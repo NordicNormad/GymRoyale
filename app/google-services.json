@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "946435500163",
+    "project_id": "gymroyale-1d770",
+    "storage_bucket": "gymroyale-1d770.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:946435500163:android:3f5710e4fefe29d6d793b6",
+        "android_client_info": {
+          "package_name": "com.cs407.gymroyale"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAo5YUEJa03SzB3hF5hZPy71SDiJ3ZiZ84"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
