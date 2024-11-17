@@ -1,4 +1,5 @@
 package com.cs407.gymroyale
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.FirebaseApp
+//import com.cs407.gymroyale.
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,6 +46,13 @@ class MainActivity : AppCompatActivity() {
             // Handle navigation item selection
             true
         }
+
+        val openSearchButton: Button = findViewById(R.id.openSearchButton)
+        openSearchButton.setOnClickListener {
+            val intent = Intent(this, SearchWorkout::class.java)
+            startActivity(intent)
+        }
+
     }
 }
 
