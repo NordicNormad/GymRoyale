@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2A2A2A">
+
+    <!-- Top left icon -->
+    <Button
+        android:id="@+id/buttonMenu"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_margin="16dp" />
+
+    <!-- Top right profile button -->
+    <Button
+        android:id="@+id/buttonProfile"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp" />
+
+    <!-- Title text -->
+    <TextView
+        android:id="@+id/textGymRoyale"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gym Royale"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
+
+    <!-- Rank -->
+    <TextView
+        android:id="@+id/textRank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rank: 256301"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        android:layout_below="@id/textGymRoyale"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp" />
+
+    <!-- Central image -->
+    <ImageView
+        android:id="@+id/imageGymIcon"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_below="@id/textRank"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
+
+    <!-- Log Workout button -->
+    <Button
+        android:id="@+id/buttonLogWorkout"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:text="Log Workout"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_below="@id/imageGymIcon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
+
+    <!-- Find Challenger button -->
+    <Button
+        android:id="@+id/buttonFindChallenger"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:text="Find Challenger"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_below="@id/buttonLogWorkout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
+
+    <!-- Bottom navigation bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:background="#000000">
+
+        <!-- Bottom nav - menu -->
+        <Button
+            android:id="@+id/buttonBottomNavMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="Menu" />
+
+        <!-- Bottom nav - workout -->
+        <Button
+            android:id="@+id/buttonBottomNavWorkout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="Workout" />
+
+        <!-- Bottom nav - history -->
+        <Button
+            android:id="@+id/buttonBottomNavHistory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="History" />
+    </LinearLayout>
+</RelativeLayout>
