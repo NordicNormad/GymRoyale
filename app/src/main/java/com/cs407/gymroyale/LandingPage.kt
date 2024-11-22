@@ -19,9 +19,9 @@ class LandingPageFragment : Fragment() {
         val profileButton = view.findViewById<Button>(R.id.buttonProfile)
         val logWorkoutButton = view.findViewById<Button>(R.id.buttonLogWorkout)
         val findChallengerButton = view.findViewById<Button>(R.id.buttonFindChallenger)
-        val bottomNavMenuButton = view.findViewById<Button>(R.id.buttonBottomNavMenu)
-        val bottomNavWorkoutButton = view.findViewById<Button>(R.id.buttonBottomNavWorkout)
-        val bottomNavHistoryButton = view.findViewById<Button>(R.id.buttonBottomNavHistory)
+        val bottomNavSettingsButton = view.findViewById<Button>(R.id.buttonBottomNavSettings)
+        val bottomNavHomeButton = view.findViewById<Button>(R.id.buttonBottomNavHome)
+        val bottomNavBountyButton = view.findViewById<Button>(R.id.buttonBottomNavBounties)
 
         menuButton.setOnClickListener { /* Empty */ }
         profileButton.setOnClickListener { /* Empty */ }
@@ -36,15 +36,15 @@ class LandingPageFragment : Fragment() {
         }
 
         // Load BountyFragment when the Bounties button is clicked
-        bottomNavHistoryButton.setOnClickListener {
+        bottomNavBountyButton.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, BountyFragment())
                 .addToBackStack(null)
                 .commit()
         }
 
-        bottomNavMenuButton.setOnClickListener { /* Empty */ }
-        bottomNavWorkoutButton.setOnClickListener { /* Empty */ }
+        bottomNavSettingsButton.setOnClickListener { /* Empty */ }
+        bottomNavHomeButton.setOnClickListener { /* Empty */ }
 
         return view
     }

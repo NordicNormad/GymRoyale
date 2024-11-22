@@ -32,6 +32,9 @@ class BountyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_bounty, container, false)
+        val bottomNavSettingsButton = view.findViewById<Button>(R.id.buttonBottomNavSettings)
+        val bottomNavHomeButton = view.findViewById<Button>(R.id.buttonBottomNavHome)
+        val bottomNavBountyButton = view.findViewById<Button>(R.id.buttonBottomNavBounties)
 
         recyclerView = view.findViewById(R.id.rvBounties)
         btnClaimAll = view.findViewById(R.id.btnClaimAll)
@@ -50,6 +53,16 @@ class BountyFragment : Fragment() {
         openSearchButton.setOnClickListener {
             val intent = Intent(requireContext(), SearchWorkout::class.java)
             startActivity(intent)
+        }
+
+        bottomNavBountyButton.setOnClickListener {        }
+
+        bottomNavSettingsButton.setOnClickListener { /* Empty */ }
+        bottomNavHomeButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, LandingPageFragment())
+                .addToBackStack(null)
+                .commit()
         }
 
         return view
