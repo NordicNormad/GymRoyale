@@ -25,7 +25,14 @@ class LandingPageFragment : Fragment() {
 
         shopButton.setOnClickListener { /* Empty */ }
         profileButton.setOnClickListener { /* Empty */ }
-        logWorkoutButton.setOnClickListener { /* Empty */ }
+
+        // Load WorkoutStorageFragment when the Log Workout button is clicked
+        logWorkoutButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, WorkoutStorageFragment())
+                .addToBackStack(null) // Add the transaction to the back stack to allow navigation back
+                .commit()
+        }
 
         // Load LoadingScreenFragment when the Find Challenger button is clicked
         findChallengerButton.setOnClickListener {

@@ -1,10 +1,11 @@
 package com.cs407.gymroyale
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +23,7 @@ class SearchWorkout : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_search_workout)  // Use the correct layout
+        setContentView(R.layout.fragment_search_workout)
 
         searchView = findViewById(R.id.searchView)
         buttonSearch = findViewById(R.id.buttonSearch)
@@ -33,23 +34,21 @@ class SearchWorkout : AppCompatActivity() {
             setupAutoComplete()
         }
 
-        // Search button functionality
         buttonSearch.setOnClickListener {
             val query = searchView.text.toString()
-            searchWorkouts(query)
+            selectWorkout(query)
         }
     }
 
-    // Function to read workouts from the CSV file in res/raw
     private suspend fun readWorkoutsFromCsv(): List<String> {
         return withContext(Dispatchers.IO) {
             val workouts = mutableListOf<String>()
-            val inputStream = resources.openRawResource(R.raw.workouts)  // Assuming your CSV is called workouts.csv
+            val inputStream = resources.openRawResource(R.raw.workouts)
             val reader = BufferedReader(InputStreamReader(inputStream))
 
             reader.useLines { lines ->
                 lines.forEach { line ->
-                    workouts.add(line.trim())  // Add each workout name to the list
+                    workouts.add(line.trim())
                 }
             }
 
@@ -57,7 +56,6 @@ class SearchWorkout : AppCompatActivity() {
         }
     }
 
-    // Setup the AutoCompleteTextView with the workout names
     private fun setupAutoComplete() {
         adapter = ArrayAdapter(
             this,
@@ -67,14 +65,18 @@ class SearchWorkout : AppCompatActivity() {
         searchView.setAdapter(adapter)
     }
 
-    // Search for a workout and display a Toast
-    private fun searchWorkouts(query: String) {
+    private fun selectWorkout(query: String) {
         val filteredWorkouts = workoutList.filter { it.contains(query, ignoreCase = true) }
 
         if (filteredWorkouts.isNotEmpty()) {
-            Toast.makeText(applicationContext, "Found: ${filteredWorkouts[0]}", Toast.LENGTH_LONG).show()
+            // Return the selected workout to the calling fragment
+            val intent = Intent()
+            intent.putExtra(WorkoutStorageFragment.RESULT_WORKOUT, filteredWorkouts[0])
+            setResult(Activity.RESULT_OK, intent)
+            finish()
         } else {
-            Toast.makeText(applicationContext, "No workouts found", Toast.LENGTH_SHORT).show()
+            setResult(Activity.RESULT_CANCELED)
+            finish()
         }
     }
 }
