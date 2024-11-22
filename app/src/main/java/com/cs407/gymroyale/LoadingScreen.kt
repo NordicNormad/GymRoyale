@@ -31,17 +31,12 @@ class LoadingScreenFragment : Fragment() {
             textViewTip.text = randomTip
         }
 
-        // Cancel button onClick listener (empty for now)
+        // Cancel button onClick listener
         buttonCancel.setOnClickListener {
-            onCancel()
+            parentFragmentManager.popBackStack() // Navigates back to the previous fragment (LandingPageFragment)
         }
 
         return view
-    }
-
-    // Function to handle cancel action (empty for now)
-    private fun onCancel() {
-        // TODO: Implement cancel logic here
     }
 
     // Function to read tips from the CSV file

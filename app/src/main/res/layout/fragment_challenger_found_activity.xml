@@ -60,7 +60,6 @@
                 android:layout_width="96dp"
                 android:layout_height="96dp"
                 android:src="@drawable/ic_launcher_foreground"
-                android:background="@drawable/circle_shape"
                 app:layout_constraintTop_toBottomOf="@id/textOpponent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

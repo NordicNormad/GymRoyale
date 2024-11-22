@@ -26,7 +26,16 @@ class LandingPageFragment : Fragment() {
         menuButton.setOnClickListener { /* Empty */ }
         profileButton.setOnClickListener { /* Empty */ }
         logWorkoutButton.setOnClickListener { /* Empty */ }
-        findChallengerButton.setOnClickListener { /* Empty */ }
+
+        // Load LoadingScreenFragment when the Find Challenger button is clicked
+        findChallengerButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, LoadingScreenFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+
         bottomNavMenuButton.setOnClickListener { /* Empty */ }
         bottomNavWorkoutButton.setOnClickListener { /* Empty */ }
         bottomNavHistoryButton.setOnClickListener { /* Empty */ }
