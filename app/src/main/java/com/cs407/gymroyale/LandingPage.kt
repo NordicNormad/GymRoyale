@@ -35,10 +35,16 @@ class LandingPageFragment : Fragment() {
                 .commit()
         }
 
+        // Load BountyFragment when the Bounties button is clicked
+        bottomNavHistoryButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, BountyFragment())
+                .addToBackStack(null)
+                .commit()
+        }
 
         bottomNavMenuButton.setOnClickListener { /* Empty */ }
         bottomNavWorkoutButton.setOnClickListener { /* Empty */ }
-        bottomNavHistoryButton.setOnClickListener { /* Empty */ }
 
         return view
     }
