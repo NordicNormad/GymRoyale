@@ -15,7 +15,7 @@ class LandingPageFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_landing_page, container, false)
 
-        val menuButton = view.findViewById<Button>(R.id.buttonMenu)
+        val shopButton = view.findViewById<Button>(R.id.buttonShop)
         val profileButton = view.findViewById<Button>(R.id.buttonProfile)
         val logWorkoutButton = view.findViewById<Button>(R.id.buttonLogWorkout)
         val findChallengerButton = view.findViewById<Button>(R.id.buttonFindChallenger)
@@ -23,7 +23,7 @@ class LandingPageFragment : Fragment() {
         val bottomNavHomeButton = view.findViewById<Button>(R.id.buttonBottomNavHome)
         val bottomNavBountyButton = view.findViewById<Button>(R.id.buttonBottomNavBounties)
 
-        menuButton.setOnClickListener { /* Empty */ }
+        shopButton.setOnClickListener { /* Empty */ }
         profileButton.setOnClickListener { /* Empty */ }
         logWorkoutButton.setOnClickListener { /* Empty */ }
 

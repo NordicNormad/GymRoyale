@@ -5,9 +5,9 @@
     android:layout_height="match_parent"
     android:background="#2A2A2A">
 
-    <!-- Top left icon -->
+    <!-- Shop icon -->
     <Button
-        android:id="@+id/buttonMenu"
+        android:id="@+id/buttonShop"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_alignParentStart="true"
