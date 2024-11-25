@@ -19,7 +19,7 @@ class BountyFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var btnClaimAll: Button
-    private lateinit var openSearchButton: Button
+    //private lateinit var openSearchButton: Button
     private val bountyList = listOf(
         Bounty("Run 1 Mile", false),
         Bounty("30 Leg Lifts", true),
@@ -38,7 +38,7 @@ class BountyFragment : Fragment() {
 
         recyclerView = view.findViewById(R.id.rvBounties)
         btnClaimAll = view.findViewById(R.id.btnClaimAll)
-        openSearchButton = view.findViewById(R.id.openSearchButton) // Referencing the button
+        //openSearchButton = view.findViewById(R.id.openSearchButton) // Referencing the button
 
         // Set up RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -50,10 +50,10 @@ class BountyFragment : Fragment() {
         }
 
         // Open SearchWorkout activity when the button is clicked
-        openSearchButton.setOnClickListener {
-            val intent = Intent(requireContext(), SearchWorkout::class.java)
-            startActivity(intent)
-        }
+//        openSearchButton.setOnClickListener {
+//            val intent = Intent(requireContext(), SearchWorkout::class.java)
+//            startActivity(intent)
+//        }
 
         bottomNavBountyButton.setOnClickListener {        }
 
