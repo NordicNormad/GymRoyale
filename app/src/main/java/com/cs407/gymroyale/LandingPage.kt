@@ -1,5 +1,6 @@
 package com.cs407.gymroyale
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,10 +29,12 @@ class LandingPageFragment : Fragment() {
 
         // Load WorkoutStorageFragment when the Log Workout button is clicked
         logWorkoutButton.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, WorkoutStorageFragment())
-                .addToBackStack(null) // Add the transaction to the back stack to allow navigation back
-                .commit()
+//            parentFragmentManager.beginTransaction()
+//                .replace(R.id.fragment_container, SearchWorkoutFragment())
+//                .addToBackStack(null) // Add the transaction to the back stack to allow navigation back
+//                .commit()
+            val intent = Intent(requireContext(), SearchWorkout::class.java)
+            startActivityForResult(intent, 1)
         }
 
         // Load LoadingScreenFragment when the Find Challenger button is clicked
