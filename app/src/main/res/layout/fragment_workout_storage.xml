@@ -18,21 +18,21 @@
             android:id="@+id/editWorkoutType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:drawable/edit_text"
             android:hint="Enter 5-hex Workout Type (e.g., A1B2C)"
             android:textColor="#000000"
-            android:textColorHint="#CCCCCC"
-            android:background="@android:drawable/edit_text" />
+            android:textColorHint="#CCCCCC" />
 
         <!-- Input for Workout Details -->
         <EditText
             android:id="@+id/editWorkoutDetails"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@android:drawable/edit_text"
             android:hint="Enter Workout Details (e.g., A123,12,100,10,95)"
             android:textColor="#000000"
-            android:textColorHint="#CCCCCC"
-            android:background="@android:drawable/edit_text"
-            android:layout_marginTop="16dp" />
+            android:textColorHint="#CCCCCC" />
 
         <!-- Save Button -->
         <Button
