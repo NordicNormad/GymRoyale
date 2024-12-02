@@ -25,7 +25,12 @@ class LandingPageFragment : Fragment() {
         val bottomNavBountyButton = view.findViewById<Button>(R.id.buttonBottomNavBounties)
 
         shopButton.setOnClickListener { /* Empty */ }
-        profileButton.setOnClickListener { /* Empty */ }
+        profileButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ProfileFragment())
+                .addToBackStack(null)
+                .commit()
+        }
 
         // Load WorkoutStorageFragment when the Log Workout button is clicked
         logWorkoutButton.setOnClickListener {

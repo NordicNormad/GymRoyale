@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp"
+    android:background="#2A2A2A">
+
+    <!-- Switch Between Login and Registration -->
+    <Switch
+        android:id="@+id/switchAuthMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        android:text="Register"
+        android:textColor="#FFFFFF"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+    <!-- Email Input -->
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#CCCCCC"
+        android:background="#444444"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Password Input -->
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#CCCCCC"
+        android:background="#444444"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp"
+        android:inputType="textPassword" />
+
+    <!-- Confirm Password (Visible in Registration Mode) -->
+    <EditText
+        android:id="@+id/editTextConfirmPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Confirm Password"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#CCCCCC"
+        android:background="#444444"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp"
+        android:inputType="textPassword"
+        android:visibility="gone" />
+
+    <!-- Login/Register Button -->
+    <Button
+        android:id="@+id/buttonAuth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:textColor="#FFFFFF"
+        android:background="#007BFF"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Error/Status Message -->
+    <TextView
+        android:id="@+id/textViewError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#FF0000"
+        android:visibility="gone"
+        android:textSize="14sp"
+        android:gravity="center" />
+</LinearLayout>
+
