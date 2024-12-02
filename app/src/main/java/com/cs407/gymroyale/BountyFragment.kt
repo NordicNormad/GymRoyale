@@ -1,5 +1,6 @@
 package com.cs407.gymroyale
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ class BountyFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var btnClaimAll: Button
+    //private lateinit var openSearchButton: Button
     private val bountyList = listOf(
         Bounty("Run 1 Mile", false),
         Bounty("30 Leg Lifts", true),
@@ -30,17 +32,37 @@ class BountyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_bounty, container, false)
+        val bottomNavSettingsButton = view.findViewById<Button>(R.id.buttonBottomNavSettings)
+        val bottomNavHomeButton = view.findViewById<Button>(R.id.buttonBottomNavHome)
+        val bottomNavBountyButton = view.findViewById<Button>(R.id.buttonBottomNavBounties)
 
         recyclerView = view.findViewById(R.id.rvBounties)
         btnClaimAll = view.findViewById(R.id.btnClaimAll)
+        //openSearchButton = view.findViewById(R.id.openSearchButton) // Referencing the button
 
         // Set up RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = BountyAdapter(bountyList)
 
-        // Button click listener
+        // Button click listener for claiming all bounties
         btnClaimAll.setOnClickListener {
             Toast.makeText(requireContext(), "All bounties claimed!", Toast.LENGTH_SHORT).show()
+        }
+
+        // Open SearchWorkout activity when the button is clicked
+//        openSearchButton.setOnClickListener {
+//            val intent = Intent(requireContext(), SearchWorkout::class.java)
+//            startActivity(intent)
+//        }
+
+        bottomNavBountyButton.setOnClickListener {        }
+
+        bottomNavSettingsButton.setOnClickListener { /* Empty */ }
+        bottomNavHomeButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, LandingPageFragment())
+                .addToBackStack(null)
+                .commit()
         }
 
         return view

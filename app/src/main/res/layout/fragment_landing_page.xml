@@ -5,9 +5,9 @@
     android:layout_height="match_parent"
     android:background="#2A2A2A">
 
-    <!-- Top left icon -->
+    <!-- Shop icon -->
     <Button
-        android:id="@+id/buttonMenu"
+        android:id="@+id/buttonShop"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_alignParentStart="true"
@@ -89,28 +89,31 @@
         android:layout_alignParentBottom="true"
         android:background="#000000">
 
-        <!-- Bottom nav - menu -->
+        <!-- Bottom nav - Settings -->
         <Button
-            android:id="@+id/buttonBottomNavMenu"
+            android:id="@+id/buttonBottomNavSettings"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:text="Settings"
             android:contentDescription="Menu" />
 
-        <!-- Bottom nav - workout -->
+        <!-- Bottom nav - homepage -->
         <Button
-            android:id="@+id/buttonBottomNavWorkout"
+            android:id="@+id/buttonBottomNavHome"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:text="Home"
             android:contentDescription="Workout" />
 
-        <!-- Bottom nav - history -->
+        <!-- Bottom nav - bounties -->
         <Button
-            android:id="@+id/buttonBottomNavHistory"
+            android:id="@+id/buttonBottomNavBounties"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:contentDescription="History" />
+            android:text="Bounties"
+            android:contentDescription="Bounties" />
     </LinearLayout>
 </RelativeLayout>

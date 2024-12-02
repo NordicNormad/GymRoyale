@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2A2A2A">
+
+    <!-- Main content container -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_above="@+id/bottomNavigationBar">
+
+        <!-- Input for Workout Type -->
+        <EditText
+            android:id="@+id/editWorkoutType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/edit_text"
+            android:hint="Enter 5-hex Workout Type (e.g., A1B2C)"
+            android:textColor="#000000"
+            android:textColorHint="#CCCCCC" />
+
+        <!-- Input for Workout Details -->
+        <EditText
+            android:id="@+id/editWorkoutDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@android:drawable/edit_text"
+            android:hint="Enter Workout Details (e.g., A123,12,100,10,95)"
+            android:textColor="#000000"
+            android:textColorHint="#CCCCCC" />
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/btnSaveWorkout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save Workout"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp" />
+
+        <Button
+            android:id="@+id/btnSearchWorkout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Search Workouts"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+    </LinearLayout>
+
+    <!-- Bottom navigation bar -->
+    <LinearLayout
+        android:id="@+id/bottomNavigationBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:background="#000000">
+
+        <!-- Bottom nav - Settings -->
+        <Button
+            android:id="@+id/buttonBottomNavSettings"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Settings"
+            android:contentDescription="Settings" />
+
+        <!-- Bottom nav - homepage -->
+        <Button
+            android:id="@+id/buttonBottomNavHome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Home"
+            android:contentDescription="Home" />
+
+        <!-- Bottom nav - bounties -->
+        <Button
+            android:id="@+id/buttonBottomNavBounties"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Bounties"
+            android:contentDescription="Bounties" />
+    </LinearLayout>
+
+</RelativeLayout>

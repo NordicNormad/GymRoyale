@@ -1,5 +1,6 @@
 package com.cs407.gymroyale
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,21 +16,45 @@ class LandingPageFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_landing_page, container, false)
 
-        val menuButton = view.findViewById<Button>(R.id.buttonMenu)
+        val shopButton = view.findViewById<Button>(R.id.buttonShop)
         val profileButton = view.findViewById<Button>(R.id.buttonProfile)
         val logWorkoutButton = view.findViewById<Button>(R.id.buttonLogWorkout)
         val findChallengerButton = view.findViewById<Button>(R.id.buttonFindChallenger)
-        val bottomNavMenuButton = view.findViewById<Button>(R.id.buttonBottomNavMenu)
-        val bottomNavWorkoutButton = view.findViewById<Button>(R.id.buttonBottomNavWorkout)
-        val bottomNavHistoryButton = view.findViewById<Button>(R.id.buttonBottomNavHistory)
+        val bottomNavSettingsButton = view.findViewById<Button>(R.id.buttonBottomNavSettings)
+        val bottomNavHomeButton = view.findViewById<Button>(R.id.buttonBottomNavHome)
+        val bottomNavBountyButton = view.findViewById<Button>(R.id.buttonBottomNavBounties)
 
-        menuButton.setOnClickListener { /* Empty */ }
+        shopButton.setOnClickListener { /* Empty */ }
         profileButton.setOnClickListener { /* Empty */ }
-        logWorkoutButton.setOnClickListener { /* Empty */ }
-        findChallengerButton.setOnClickListener { /* Empty */ }
-        bottomNavMenuButton.setOnClickListener { /* Empty */ }
-        bottomNavWorkoutButton.setOnClickListener { /* Empty */ }
-        bottomNavHistoryButton.setOnClickListener { /* Empty */ }
+
+        // Load WorkoutStorageFragment when the Log Workout button is clicked
+        logWorkoutButton.setOnClickListener {
+//            parentFragmentManager.beginTransaction()
+//                .replace(R.id.fragment_container, SearchWorkoutFragment())
+//                .addToBackStack(null) // Add the transaction to the back stack to allow navigation back
+//                .commit()
+            val intent = Intent(requireContext(), SearchWorkout::class.java)
+            startActivityForResult(intent, 1)
+        }
+
+        // Load LoadingScreenFragment when the Find Challenger button is clicked
+        findChallengerButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, LoadingScreenFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        // Load BountyFragment when the Bounties button is clicked
+        bottomNavBountyButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, BountyFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        bottomNavSettingsButton.setOnClickListener { /* Empty */ }
+        bottomNavHomeButton.setOnClickListener { /* Empty */ }
 
         return view
     }
