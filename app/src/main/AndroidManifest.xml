@@ -25,6 +25,7 @@
         <activity android:name=".LoginActivity" />
 
         <activity android:name=".SearchWorkout" />
+        <activity android:name=".WorkoutHistoryActivity" />
     </application>
 
 </manifest>

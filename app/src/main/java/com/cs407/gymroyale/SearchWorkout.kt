@@ -1,5 +1,6 @@
 package com.cs407.gymroyale
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -25,7 +26,7 @@ class SearchWorkout : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_search_workout)
+        setContentView(R.layout.activity_search_workout)
 
         csvManager = WorkoutLogCSVManager(this)
 
@@ -53,6 +54,14 @@ class SearchWorkout : AppCompatActivity() {
         buttonCancel.setOnClickListener {
             finish()  // Closes the current activity and returns to the parent
         }
+
+        // Inside onCreate method
+        val historyButton = findViewById<Button>(R.id.historyButton)
+        historyButton.setOnClickListener {
+            val intent = Intent(this, WorkoutHistoryActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
     private fun showTodayWorkouts() {
