@@ -46,16 +46,19 @@ dependencies {
     implementation(libs.androidx.room.common)
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.storage.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
 
+    //noinspection UseTomlInstead
 
-
+    //noinspection GradleDependency,UseTomlInstead
     implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
     // TODO: Add the dependencies for Firebase products you want to use
     // When using the BoM, don't specify versions in Firebase dependencies
+    //noinspection UseTomlInstead
     implementation("com.google.firebase:firebase-analytics")
 
     // Add the dependencies for any other desired Firebase products

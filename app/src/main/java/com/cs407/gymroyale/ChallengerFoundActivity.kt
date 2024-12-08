@@ -1,46 +1,27 @@
 package com.cs407.lab7
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.Toast
-import androidx.fragment.app.Fragment
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.cs407.gymroyale.R
 
-class ChallengerFoundFragment : Fragment() {
+class ChallengerFoundActivity : AppCompatActivity() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_challenger_found_activity, container, false)
-    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_challenger_found_loading)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        val progressBar: ProgressBar = findViewById(R.id.progressBarLoading)
+        val loadingMessage: TextView = findViewById(R.id.textLoadingMessage)
 
-        val buttonCancel: Button = view.findViewById(R.id.buttonCancel)
-
-        // ******************************************************* //
-        // functionality to pull user pfp from DB call here
-        // functionality to pull username from DB call here
-        // ******************************************************* //
-
-
-        // Handle Cancel button click
-        buttonCancel.setOnClickListener {
-            Toast.makeText(requireContext(), "Challenger screen canceled!", Toast.LENGTH_SHORT).show()
-            requireActivity().supportFragmentManager.popBackStack()
-        }
-
-        // Automatically close the fragment after 5 seconds
-        Handler(Looper.getMainLooper()).postDelayed({
-            requireActivity().supportFragmentManager.popBackStack()
-        }, 5000)
+        // Simulate loading (e.g., fetching data)
+        Handler().postDelayed({
+            // Transition to the detailed view
+            startActivity(Intent(this, ChallengerFoundDetailActivity::class.java))
+            finish()
+        }, 3000) // Delay for 3 seconds
     }
 }
