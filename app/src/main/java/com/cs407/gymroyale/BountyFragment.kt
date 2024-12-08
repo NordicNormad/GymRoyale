@@ -32,9 +32,6 @@ class BountyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_bounty, container, false)
-        val bottomNavSettingsButton = view.findViewById<Button>(R.id.buttonBottomNavSettings)
-        val bottomNavHomeButton = view.findViewById<Button>(R.id.buttonBottomNavHome)
-        val bottomNavBountyButton = view.findViewById<Button>(R.id.buttonBottomNavBounties)
 
         recyclerView = view.findViewById(R.id.rvBounties)
         btnClaimAll = view.findViewById(R.id.btnClaimAll)
@@ -55,15 +52,35 @@ class BountyFragment : Fragment() {
 //            startActivity(intent)
 //        }
 
-        bottomNavBountyButton.setOnClickListener {        }
+        ////////////////////////////////////////////////////////BOTTOM BAR//////////////////////////
+        // Button Definitions
+        val bottomNavSettingsButton = view.findViewById<Button>(R.id.buttonBottomNavSettings)
+        val bottomNavBountyButton = view.findViewById<Button>(R.id.buttonBottomNavBounties)
+        val bottomNavHomeButton = view.findViewById<Button>(R.id.buttonBottomNavHome)
 
-        bottomNavSettingsButton.setOnClickListener { /* Empty */ }
+        // Load BountyFragment when the Bounties button is clicked
+        bottomNavBountyButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, BountyFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        // Settings button open
+        bottomNavSettingsButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, SettingsMain())
+                .addToBackStack(null)
+                .commit()
+        }
+
         bottomNavHomeButton.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, LandingPageFragment())
                 .addToBackStack(null)
                 .commit()
         }
+        ////////////////////////////////////////////////////////////////////////////////////////////
 
         return view
     }
