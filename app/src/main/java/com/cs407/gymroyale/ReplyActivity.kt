@@ -23,13 +23,18 @@ class ReplyActivity : AppCompatActivity() {
     private val auth = FirebaseAuth.getInstance()
     private lateinit var challengeId: String
     private val repliesList = mutableListOf<Reply>()
+    private lateinit var repliesAdapter: ReplyAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reply)
 
         // Get challenge ID from intent
-        challengeId = intent.getStringExtra("challengeId") ?: return
+        challengeId = intent.getStringExtra("challengeId") ?: run {
+            Log.e("ReplyActivity", "Challenge ID is null, finishing activity.")
+            finish()
+            return
+        }
 
         // Initialize views
         repliesRecyclerView = findViewById(R.id.repliesRecyclerView)
@@ -37,7 +42,11 @@ class ReplyActivity : AppCompatActivity() {
         postReplyButton = findViewById(R.id.postReplyButton)
 
         // Set up RecyclerView
+        repliesAdapter = ReplyAdapter(repliesList)
         repliesRecyclerView.layoutManager = LinearLayoutManager(this)
+        repliesRecyclerView.adapter = repliesAdapter
+
+        // Fetch replies
         fetchReplies()
 
         // Post reply button action
@@ -61,17 +70,22 @@ class ReplyActivity : AppCompatActivity() {
                     repliesList.add(reply)
                 }
 
-                repliesRecyclerView.adapter = ReplyAdapter(repliesList)
+                // Notify adapter of dataset changes
+                repliesAdapter.notifyDataSetChanged()
             }
     }
 
     private fun postReply() {
         val message = replyInput.text.toString().trim()
         if (TextUtils.isEmpty(message)) {
+            replyInput.error = "Message cannot be empty"
             return
         }
 
-        val userId = auth.currentUser?.uid ?: return
+        val userId = auth.currentUser?.uid ?: run {
+            Log.e("ReplyActivity", "User is not authenticated, cannot post reply.")
+            return
+        }
         val username = auth.currentUser?.displayName ?: "Anonymous"
 
         val reply = Reply(
@@ -85,7 +99,7 @@ class ReplyActivity : AppCompatActivity() {
             .add(reply)
             .addOnSuccessListener {
                 replyInput.text.clear()
-                fetchReplies()
+                Log.d("ReplyActivity", "Reply successfully posted")
             }
             .addOnFailureListener { e ->
                 Log.w("ReplyActivity", "Error posting reply", e)
