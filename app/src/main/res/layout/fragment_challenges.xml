@@ -1,23 +1,55 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:layout_marginBottom="8dp">
 
-    <!-- RecyclerView for challenges -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/challengesRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scrollbars="vertical" />
-
-    <!-- Button to add a new challenge -->
-    <Button
-        android:id="@+id/buttonAddChallenge"
-        android:layout_width="match_parent"
+    <!-- Challenge Title -->
+    <TextView
+        android:id="@+id/challengeTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Challenge" />
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="Challenge Title" />
 
+    <!-- Challenge Description -->
+    <TextView
+        android:id="@+id/challengeDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:paddingTop="4dp"
+        android:text="Challenge Description" />
+
+    <!-- Uploaded By -->
+    <TextView
+        android:id="@+id/uploadedBy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="@android:color/darker_gray"
+        android:paddingTop="8dp"
+        android:text="Uploaded by: username123" />
+
+    <!-- Completed By -->
+    <TextView
+        android:id="@+id/completedBy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="@android:color/darker_gray"
+        android:paddingTop="4dp"
+        android:text="Completed by: Not completed yet" />
+
+    <!-- Reply Button -->
+    <Button
+        android:id="@+id/replyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reply"
+        android:layout_gravity="end"
+        android:layout_marginTop="8dp" />
 </LinearLayout>

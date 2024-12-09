@@ -76,7 +76,7 @@ class LandingPageFragment : Fragment() {
         // Load ChallengesFragment when the Find Challenger button is clicked
         challengesButton.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ChallengesFragment())
+                .replace(R.id.fragment_container, ChallengerFragment())
                 .addToBackStack(null)
                 .commit()
         }
