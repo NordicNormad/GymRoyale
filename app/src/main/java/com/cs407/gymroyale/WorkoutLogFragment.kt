@@ -1,6 +1,7 @@
 package com.cs407.gymroyale
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import java.util.Locale
 class WorkoutLogFragment : Fragment() {
 
     private lateinit var textViewWorkoutName: TextView
+    private lateinit var textViewBounty: TextView
     private lateinit var editTextWeight: EditText
     private lateinit var editTextReps: EditText
     private lateinit var buttonSave: Button
@@ -35,21 +37,29 @@ class WorkoutLogFragment : Fragment() {
 
         // Retrieve workout name from arguments
         workoutName = arguments?.getString("WORKOUT_NAME") ?: "Unknown Workout"
+        val isBounty = activity?.intent?.getBooleanExtra("IS_BOUNTY", false) ?: true
 
         textViewWorkoutName = view.findViewById(R.id.textViewWorkoutName)
         editTextWeight = view.findViewById(R.id.editTextWeight)
         editTextReps = view.findViewById(R.id.editTextReps)
         buttonSave = view.findViewById(R.id.buttonSave)
         listViewLogs = view.findViewById(R.id.listViewLogs)
+        textViewBounty = view.findViewById(R.id.textViewBounty)
+
 
         // Set workout name
         textViewWorkoutName.text = workoutName
+        if (isBounty) {
+            Log.d("WorkoutLogFragment", "Setting bounty label to VISIBLE")
+            textViewBounty.visibility = View.VISIBLE
+        }
 
         csvManager = WorkoutLogCSVManager(requireContext())
         // Load existing logs and set up adapter
         loadExistingLogs()
 
         buttonSave.setOnClickListener {
+            textViewBounty.visibility = View.INVISIBLE
             saveWorkoutLog()
         }
 

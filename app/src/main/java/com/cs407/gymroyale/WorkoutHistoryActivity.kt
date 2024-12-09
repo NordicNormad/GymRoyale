@@ -74,4 +74,6 @@ class WorkoutHistoryActivity : AppCompatActivity() {
         }
     }
 
+
+
 }

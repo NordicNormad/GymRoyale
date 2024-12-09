@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -36,10 +37,25 @@ class SearchWorkout : AppCompatActivity() {
         buttonCancel = findViewById(R.id.buttonCancel)
 
         // Load workout data from the CSV file
+//        lifecycleScope.launch {
+//            workoutList = readWorkoutsFromCsv()
+//            setupAutoComplete()
+//        }
+
+        val preSelectedWorkout = intent.getStringExtra("SELECTED_WORKOUT")
+
+        // Load workout data from the CSV file
         lifecycleScope.launch {
             workoutList = readWorkoutsFromCsv()
             setupAutoComplete()
+
+            // If a workout was pre-selected, automatically select it
+            preSelectedWorkout?.let { workout ->
+                searchView.setText(workout)
+                selectWorkout(workout)
+            }
         }
+
 
         buttonSearch.setOnClickListener {
             val query = searchView.text.toString()
