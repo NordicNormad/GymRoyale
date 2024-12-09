@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2A2A2A">
+    android:background="#ccf5ff">
 
     <!-- Top right profile button -->
     <Button
@@ -21,7 +21,7 @@
         android:text="Gym Royale"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="#FFFFFF"
+        android:textColor="#000000"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp" />
 
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:text="Rank: 256301"
         android:textSize="16sp"
-        android:textColor="#FFFFFF"
+        android:textColor="#000000"
         android:layout_below="@id/textGymRoyale"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp" />
@@ -56,7 +56,7 @@
             android:text="Level: 1, 0/10000"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="#FFFFFF"
+            android:textColor="#000000"
             android:layout_gravity="center" />
 
         <!-- Trophies Text -->
@@ -66,7 +66,7 @@
             android:layout_height="wrap_content"
             android:text="Trophies: 0"
             android:textSize="16sp"
-            android:textColor="#FFFFFF"
+            android:textColor="#000000"
             android:layout_gravity="center"
             android:layout_marginTop="8dp" />
     </LinearLayout>
@@ -74,8 +74,8 @@
     <!-- Central image -->
     <ImageView
         android:id="@+id/imageGymIcon"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
         android:layout_below="@id/levelBarContainer"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp" />
@@ -83,10 +83,11 @@
     <!-- Log Workout button -->
     <Button
         android:id="@+id/buttonLogWorkout"
-        android:layout_width="200dp"
-        android:layout_height="60dp"
+        android:layout_width="450dp"
+        android:layout_height="110dp"
         android:text="Log Workout"
-        android:textColor="#FFFFFF"
+        android:textColor="#000000"
+        android:backgroundTint="#ffff99"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_above="@id/buttonFindChallenger"
@@ -96,10 +97,11 @@
     <!-- Find Challenger button -->
     <Button
         android:id="@+id/buttonFindChallenger"
-        android:layout_width="200dp"
-        android:layout_height="60dp"
+        android:layout_width="450dp"
+        android:layout_height="110dp"
         android:text="Find Challenger"
-        android:textColor="#FFFFFF"
+        android:textColor="#000000"
+        android:backgroundTint="#ffff99"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_above="@id/bottomNavigation"
@@ -110,18 +112,21 @@
     <LinearLayout
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="110dp"
+        android:textColor="#000000"
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_alignParentBottom="true"
-        android:background="#000000">
+        android:background="#ccf5ff">
 
         <!-- Bottom nav - Settings -->
         <Button
             android:id="@+id/buttonBottomNavSettings"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="110dp"
+            android:textColor="#000000"
             android:layout_weight="1"
+            android:backgroundTint="#ffff99"
             android:text="Settings"
             android:contentDescription="Menu" />
 
@@ -129,8 +134,10 @@
         <Button
             android:id="@+id/buttonBottomNavHome"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="110dp"
+            android:textColor="#000000"
             android:layout_weight="1"
+            android:backgroundTint="#ffff99"
             android:text="Home"
             android:contentDescription="Workout" />
 
@@ -138,8 +145,10 @@
         <Button
             android:id="@+id/buttonBottomNavBounties"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="110dp"
+            android:textColor="#000000"
             android:layout_weight="1"
+            android:backgroundTint="#ffff99"
             android:text="Bounties"
             android:contentDescription="Bounties" />
     </LinearLayout>
