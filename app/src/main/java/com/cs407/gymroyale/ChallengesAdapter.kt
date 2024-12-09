@@ -1,4 +1,4 @@
-package com.cs407.lab7
+package com.cs407.gymroyale
 
 import android.view.LayoutInflater
 import android.view.View
