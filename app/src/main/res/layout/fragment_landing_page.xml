@@ -38,6 +38,29 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp" />
 
+    <!-- Level bar -->
+    <LinearLayout
+        android:id="@+id/levelBarContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textRank"
+        android:layout_marginTop="16dp"
+        android:padding="16dp"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <!-- Level Text -->
+        <TextView
+            android:id="@+id/textLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Level: 1, 0/10000"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
     <!-- Central image -->
     <ImageView
         android:id="@+id/imageGymIcon"

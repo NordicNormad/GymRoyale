@@ -1,20 +1,44 @@
 package com.cs407.gymroyale
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.google.gson.Gson
+import com.google.common.reflect.TypeToken
 
 class LandingPageFragment : Fragment() {
+
+    private val sharedPrefsName = "GymRoyalePrefs"
+    private val userInfoKey = "UserInfo"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_landing_page, container, false)
+
+        // Level element
+        val levelText = view.findViewById<TextView>(R.id.textLevel)
+
+        // Load UserInfo
+        val sharedPreferences = requireContext().getSharedPreferences(sharedPrefsName, Context.MODE_PRIVATE)
+        val userInfo = loadUserInfo(sharedPreferences)
+
+        if (userInfo != null) {
+            // Set level text with fraction
+            val currentLevel = userInfo.Level.toInt()
+            val progressDecimal = userInfo.Level - currentLevel
+            val progressFraction = (progressDecimal * 10000).toInt()
+            levelText.text = "Level: $currentLevel, $progressFraction/10000"
+        }
 
         // Button Definitions
         val profileButton = view.findViewById<Button>(R.id.buttonProfile)
@@ -43,13 +67,11 @@ class LandingPageFragment : Fragment() {
                 .commit()
         }
 
-////////////////////////////////////////////////////////BOTTOM BAR//////////////////////////
-        // Button Definitions
+        // Bottom navigation bar buttons
         val bottomNavSettingsButton = view.findViewById<Button>(R.id.buttonBottomNavSettings)
         val bottomNavBountyButton = view.findViewById<Button>(R.id.buttonBottomNavBounties)
         val bottomNavHomeButton = view.findViewById<Button>(R.id.buttonBottomNavHome)
 
-        // Load BountyFragment when the Bounties button is clicked
         bottomNavBountyButton.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, BountyFragment())
@@ -57,7 +79,6 @@ class LandingPageFragment : Fragment() {
                 .commit()
         }
 
-        // Settings button open
         bottomNavSettingsButton.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, SettingsMain())
@@ -71,8 +92,16 @@ class LandingPageFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
-        ////////////////////////////////////////////////////////////////////////////////////////////
 
         return view
+    }
+
+    private fun loadUserInfo(sharedPreferences: SharedPreferences): UserInfo? {
+        val userInfoJson = sharedPreferences.getString(userInfoKey, null)
+        return if (userInfoJson != null) {
+            Gson().fromJson(userInfoJson, object : TypeToken<UserInfo>() {}.type)
+        } else {
+            null
+        }
     }
 }
