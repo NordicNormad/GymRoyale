@@ -18,8 +18,8 @@
         android:id="@+id/textGymRoyale"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Gym Royale"
-        android:textSize="24sp"
+        android:text="GYM ROYALE"
+        android:textSize="60sp"
         android:textStyle="bold"
         android:textColor="#000000"
         android:layout_centerHorizontal="true"
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/textRank"
         android:layout_marginTop="16dp"
-        android:padding="16dp"
+        android:padding="7dp"
         android:orientation="vertical"
         android:gravity="center">
 
@@ -74,8 +74,8 @@
     <!-- Central image -->
     <ImageView
         android:id="@+id/imageGymIcon"
-        android:layout_width="400dp"
-        android:layout_height="400dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_below="@id/levelBarContainer"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp" />
@@ -83,12 +83,12 @@
     <!-- Log Workout button -->
     <Button
         android:id="@+id/buttonLogWorkout"
-        android:layout_width="450dp"
-        android:layout_height="110dp"
-        android:text="Log Workout"
+        android:layout_width="400dp"
+        android:layout_height="90dp"
+        android:text="LOG WORKOUT"
         android:textColor="#000000"
         android:backgroundTint="#ffff99"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:layout_above="@id/buttonFindChallenger"
         android:layout_centerHorizontal="true"
@@ -97,12 +97,12 @@
     <!-- Find Challenger button -->
     <Button
         android:id="@+id/buttonFindChallenger"
-        android:layout_width="450dp"
-        android:layout_height="110dp"
-        android:text="Find Challenger"
+        android:layout_width="400dp"
+        android:layout_height="90dp"
+        android:text="FIND CHALLENGER"
         android:textColor="#000000"
         android:backgroundTint="#ffff99"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:layout_above="@id/bottomNavigation"
         android:layout_centerHorizontal="true"
@@ -112,7 +112,7 @@
     <LinearLayout
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_height="70dp"
         android:textColor="#000000"
         android:orientation="horizontal"
         android:gravity="center"
@@ -123,8 +123,9 @@
         <Button
             android:id="@+id/buttonBottomNavSettings"
             android:layout_width="0dp"
-            android:layout_height="110dp"
+            android:layout_height="60dp"
             android:textColor="#000000"
+            android:textSize="15sp"
             android:layout_weight="1"
             android:backgroundTint="#ffff99"
             android:text="Settings"
@@ -134,7 +135,8 @@
         <Button
             android:id="@+id/buttonBottomNavHome"
             android:layout_width="0dp"
-            android:layout_height="110dp"
+            android:layout_height="60dp"
+            android:textSize="15sp"
             android:textColor="#000000"
             android:layout_weight="1"
             android:backgroundTint="#ffff99"
@@ -145,7 +147,8 @@
         <Button
             android:id="@+id/buttonBottomNavBounties"
             android:layout_width="0dp"
-            android:layout_height="110dp"
+            android:textSize="15sp"
+            android:layout_height="60dp"
             android:textColor="#000000"
             android:layout_weight="1"
             android:backgroundTint="#ffff99"
