@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsMain">
+
+    <!-- Bottom navigation bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:background="#000000">
+
+        <!-- Bottom nav - Settings -->
+        <Button
+            android:id="@+id/buttonBottomNavSettings"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Settings"
+            android:contentDescription="Menu" />
+
+        <!-- Bottom nav - homepage -->
+        <Button
+            android:id="@+id/buttonBottomNavHome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Home"
+            android:contentDescription="Workout" />
+
+        <!-- Bottom nav - bounties -->
+        <Button
+            android:id="@+id/buttonBottomNavBounties"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Bounties"
+            android:contentDescription="Bounties" />
+    </LinearLayout>
+
+</FrameLayout>

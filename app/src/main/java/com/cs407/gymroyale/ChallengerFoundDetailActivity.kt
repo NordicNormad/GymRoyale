@@ -1,4 +1,4 @@
-package com.cs407.lab7
+package com.cs407.gymroyale
 
 import android.os.Bundle
 import android.widget.Button

@@ -1,4 +1,4 @@
-package com.cs407.lab7
+package com.cs407.gymroyle
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.cs407.gymroyale.ChallengerFoundActivity
+import com.cs407.gymroyale.ChallengesAdapter
 import com.cs407.gymroyale.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
