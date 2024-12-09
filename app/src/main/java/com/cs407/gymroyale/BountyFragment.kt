@@ -1,5 +1,6 @@
 package com.cs407.gymroyale
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,6 +19,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 data class Bounty(val task: String, var isSelected: Boolean = false)
 
@@ -33,6 +37,7 @@ class BountyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_bounty, container, false)
+
         val bottomNavSettingsButton = view.findViewById<Button>(R.id.buttonBottomNavSettings)
         val bottomNavHomeButton = view.findViewById<Button>(R.id.buttonBottomNavHome)
         val bottomNavBountyButton = view.findViewById<Button>(R.id.buttonBottomNavBounties)
@@ -42,6 +47,12 @@ class BountyFragment : Fragment() {
 
         // Load workouts from CSV
         loadWorkouts()
+
+        // Disable claim button if already claimed today
+        if (hasClaimedToday()) {
+            btnClaimBounty.isEnabled = false
+            Toast.makeText(requireContext(), "You've already claimed a workout today! Come back tomorrow.", Toast.LENGTH_SHORT).show()
+        }
 
         // Set up RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -57,11 +68,17 @@ class BountyFragment : Fragment() {
                 intent.putExtra("SELECTED_WORKOUT", selectedBounty.task)
                 intent.putExtra("IS_BOUNTY", true)
                 startActivity(intent)
+
+                // Save today's date after claiming
+                saveLastClaimDate()
+
+                // Disable claim button for the rest of the day
+                btnClaimBounty.isEnabled = false
+                Toast.makeText(requireContext(), "You've successfully claimed a workout! Come back tomorrow.", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(requireContext(), "Please select a workout first", Toast.LENGTH_SHORT).show()
             }
         }
-
 
         bottomNavBountyButton.setOnClickListener { /* Empty */ }
 
@@ -76,14 +93,40 @@ class BountyFragment : Fragment() {
         return view
     }
 
+    // Function to get today's date as a String
+    private fun getTodayDate(): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return dateFormat.format(Date())
+    }
+
+    // Function to save the last claim date in SharedPreferences
+    private fun saveLastClaimDate() {
+        val sharedPreferences = requireContext().getSharedPreferences("BountyPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("lastClaimDate", getTodayDate())  // Save today's date
+        editor.apply()
+    }
+
+    // Function to check if the last claim date is today
+    private fun hasClaimedToday(): Boolean {
+        val sharedPreferences = requireContext().getSharedPreferences("BountyPrefs", Context.MODE_PRIVATE)
+        val lastClaimDate = sharedPreferences.getString("lastClaimDate", null)
+        val todayDate = getTodayDate()
+        return lastClaimDate == todayDate
+    }
+
     private fun loadWorkouts() {
-        lifecycleScope.launch {
-            bountyList.clear()
-            val workouts = readWorkoutsFromCsv()
-            bountyList.addAll(workouts.map { Bounty(it) })
-            bountyAdapter.notifyDataSetChanged()
+        // If the user hasn't claimed today, allow them to see new bounties
+        if (!hasClaimedToday()) {
+            lifecycleScope.launch {
+                bountyList.clear()
+                val workouts = readWorkoutsFromCsv()
+                bountyList.addAll(workouts.map { Bounty(it) })
+                bountyAdapter.notifyDataSetChanged()
+            }
         }
     }
+
 
     private suspend fun readWorkoutsFromCsv(): List<String> {
         return withContext(Dispatchers.IO) {
@@ -97,7 +140,7 @@ class BountyFragment : Fragment() {
                 }
             }
 
-            workouts
+            workouts.shuffled().take(3)
         }
     }
 

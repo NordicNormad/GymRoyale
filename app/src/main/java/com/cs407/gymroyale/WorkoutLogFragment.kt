@@ -34,11 +34,11 @@ class WorkoutLogFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_workout_log, container, false)
-
         // Retrieve workout name from arguments
         workoutName = arguments?.getString("WORKOUT_NAME") ?: "Unknown Workout"
-        val isBounty = activity?.intent?.getBooleanExtra("IS_BOUNTY", false) ?: true
-
+        val isBounty = activity?.intent?.getBooleanExtra("IS_BOUNTY", false) ?: false
+        var Bonus = true
+        activity?.intent?.removeExtra("IS_BOUNTY")
         textViewWorkoutName = view.findViewById(R.id.textViewWorkoutName)
         editTextWeight = view.findViewById(R.id.editTextWeight)
         editTextReps = view.findViewById(R.id.editTextReps)
@@ -52,6 +52,8 @@ class WorkoutLogFragment : Fragment() {
         if (isBounty) {
             Log.d("WorkoutLogFragment", "Setting bounty label to VISIBLE")
             textViewBounty.visibility = View.VISIBLE
+        } else {
+            textViewBounty.visibility = View.GONE
         }
 
         csvManager = WorkoutLogCSVManager(requireContext())
@@ -60,6 +62,10 @@ class WorkoutLogFragment : Fragment() {
 
         buttonSave.setOnClickListener {
             textViewBounty.visibility = View.INVISIBLE
+            if (isBounty && Bonus) {
+                Toast.makeText(requireContext(), "Bonus XP added", Toast.LENGTH_SHORT).show()
+            }
+            Bonus = false
             saveWorkoutLog()
         }
 

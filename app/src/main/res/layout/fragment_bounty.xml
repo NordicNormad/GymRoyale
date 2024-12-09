@@ -34,7 +34,7 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
         android:backgroundTint="#4CAF50"
-        android:text="Claim All"
+        android:text="Claim Workout"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
