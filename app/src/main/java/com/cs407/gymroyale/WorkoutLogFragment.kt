@@ -11,6 +11,8 @@ import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class WorkoutLogFragment : Fragment() {
 
@@ -95,16 +97,20 @@ class WorkoutLogFragment : Fragment() {
 
     private fun loadExistingLogs() {
         // Load all logs for the current workout and update the list
-        val logs = csvManager.readWorkoutLogs().filter { it.workoutName == workoutName }
+        val logs = csvManager.readWorkoutLogs()
+            .filter { it.workoutName == workoutName }
+            .sortedByDescending { SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(it.date) }
+
         workoutLogs.clear()
         workoutLogs.addAll(logs)
 
-        // Display log entries in the format "id --- weight lbs --- reps reps"
+        // Display log entries in the format "date --- weight lbs --- reps reps"
         val logDisplayList = logs.map { "${it.date} --- ${it.weight} lbs --- ${it.reps} reps" }
         logAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, logDisplayList)
         listViewLogs.adapter = logAdapter
         logAdapter.notifyDataSetChanged()
     }
+
 
     private fun deleteWorkoutLog(log: WorkoutLog) {
         // Use the workout name and date to delete the correct log
