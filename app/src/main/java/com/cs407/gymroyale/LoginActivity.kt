@@ -101,8 +101,7 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show()
                     navigateToMainActivity()
                 } else {
-                    errorTextView.text = "Login failed: ${task.exception?.message}"
-                    errorTextView.visibility = TextView.VISIBLE
+                    Toast.makeText(this, "Login Failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
     }

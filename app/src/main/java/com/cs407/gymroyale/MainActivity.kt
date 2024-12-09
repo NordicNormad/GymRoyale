@@ -3,39 +3,32 @@ package com.cs407.gymroyale
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseAuth
 import android.util.Log
 import android.widget.Button
-import android.content.Context
-import android.content.SharedPreferences
-import com.google.common.reflect.TypeToken
-import com.google.gson.Gson
-
-data class UserInfo(
-    val Username: String,
-    val Level: Double,
-    val Trophies: Int
-)
+import android.widget.Toast
+import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.DocumentChange
+import com.cs407.gymroyale.models.Challenge
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    private val sharedPrefsName = "GymRoyalePrefs"
-    private val userInfoKey = "UserInfo"
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this) // Initialize Firebase
+        setContentView(R.layout.activity_main)
 
         auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+
         Log.d("MainActivity", "Current user: ${auth.currentUser?.uid}")
 
-        // Initialize SharedPreferences
-        val sharedPreferences = getSharedPreferences(sharedPrefsName, Context.MODE_PRIVATE)
-        val userInfo = loadUserInfo(sharedPreferences) ?: createDefaultUserInfo(sharedPreferences)
-
-        setContentView(R.layout.activity_main)
+        // Ensure user is authenticated
+        checkAuthentication()
 
         // Load the main content (LandingPageFragment)
         if (savedInstanceState == null) {
@@ -43,74 +36,75 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.fragment_container, LandingPageFragment())
                 .commit()
         }
+
         // Set up the Profile button
         val profileButton = findViewById<Button>(R.id.buttonProfile)
         profileButton.setOnClickListener {
             handleProfileButtonClick()
         }
-    }
-        private fun handleProfileButtonClick() {
-            val currentUser = auth.currentUser
-            if (currentUser == null) {
-                // Redirect to LoginActivity if user is not logged in
-                Log.d("MainActivity", "No user logged in. Redirecting to LoginActivity.")
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-            } else {
-                // Load the ProfileFragment if the user is logged in
-                Log.d("MainActivity", "User logged in: ${currentUser.email}. Loading ProfileFragment.")
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, ProfileFragment())
-                    .addToBackStack(null)
-                    .commit()
-            }
+
+        // Listen for challenge matches in real-time
+        listenForMatches()
     }
 
-    // loads user information into something
-    private fun loadUserInfo(sharedPreferences: SharedPreferences): UserInfo? {
-        val userInfoJson = sharedPreferences.getString(userInfoKey, null)
-        return if (userInfoJson != null) {
-            Gson().fromJson(userInfoJson, object : TypeToken<UserInfo>() {}.type)
+    private fun checkAuthentication() {
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
+            // Redirect to LoginActivity if user is not logged in
+            Log.d("MainActivity", "No user logged in. Redirecting to LoginActivity.")
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
         } else {
-            null
+            Log.d("MainActivity", "User logged in: ${currentUser.email}")
         }
     }
 
-    // saves user information into something
-    private fun saveUserInfo(sharedPreferences: SharedPreferences, userInfo: UserInfo) {
-        val editor = sharedPreferences.edit()
-        val userInfoJson = Gson().toJson(userInfo)
-        editor.putString(userInfoKey, userInfoJson)
-        editor.apply()
+    private fun handleProfileButtonClick() {
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
+            // Redirect to LoginActivity if user is not logged in
+            Log.d("MainActivity", "No user logged in. Redirecting to LoginActivity.")
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        } else {
+            // Load the ProfileFragment if the user is logged in
+            Log.d("MainActivity", "User logged in: ${currentUser.email}. Loading ProfileFragment.")
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ProfileFragment())
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
-    // edits user information into the data structure
-    private fun editUserInfo(
-        sharedPreferences: SharedPreferences,
-        username: String? = null,
-        level: Double? = null,
-        trophies: Int? = null
-    ) {
-        val currentUserInfo = loadUserInfo(sharedPreferences) ?: return
-        val updatedUserInfo = currentUserInfo.copy(
-            Username = username ?: currentUserInfo.Username,
-            Level = level ?: currentUserInfo.Level,
-            Trophies = trophies ?: currentUserInfo.Trophies
-        )
-        saveUserInfo(sharedPreferences, updatedUserInfo)
+    private fun listenForMatches() {
+        val currentUser = auth.currentUser
+        val userId = currentUser?.uid
 
-        Log.d("MainActivity", "UserInfo updated: $updatedUserInfo")
-    }
+        if (userId == null) {
+            Log.w("MainActivity", "User ID is null. Cannot listen for matches.")
+            return
+        }
 
-    //////////////////////////////////////////////DELETE ME WHEN FIREBASE WORKS/////////////////////
-    private fun createDefaultUserInfo(sharedPreferences: SharedPreferences): UserInfo {
-        val defaultUserInfo = UserInfo(
-            Username = "Player1",
-            Level = 1.010001,
-            Trophies = 5000
-        )
-        saveUserInfo(sharedPreferences, defaultUserInfo)
-        return defaultUserInfo
+        db.collection("challenges")
+            .whereArrayContains("participants", userId)
+            .addSnapshotListener { snapshots, e ->
+                if (e != null) {
+                    Log.w("Firestore", "Listen failed.", e)
+                    return@addSnapshotListener
+                }
+
+                for (docChange in snapshots!!.documentChanges) {
+                    if (docChange.type == DocumentChange.Type.ADDED) {
+                        val challenge = docChange.document.toObject(Challenge::class.java)
+                        // Notify user about the challenge
+                        Toast.makeText(
+                            this,
+                            "Matched to challenge: ${challenge.title}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////
 }

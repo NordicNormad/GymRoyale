@@ -1,7 +1,7 @@
-package com.cs407.gymroyle
+package com.cs407.gymroyale
 
-import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,59 +9,85 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.cs407.gymroyale.ChallengerFoundActivity
-import com.cs407.gymroyale.ChallengesAdapter
-import com.cs407.gymroyale.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
+import com.cs407.gymroyale.adapters.ChallengesAdapter
+import com.cs407.gymroyale.models.Challenge
+import com.google.firebase.firestore.FieldValue
 
-class ChallengesFragment : Fragment() {
+class ChallengerFragment : Fragment() {
 
-    private lateinit var firestore: FirebaseFirestore
+    private lateinit var challengesRecyclerView: RecyclerView
+    private lateinit var challengesAdapter: ChallengesAdapter
+    private val challengesList = mutableListOf<Challenge>()
+
+    private lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
+    private var listenerRegistration: ListenerRegistration? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_challenges, container, false)
+    ): View {
+        val view = inflater.inflate(R.layout.fragment_challenger, container, false)
+
+        // Initialize Firebase
+        db = FirebaseFirestore.getInstance()
+        auth = FirebaseAuth.getInstance()
+
+        // Set up RecyclerView
+        challengesRecyclerView = view.findViewById(R.id.challengesRecyclerView)
+        challengesAdapter = ChallengesAdapter(challengesList) { challenge ->
+            joinChallenge(challenge.id)
+        }
+        challengesRecyclerView.layoutManager = LinearLayoutManager(context)
+        challengesRecyclerView.adapter = challengesAdapter
+
+        // Fetch Challenges
+        fetchAvailableChallenges()
+
+        return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        listenerRegistration?.remove()
+    }
 
-        auth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
-
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewChallenges)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-
-        // Fetch and display challenges
-        firestore.collection("challenges")
-            .get()
-            .addOnSuccessListener { documents ->
-                val challenges = documents.map { document ->
-                    Pair(
-                        document.id, // Challenge ID
-                        document.data["title"] as String // Challenge Title
-                    )
+    private fun fetchAvailableChallenges() {
+        listenerRegistration = db.collection("challenges")
+            .whereEqualTo("status", "open")
+            .addSnapshotListener { snapshots, e ->
+                if (e != null) {
+                    Log.e("Firestore", "Error fetching challenges", e)
+                    return@addSnapshotListener
                 }
-                recyclerView.adapter = ChallengesAdapter(challenges) { challengeId, challengeTitle ->
-                    onChallengeSelected(challengeId, challengeTitle)
+                challengesList.clear()
+                for (document in snapshots!!) {
+                    val challenge = document.toObject(Challenge::class.java)
+                    challenge.id = document.id // Assign document ID
+                    challengesList.add(challenge)
                 }
+                challengesAdapter.notifyDataSetChanged()
+            }
+    }
+
+    private fun joinChallenge(challengeId: String) {
+        val userId = auth.currentUser?.uid
+        if (userId == null) {
+            Toast.makeText(context, "User not logged in!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        db.collection("challenges").document(challengeId)
+            .update("participants", FieldValue.arrayUnion(userId))
+            .addOnSuccessListener {
+                Toast.makeText(context, "Joined Challenge!", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener { e ->
-                Toast.makeText(context, "Error fetching challenges: ${e.message}", Toast.LENGTH_SHORT).show()
+                Log.e("Firestore", "Error joining challenge", e)
+                Toast.makeText(context, "Failed to join challenge.", Toast.LENGTH_SHORT).show()
             }
     }
-
-    private fun onChallengeSelected(challengeId: String, challengeTitle: String) {
-        // Navigate to ChallengerFoundActivity with challenge details
-        val intent = Intent(requireContext(), ChallengerFoundActivity::class.java).apply {
-            putExtra("challengeId", challengeId)
-            putExtra("challengeTitle", challengeTitle)
-        }
-        startActivity(intent)
-    }
-
 }
