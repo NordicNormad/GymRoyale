@@ -90,16 +90,16 @@
         android:backgroundTint="#ffff99"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_above="@id/buttonFindChallenger"
+        android:layout_above="@id/buttonChallenges"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="16dp" />
 
     <!-- Find Challenger button -->
     <Button
-        android:id="@+id/buttonFindChallenger"
+        android:id="@+id/buttonChallenges"
         android:layout_width="400dp"
         android:layout_height="90dp"
-        android:text="FIND CHALLENGER"
+        android:text="CHALLENGES"
         android:textColor="#000000"
         android:backgroundTint="#ffff99"
         android:textSize="20sp"

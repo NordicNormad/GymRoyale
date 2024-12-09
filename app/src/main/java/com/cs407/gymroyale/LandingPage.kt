@@ -1,5 +1,6 @@
 package com.cs407.gymroyale
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,11 +10,11 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.cs407.gymroyale.models.UserInfo
 import com.cs407.gymroyale.utils.FirebaseUtils
 
 class LandingPageFragment : Fragment() {
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,7 +57,7 @@ class LandingPageFragment : Fragment() {
         // Button Definitions
         val profileButton = view.findViewById<Button>(R.id.buttonProfile)
         val logWorkoutButton = view.findViewById<Button>(R.id.buttonLogWorkout)
-        val findChallengerButton = view.findViewById<Button>(R.id.buttonFindChallenger)
+        val challengesButton = view.findViewById<Button>(R.id.buttonChallenges)
 
         // Profile button action
         profileButton.setOnClickListener {
@@ -72,10 +73,10 @@ class LandingPageFragment : Fragment() {
             startActivityForResult(intent, 1)
         }
 
-        // Load LoadingScreenFragment when the Find Challenger button is clicked
-        findChallengerButton.setOnClickListener {
+        // Load ChallengesFragment when the Find Challenger button is clicked
+        challengesButton.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, LoadingScreenFragment())
+                .replace(R.id.fragment_container, ChallengesFragment())
                 .addToBackStack(null)
                 .commit()
         }
