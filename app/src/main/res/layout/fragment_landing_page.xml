@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:background="#2A2A2A">
 
-
     <!-- Top right profile button -->
     <Button
         android:id="@+id/buttonProfile"
@@ -59,14 +58,25 @@
             android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:layout_gravity="center" />
+
+        <!-- Trophies Text -->
+        <TextView
+            android:id="@+id/textTrophies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trophies: 0"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp" />
     </LinearLayout>
 
     <!-- Central image -->
     <ImageView
         android:id="@+id/imageGymIcon"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_below="@id/textRank"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_below="@id/levelBarContainer"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp" />
 
@@ -79,9 +89,9 @@
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_below="@id/imageGymIcon"
+        android:layout_above="@id/buttonFindChallenger"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp" />
+        android:layout_marginBottom="16dp" />
 
     <!-- Find Challenger button -->
     <Button
@@ -92,12 +102,13 @@
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_below="@id/buttonLogWorkout"
+        android:layout_above="@id/bottomNavigation"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp" />
+        android:layout_marginBottom="16dp" />
 
     <!-- Bottom navigation bar -->
     <LinearLayout
+        android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -114,7 +125,7 @@
             android:text="Settings"
             android:contentDescription="Menu" />
 
-        <!-- Bottom nav - homepage -->
+        <!-- Bottom nav - Homepage -->
         <Button
             android:id="@+id/buttonBottomNavHome"
             android:layout_width="0dp"
@@ -123,7 +134,7 @@
             android:text="Home"
             android:contentDescription="Workout" />
 
-        <!-- Bottom nav - bounties -->
+        <!-- Bottom nav - Bounties -->
         <Button
             android:id="@+id/buttonBottomNavBounties"
             android:layout_width="0dp"

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -25,8 +26,10 @@ class LandingPageFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_landing_page, container, false)
 
-        // Level element
+        // Level and trophies elements
         val levelText = view.findViewById<TextView>(R.id.textLevel)
+        val trophiesText = view.findViewById<TextView>(R.id.textTrophies)
+        val gymIconImageView = view.findViewById<ImageView>(R.id.imageGymIcon)
 
         // Load UserInfo
         val sharedPreferences = requireContext().getSharedPreferences(sharedPrefsName, Context.MODE_PRIVATE)
@@ -38,6 +41,18 @@ class LandingPageFragment : Fragment() {
             val progressDecimal = userInfo.Level - currentLevel
             val progressFraction = (progressDecimal * 10000).toInt()
             levelText.text = "Level: $currentLevel, $progressFraction/10000"
+
+            // Set trophies text
+            trophiesText.text = "Trophies: ${userInfo.Trophies}"
+
+            // Set gym icon based on trophies range
+            val gymIconRes = when (userInfo.Trophies) {
+                in 0..200 -> R.drawable.arena1icon
+                in 201..400 -> R.drawable.arena2icon
+                in 401..600 -> R.drawable.arena3icon
+                else -> R.drawable.arena4icon
+            }
+            gymIconImageView.setImageResource(gymIconRes)
         }
 
         // Button Definitions

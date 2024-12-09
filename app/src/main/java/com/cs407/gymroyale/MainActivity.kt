@@ -106,8 +106,8 @@ class MainActivity : AppCompatActivity() {
     private fun createDefaultUserInfo(sharedPreferences: SharedPreferences): UserInfo {
         val defaultUserInfo = UserInfo(
             Username = "Player1",
-            Level = 1.00001,
-            Trophies = 0
+            Level = 1.010001,
+            Trophies = 5000
         )
         saveUserInfo(sharedPreferences, defaultUserInfo)
         return defaultUserInfo
