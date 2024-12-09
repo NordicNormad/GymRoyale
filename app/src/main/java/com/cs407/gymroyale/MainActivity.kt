@@ -7,10 +7,22 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import android.util.Log
 import android.widget.Button
+import android.content.Context
+import android.content.SharedPreferences
+import com.google.common.reflect.TypeToken
+import com.google.gson.Gson
+
+data class UserInfo(
+    val Username: String,
+    val Level: Double,
+    val Trophies: Int
+)
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private val sharedPrefsName = "GymRoyalePrefs"
+    private val userInfoKey = "UserInfo"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,6 +30,10 @@ class MainActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         Log.d("MainActivity", "Current user: ${auth.currentUser?.uid}")
+
+        // Initialize SharedPreferences
+        val sharedPreferences = getSharedPreferences(sharedPrefsName, Context.MODE_PRIVATE)
+        val userInfo = loadUserInfo(sharedPreferences) ?: createDefaultUserInfo(sharedPreferences)
 
         setContentView(R.layout.activity_main)
 
@@ -48,5 +64,33 @@ class MainActivity : AppCompatActivity() {
                     .addToBackStack(null)
                     .commit()
             }
+    }
+
+    // loads user information into something
+    private fun loadUserInfo(sharedPreferences: SharedPreferences): UserInfo? {
+        val userInfoJson = sharedPreferences.getString(userInfoKey, null)
+        return if (userInfoJson != null) {
+            Gson().fromJson(userInfoJson, object : TypeToken<UserInfo>() {}.type)
+        } else {
+            null
+        }
+    }
+
+    // saves user information into something
+    private fun saveUserInfo(sharedPreferences: SharedPreferences, userInfo: UserInfo) {
+        val editor = sharedPreferences.edit()
+        val userInfoJson = Gson().toJson(userInfo)
+        editor.putString(userInfoKey, userInfoJson)
+        editor.apply()
+    }
+
+    private fun createDefaultUserInfo(sharedPreferences: SharedPreferences): UserInfo {
+        val defaultUserInfo = UserInfo(
+            Username = "Player1",
+            Level = 1.00001,
+            Trophies = 0
+        )
+        saveUserInfo(sharedPreferences, defaultUserInfo)
+        return defaultUserInfo
     }
 }
