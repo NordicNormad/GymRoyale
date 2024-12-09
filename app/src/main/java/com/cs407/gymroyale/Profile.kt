@@ -5,9 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -44,13 +42,12 @@ class ProfileFragment : Fragment() {
         val profilePhoto = view.findViewById<ImageView>(R.id.imageViewProfilePhoto)
         val profileName = view.findViewById<TextView>(R.id.textViewProfileName)
         val profileBio = view.findViewById<TextView>(R.id.textViewProfileBio)
-        val editBioButton = view.findViewById<Button>(R.id.buttonEditBio)
         val uploadPhotoButton = view.findViewById<Button>(R.id.buttonUploadPhoto)
         val xpTextView = view.findViewById<TextView>(R.id.textViewXP)
         val challengesCompletedTextView = view.findViewById<TextView>(R.id.textViewChallengesCompleted)
         val logOutButton = view.findViewById<Button>(R.id.buttonLogOut)
+        val editProfileButton = view.findViewById<Button>(R.id.buttonEditProfile)
 
-        // Redirect to login if not authenticated
         if (auth.currentUser == null) {
             startActivity(Intent(requireContext(), LoginActivity::class.java))
             requireActivity().finish()
@@ -59,59 +56,68 @@ class ProfileFragment : Fragment() {
 
         val userId = auth.currentUser?.uid ?: ""
 
-        // Fetch profile data from Firestore
         firestore.collection("users").document(userId).get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
-                    Log.d("ProfileFragment", "Document data: ${document.data}")
                     profileName.text = document.getString("name") ?: "Name not set"
                     profileBio.text = document.getString("bio") ?: "Bio not set"
                     xpTextView.text = "XP: ${document.getLong("xp") ?: 0}"
                     challengesCompletedTextView.text =
                         "Challenges Completed: ${document.getLong("challengesCompleted") ?: 0}"
                 } else {
-                    Log.e("ProfileFragment", "Document is null or does not exist.")
                     Toast.makeText(context, "User data not found", Toast.LENGTH_SHORT).show()
                 }
             }
-            .addOnFailureListener { exception ->
-                Log.e("ProfileFragment", "Error fetching profile: ${exception.message}")
+            .addOnFailureListener {
                 Toast.makeText(context, "Error fetching profile", Toast.LENGTH_SHORT).show()
             }
 
-        // Log out functionality
         logOutButton.setOnClickListener {
             auth.signOut()
             startActivity(Intent(requireContext(), LoginActivity::class.java))
             requireActivity().finish()
         }
 
-        // Edit bio functionality
-        editBioButton.setOnClickListener {
-            val newBio = EditText(requireContext())
+        uploadPhotoButton.setOnClickListener {
+            uploadImageLauncher.launch("image/*")
+        }
+
+        editProfileButton.setOnClickListener {
+            val layout = LinearLayout(requireContext())
+            layout.orientation = LinearLayout.VERTICAL
+            val nameField = EditText(requireContext())
+            nameField.hint = "Name"
+            val bioField = EditText(requireContext())
+            bioField.hint = "Bio"
+            layout.addView(nameField)
+            layout.addView(bioField)
+            nameField.setText(profileName.text)
+            bioField.setText(profileBio.text)
+
             val dialog = androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                .setTitle("Edit Bio")
-                .setView(newBio)
+                .setTitle("Edit Profile")
+                .setView(layout)
                 .setPositiveButton("Save") { _, _ ->
-                    val bioText = newBio.text.toString()
+                    val newName = nameField.text.toString()
+                    val newBio = bioField.text.toString()
+                    val updates = hashMapOf<String, Any>(
+                        "name" to newName,
+                        "bio" to newBio
+                    )
                     firestore.collection("users").document(userId)
-                        .update("bio", bioText)
+                        .update(updates)
                         .addOnSuccessListener {
-                            profileBio.text = bioText
-                            Toast.makeText(context, "Bio updated!", Toast.LENGTH_SHORT).show()
+                            profileName.text = newName
+                            profileBio.text = newBio
+                            Toast.makeText(context, "Profile updated!", Toast.LENGTH_SHORT).show()
                         }
                         .addOnFailureListener {
-                            Toast.makeText(context, "Failed to update bio.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Failed to update profile.", Toast.LENGTH_SHORT).show()
                         }
                 }
                 .setNegativeButton("Cancel", null)
                 .create()
             dialog.show()
-        }
-
-        // Upload photo functionality
-        uploadPhotoButton.setOnClickListener {
-            uploadImageLauncher.launch("image/*")
         }
 
         return view

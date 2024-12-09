@@ -102,11 +102,12 @@
         android:layout_marginTop="16dp" />
 
     <Button
-        android:id="@+id/buttonEditBio"
+        android:id="@+id/buttonEditProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit Bio"
-        android:layout_gravity="center" />
+        android:text="Edit Profile"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center_horizontal"/>
 
     <Button
         android:id="@+id/buttonUploadPhoto"
