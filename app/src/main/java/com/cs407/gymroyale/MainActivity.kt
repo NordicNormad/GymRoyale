@@ -84,6 +84,25 @@ class MainActivity : AppCompatActivity() {
         editor.apply()
     }
 
+    // edits user information into the data structure
+    private fun editUserInfo(
+        sharedPreferences: SharedPreferences,
+        username: String? = null,
+        level: Double? = null,
+        trophies: Int? = null
+    ) {
+        val currentUserInfo = loadUserInfo(sharedPreferences) ?: return
+        val updatedUserInfo = currentUserInfo.copy(
+            Username = username ?: currentUserInfo.Username,
+            Level = level ?: currentUserInfo.Level,
+            Trophies = trophies ?: currentUserInfo.Trophies
+        )
+        saveUserInfo(sharedPreferences, updatedUserInfo)
+
+        Log.d("MainActivity", "UserInfo updated: $updatedUserInfo")
+    }
+
+    //////////////////////////////////////////////DELETE ME WHEN FIREBASE WORKS/////////////////////
     private fun createDefaultUserInfo(sharedPreferences: SharedPreferences): UserInfo {
         val defaultUserInfo = UserInfo(
             Username = "Player1",
@@ -93,4 +112,5 @@ class MainActivity : AppCompatActivity() {
         saveUserInfo(sharedPreferences, defaultUserInfo)
         return defaultUserInfo
     }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 }
