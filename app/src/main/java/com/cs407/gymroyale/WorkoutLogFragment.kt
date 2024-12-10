@@ -15,8 +15,13 @@ import androidx.fragment.app.Fragment
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+
 class WorkoutLogFragment : Fragment() {
 
+    private lateinit var auth: FirebaseAuth
+    private lateinit var firestore: FirebaseFirestore
     private lateinit var textViewWorkoutName: TextView
     private lateinit var textViewBounty: TextView
     private lateinit var editTextWeight: EditText
@@ -34,6 +39,11 @@ class WorkoutLogFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_workout_log, container, false)
+
+        // Firebase initialization
+        auth = FirebaseAuth.getInstance()
+        firestore = FirebaseFirestore.getInstance()
+
         // Retrieve workout name from arguments
         workoutName = arguments?.getString("WORKOUT_NAME") ?: "Unknown Workout"
         val isBounty = activity?.intent?.getBooleanExtra("IS_BOUNTY", false) ?: false
@@ -45,7 +55,6 @@ class WorkoutLogFragment : Fragment() {
         buttonSave = view.findViewById(R.id.buttonSave)
         listViewLogs = view.findViewById(R.id.listViewLogs)
         textViewBounty = view.findViewById(R.id.textViewBounty)
-
 
         // Set workout name
         textViewWorkoutName.text = workoutName
@@ -63,10 +72,12 @@ class WorkoutLogFragment : Fragment() {
         buttonSave.setOnClickListener {
             textViewBounty.visibility = View.INVISIBLE
             if (isBounty && Bonus) {
-                Toast.makeText(requireContext(), "Bonus XP added", Toast.LENGTH_SHORT).show()
+                saveWorkoutLog(true)
+            } else {
+                saveWorkoutLog(false)
             }
             Bonus = false
-            saveWorkoutLog()
+
         }
 
         // Handle long-press to delete a log entry
@@ -79,7 +90,7 @@ class WorkoutLogFragment : Fragment() {
         return view
     }
 
-    private fun saveWorkoutLog() {
+    private fun saveWorkoutLog(isBonus: Boolean) {
         val weightStr = editTextWeight.text.toString()
         val repsStr = editTextReps.text.toString()
 
@@ -103,12 +114,52 @@ class WorkoutLogFragment : Fragment() {
                 reps = reps
             )
 
+            // Save the workout log to CSV
             csvManager.addWorkoutLog(workoutLog)
+
+            // Increment XP in Firebase
+            incrementUserXP(isBonus)
+
+            // Reload logs
             loadExistingLogs()
 
         } catch (e: NumberFormatException) {
             Toast.makeText(requireContext(), "Invalid weight or reps", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun incrementUserXP(isBonus: Boolean) {
+        val userId = auth.currentUser?.uid ?: return
+
+        firestore.collection("users").document(userId).get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    val currentXP = document.getLong("xp") ?: 0
+                    var newXP = currentXP
+                    var toastString = ""
+                    if (isBonus) {
+                        newXP += 30
+                        toastString = "30 XP added (Bonus!)"
+                    } else {
+                        newXP += 15
+                        toastString = "15 XP added"
+                    }
+
+                    // Update XP in Firestore
+                    firestore.collection("users").document(userId)
+                        .update("xp", newXP)
+                        .addOnSuccessListener {
+                            Toast.makeText(requireContext(), toastString, Toast.LENGTH_SHORT).show()
+                            Log.d("WorkoutLogFragment", "XP successfully updated")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w("WorkoutLogFragment", "Error updating XP", e)
+                        }
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.w("WorkoutLogFragment", "Error retrieving user data", e)
+            }
     }
 
     private fun loadExistingLogs() {
@@ -127,13 +178,11 @@ class WorkoutLogFragment : Fragment() {
         logAdapter.notifyDataSetChanged()
     }
 
-
     private fun deleteWorkoutLog(log: WorkoutLog) {
         // Use the workout name and date to delete the correct log
         csvManager.deleteWorkoutLog(log.workoutName, log.date, log.id)
         loadExistingLogs()  // Refresh the list
     }
-
 
     companion object {
         fun newInstance(workoutName: String): WorkoutLogFragment {

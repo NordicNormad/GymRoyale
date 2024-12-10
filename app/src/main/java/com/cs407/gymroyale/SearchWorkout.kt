@@ -68,8 +68,13 @@ class SearchWorkout : AppCompatActivity() {
 
         // Handle Cancel button click to finish the activity
         buttonCancel.setOnClickListener {
-            finish()  // Closes the current activity and returns to the parent
+            val intent = Intent(this, MainActivity::class.java)  // Assuming MainActivity hosts the fragments
+            intent.putExtra("NAVIGATE_TO_HOME", true)  // Use an extra flag to signal home navigation
+            startActivity(intent)
+            finish()  // Close the current activity
         }
+
+
 
         // Inside onCreate method
         val historyButton = findViewById<Button>(R.id.historyButton)
