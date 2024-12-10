@@ -39,9 +39,10 @@ class BountyFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_bounty, container, false)
 
-        val bottomNavSettingsButton = view.findViewById<Button>(R.id.buttonBottomNavSettings)
-        val bottomNavHomeButton = view.findViewById<Button>(R.id.buttonBottomNavHome)
+
+        val bottomNavProfileButton = view.findViewById<Button>(R.id.buttonBottomNavProfile)
         val bottomNavBountyButton = view.findViewById<Button>(R.id.buttonBottomNavBounties)
+        val bottomNavHomeButton = view.findViewById<Button>(R.id.buttonBottomNavHome)
 
         recyclerView = view.findViewById(R.id.rvBounties)
         btnClaimBounty = view.findViewById(R.id.btnClaimAll)
@@ -81,9 +82,20 @@ class BountyFragment : Fragment() {
             }
         }
 
-        bottomNavBountyButton.setOnClickListener { /* Empty */ }
+        bottomNavBountyButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, BountyFragment())
+                .addToBackStack(null)
+                .commit()
+        }
 
-        bottomNavSettingsButton.setOnClickListener { /* Empty */ }
+        bottomNavProfileButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ProfileFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
         bottomNavHomeButton.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, LandingPageFragment())
