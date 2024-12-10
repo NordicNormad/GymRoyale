@@ -1,12 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#000000"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/challengesRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="400dp"
+        android:backgroundTint="#000000"
         android:padding="8dp" />
+
+    <!-- Bottom Navigation Bar -->
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom">
+
+        <!-- Bottom nav - Profile -->
+        <Button
+            android:id="@+id/buttonBottomNavProfile"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="#1a53ff"
+            android:contentDescription="Profile"
+            android:text="Profile"
+            android:textColor="#ffffff"
+            android:textSize="10sp" />
+
+        <!-- Bottom nav - Homepage -->
+        <Button
+            android:id="@+id/buttonBottomNavHome"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="#1a53ff"
+            android:contentDescription="Workout"
+            android:text="Home"
+            android:textColor="#ffffff"
+            android:textSize="15sp" />
+
+        <!-- Bottom nav - Bounties -->
+        <Button
+            android:id="@+id/buttonBottomNavBounties"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:backgroundTint="#1a53ff"
+            android:contentDescription="Bounties"
+            android:text="Bounties"
+            android:textColor="#ffffff"
+            android:textSize="10sp" />
+    </LinearLayout>
 </FrameLayout>

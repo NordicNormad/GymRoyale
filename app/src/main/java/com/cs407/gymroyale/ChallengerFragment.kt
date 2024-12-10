@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.cs407.gymroyale.models.Challenge
+import com.cs407.gymroyalepackage.LandingPageFragment
 
 class ChallengerFragment : Fragment() {
 
@@ -21,12 +23,16 @@ class ChallengerFragment : Fragment() {
     private val challengesList = mutableListOf<Challenge>()
     private val db = FirebaseFirestore.getInstance()
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_challenger, container, false)
 
+        val bottomNavProfileButton = view.findViewById<Button>(R.id.buttonBottomNavProfile)
+        val bottomNavBountyButton = view.findViewById<Button>(R.id.buttonBottomNavBounties)
+        val bottomNavHomeButton = view.findViewById<Button>(R.id.buttonBottomNavHome)
         // Initialize RecyclerView
         challengesRecyclerView = view.findViewById(R.id.challengesRecyclerView)
         challengesRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -34,6 +40,26 @@ class ChallengerFragment : Fragment() {
         // Fetch challenges from Firestore
         fetchAvailableChallenges()
 
+        bottomNavBountyButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, BountyFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        bottomNavProfileButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ProfileFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        bottomNavHomeButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, LandingPageFragment())
+                .addToBackStack(null)
+                .commit()
+        }
         return view
     }
 
