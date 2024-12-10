@@ -9,6 +9,7 @@ import android.view.*
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import com.cs407.gymroyalepackage.LandingPageFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -39,6 +40,9 @@ class ProfileFragment : Fragment() {
         firestore = FirebaseFirestore.getInstance()
         storage = FirebaseStorage.getInstance()
 
+        val bottomNavProfileButton = view.findViewById<Button>(R.id.buttonBottomNavProfile)
+        val bottomNavBountyButton = view.findViewById<Button>(R.id.buttonBottomNavBounties)
+        val bottomNavHomeButton = view.findViewById<Button>(R.id.buttonBottomNavHome)
         val profilePhoto = view.findViewById<ImageView>(R.id.imageViewProfilePhoto)
         val profileName = view.findViewById<TextView>(R.id.textViewProfileName)
         val profileBio = view.findViewById<TextView>(R.id.textViewProfileBio)
@@ -120,6 +124,27 @@ class ProfileFragment : Fragment() {
                 .setNegativeButton("Cancel", null)
                 .create()
             dialog.show()
+        }
+
+        bottomNavBountyButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, BountyFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        bottomNavProfileButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ProfileFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        bottomNavHomeButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, LandingPageFragment())
+                .addToBackStack(null)
+                .commit()
         }
 
         return view
