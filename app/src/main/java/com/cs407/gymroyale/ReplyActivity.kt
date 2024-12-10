@@ -111,4 +111,24 @@ class ReplyActivity : AppCompatActivity() {
             }
         }
     }
+    private fun showUserProfile(userId: String) {
+        db.collection("users").document(userId).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val userName = document.getString("name") ?: "Name not set"
+                    val userStats = "XP: ${document.getLong("xp") ?: 0}, Trophies: ${document.getLong("trophies") ?: 0}"
+
+                    // Open the dialog with fetched data
+                    val dialog = UserProfileDialog.newInstance(userName, userStats)
+                    dialog.show(supportFragmentManager, "UserProfileDialog")
+                } else {
+                    Toast.makeText(this, "User data not found", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Error fetching profile: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                Log.e("ReplyActivity", "Error fetching profile", e)
+            }
+    }
+
 }

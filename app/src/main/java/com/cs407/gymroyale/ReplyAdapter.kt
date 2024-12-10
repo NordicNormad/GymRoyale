@@ -1,17 +1,20 @@
 package com.cs407.gymroyale
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cs407.gymroyale.models.Reply
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ReplyAdapter(
     private val replies: List<Reply>,
-    private val fragmentManager: FragmentManager // Use FragmentManager for navigation
+    private val fragmentManager: FragmentManager
 ) : RecyclerView.Adapter<ReplyAdapter.ReplyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReplyViewHolder {
@@ -36,16 +39,38 @@ class ReplyAdapter(
             timestampTextView.text = reply.timestamp.toString()
 
             usernameTextView.setOnClickListener {
-                val profileFragment = ProfileFragment().apply {
-                    arguments = Bundle().apply {
-                        putString("userId", reply.userId)
+                // Fetch user profile and show dialog
+                fetchUserProfile(reply.userId)
+            }
+        }
+
+        private fun fetchUserProfile(userId: String) {
+            val db = FirebaseFirestore.getInstance()
+            db.collection("users").document(userId).get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        val userName = document.getString("name") ?: "Name not set"
+                        val userStats = "XP: ${document.getLong("xp") ?: 0}, Trophies: ${document.getLong("trophies") ?: 0}"
+
+                        // Open the UserProfileDialog with fetched data
+                        val dialog = UserProfileDialog.newInstance(userName, userStats)
+                        dialog.show(fragmentManager, "UserProfileDialog")
+                    } else {
+                        Toast.makeText(
+                            itemView.context,
+                            "User data not found",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
-                fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, profileFragment)
-                    .addToBackStack(null)
-                    .commit()
-            }
+                .addOnFailureListener { e ->
+                    Toast.makeText(
+                        itemView.context,
+                        "Error fetching profile: ${e.localizedMessage}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.e("ReplyAdapter", "Error fetching profile", e)
+                }
         }
     }
 }

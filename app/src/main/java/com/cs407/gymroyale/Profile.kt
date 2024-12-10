@@ -38,13 +38,12 @@ class ProfileFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
+        // Initialize Firebase
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
         storage = FirebaseStorage.getInstance()
 
-        val bottomNavProfileButton = view.findViewById<Button>(R.id.buttonBottomNavProfile)
-        val bottomNavBountyButton = view.findViewById<Button>(R.id.buttonBottomNavBounties)
-        val bottomNavHomeButton = view.findViewById<Button>(R.id.buttonBottomNavHome)
+        // Retrieve UI elements
         val profilePhoto = view.findViewById<ImageView>(R.id.imageViewProfilePhoto)
         val profileName = view.findViewById<TextView>(R.id.textViewProfileName)
         val profileBio = view.findViewById<TextView>(R.id.textViewProfileBio)
@@ -55,26 +54,50 @@ class ProfileFragment : Fragment() {
         val logOutButton = view.findViewById<Button>(R.id.buttonLogOut)
         val editProfileButton = view.findViewById<Button>(R.id.buttonEditProfile)
 
-        // Check if a userId is passed; fallback to current user
+        val bottomNavProfileButton = view.findViewById<Button>(R.id.buttonBottomNavProfile)
+        val bottomNavBountyButton = view.findViewById<Button>(R.id.buttonBottomNavBounties)
+        val bottomNavHomeButton = view.findViewById<Button>(R.id.buttonBottomNavHome)
+
+        // Get userId from arguments or fallback to the logged-in user
         viewedUserId = arguments?.getString("userId") ?: auth.currentUser?.uid
 
         if (viewedUserId == null) {
             Toast.makeText(context, "No user information available", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(requireContext(), LoginActivity::class.java))
-            requireActivity().finish()
+            navigateToLogin()
             return view
         }
 
-        // Hide edit and upload buttons for other users
+        // Hide edit and upload buttons if viewing another user's profile
         if (viewedUserId != auth.currentUser?.uid) {
             uploadPhotoButton.visibility = View.GONE
             editProfileButton.visibility = View.GONE
         }
 
-        // Fetch profile data
-        firestore.collection("users").document(viewedUserId!!).get()
+        // Fetch and display profile data
+        fetchProfileData(viewedUserId!!, profileName, profileBio, xpTextView, trophyTextView, challengesCompletedTextView)
+
+        // Button listeners
+        logOutButton.setOnClickListener { logOutUser() }
+        uploadPhotoButton.setOnClickListener { uploadImageLauncher.launch("image/*") }
+        editProfileButton.setOnClickListener { showEditProfileDialog(profileName, profileBio, viewedUserId!!) }
+
+        // Bottom navigation
+        setBottomNavigationListeners(bottomNavProfileButton, bottomNavBountyButton, bottomNavHomeButton)
+
+        return view
+    }
+
+    private fun fetchProfileData(
+        userId: String,
+        profileName: TextView,
+        profileBio: TextView,
+        xpTextView: TextView,
+        trophyTextView: TextView,
+        challengesCompletedTextView: TextView
+    ) {
+        firestore.collection("users").document(userId).get()
             .addOnSuccessListener { document ->
-                if (document != null && document.exists()) {
+                if (document.exists()) {
                     profileName.text = document.getString("name") ?: "Name not set"
                     profileBio.text = document.getString("bio") ?: "Bio not set"
                     xpTextView.text = "XP: ${document.getLong("xp") ?: 0}"
@@ -85,46 +108,47 @@ class ProfileFragment : Fragment() {
                     Toast.makeText(context, "User data not found", Toast.LENGTH_SHORT).show()
                 }
             }
-            .addOnFailureListener {
-                Toast.makeText(context, "Error fetching profile", Toast.LENGTH_SHORT).show()
+            .addOnFailureListener { e ->
+                Toast.makeText(context, "Error fetching profile: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                Log.e("ProfileFragment", "Error fetching profile data", e)
             }
+    }
 
-        logOutButton.setOnClickListener {
-            auth.signOut()
-            startActivity(Intent(requireContext(), LoginActivity::class.java))
-            requireActivity().finish()
-        }
+    private fun navigateToLogin() {
+        startActivity(Intent(requireContext(), LoginActivity::class.java))
+        requireActivity().finish()
+    }
 
-        uploadPhotoButton.setOnClickListener {
-            uploadImageLauncher.launch("image/*")
-        }
+    private fun logOutUser() {
+        auth.signOut()
+        navigateToLogin()
+    }
 
-        editProfileButton.setOnClickListener {
-            showEditProfileDialog(profileName, profileBio, viewedUserId!!)
-        }
-
-        bottomNavBountyButton.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, BountyFragment())
-                .addToBackStack(null)
-                .commit()
-        }
-
-        bottomNavProfileButton.setOnClickListener {
+    private fun setBottomNavigationListeners(
+        profileButton: Button,
+        bountyButton: Button,
+        homeButton: Button
+    ) {
+        profileButton.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, ProfileFragment())
                 .addToBackStack(null)
                 .commit()
         }
 
-        bottomNavHomeButton.setOnClickListener {
+        bountyButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, BountyFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        homeButton.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, LandingPageFragment())
                 .addToBackStack(null)
                 .commit()
         }
-
-        return view
     }
 
     private fun uploadProfilePhoto(uri: Uri) {

@@ -17,10 +17,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        FirebaseApp.initializeApp(this) // Initialize Firebase
+        FirebaseApp.initializeApp(this)
         setContentView(R.layout.activity_main)
 
         auth = FirebaseAuth.getInstance()
@@ -31,14 +30,27 @@ class MainActivity : AppCompatActivity() {
         // Ensure user is authenticated
         checkAuthentication()
 
-        // Load the main content (LandingPageFragment)
-        if (savedInstanceState == null) {
+        // Check for userId in intent for ProfileFragment navigation
+        val userId = intent.getStringExtra("userId")
+        if (userId != null) {
+            Log.d("MainActivity", "Navigating to ProfileFragment for user: $userId")
+            val profileFragment = ProfileFragment().apply {
+                arguments = Bundle().apply {
+                    putString("userId", userId)
+                }
+            }
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, profileFragment)
+                .addToBackStack(null)
+                .commit()
+        } else if (savedInstanceState == null) {
+            // Load the main content (LandingPageFragment)
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, LandingPageFragment())
                 .commit()
         }
-
     }
+
 
     private fun checkAuthentication() {
         val currentUser = auth.currentUser
