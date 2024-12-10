@@ -4,10 +4,8 @@ data class Challenge(
     var id: String = "",
     var title: String = "",
     var description: String = "",
-    var uploadedBy: String = "",
-    var uploadedByUsername: String? = null,
-    var completedBy: String? = null,
-    var completedByUsername: String? = null,
-    var status: String = "open" ,// Status options: open, completed
-    var trophiesReward: Int = 20// Number of trophies awarded for completing the challenge
+    var status: String = "open",                // Challenge status
+    var trophiesReward: Int = 20,               // Number of trophies awarded
+    var completedBy: List<String> = emptyList(), // List of user IDs who completed the challenge
+    var maxParticipants: Int = Int.MAX_VALUE   // Optional: max number of completions allowed
 )

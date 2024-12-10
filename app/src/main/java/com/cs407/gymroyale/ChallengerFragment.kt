@@ -64,10 +64,10 @@ class ChallengerFragment : Fragment() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
         db.collection("challenges").document(challenge.id)
-            .update("acceptedBy", userId, "status", "accepted")
+            .update("status", "accepted", "acceptedBy", userId)
             .addOnSuccessListener {
                 Toast.makeText(context, "Challenge accepted!", Toast.LENGTH_SHORT).show()
-                fetchAvailableChallenges()
+                fetchAvailableChallenges() // Refresh the list
             }
             .addOnFailureListener { e ->
                 Log.w("Firestore", "Error accepting challenge", e)
@@ -77,23 +77,43 @@ class ChallengerFragment : Fragment() {
 
     private fun completeChallenge(challenge: Challenge) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
-        val username = FirebaseAuth.getInstance().currentUser?.displayName ?: "Anonymous"
 
-        db.collection("challenges").document(challenge.id)
-            .update(
-                "completedBy", userId,
-                "completedByUsername", username,
-                "status", "completed"
-            )
-            .addOnSuccessListener {
-                claimTrophies(challenge.trophiesReward) // Use the trophiesReward field
-                Toast.makeText(context, "Challenge completed and trophies claimed!", Toast.LENGTH_SHORT).show()
-                fetchAvailableChallenges()
+        val challengeRef = db.collection("challenges").document(challenge.id)
+
+        challengeRef.get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    val completedByField = document.get("completedBy")
+
+                    // Convert completedBy to a list if it is not already
+                    val completedBy = when (completedByField) {
+                        is List<*> -> completedByField.filterIsInstance<String>()
+                        is String -> listOf(completedByField)
+                        else -> emptyList()
+                    }
+
+                    if (completedBy.contains(userId)) {
+                        Toast.makeText(context, "You have already completed this challenge.", Toast.LENGTH_SHORT).show()
+                        return@addOnSuccessListener
+                    }
+
+                    challengeRef.update("completedBy", FieldValue.arrayUnion(userId))
+                        .addOnSuccessListener {
+                            claimTrophies(challenge.trophiesReward)
+                            Toast.makeText(context, "Challenge completed and trophies claimed!", Toast.LENGTH_SHORT).show()
+                            fetchAvailableChallenges() // Refresh the list
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("Firestore", "Error updating completedBy: $e")
+                        }
+                }
             }
             .addOnFailureListener { e ->
-                Log.w("Firestore", "Error completing challenge", e)
+                Log.e("Firestore", "Error fetching challenge: $e")
             }
     }
+
+
 
 
     private fun claimTrophies(trophies: Int) {
