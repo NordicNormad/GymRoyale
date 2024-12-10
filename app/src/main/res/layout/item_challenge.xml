@@ -23,32 +23,43 @@
         android:paddingTop="4dp"
         android:text="Challenge Description" />
 
-    <!-- Uploaded By -->
+    <!-- Trophies Reward -->
     <TextView
-        android:id="@+id/uploadedBy"
+        android:id="@+id/challengeTrophiesReward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:textColor="@android:color/darker_gray"
-        android:paddingTop="8dp"
-        android:text="Uploaded by: username123" />
-
-    <!-- Completed By -->
-    <TextView
-        android:id="@+id/completedBy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:textColor="@android:color/darker_gray"
+        android:textSize="14sp"
         android:paddingTop="4dp"
-        android:text="Completed by: Not completed yet" />
+        android:text="Trophies: 0" />
 
-    <!-- Reply Button -->
-    <Button
-        android:id="@+id/replyButton"
-        android:layout_width="wrap_content"
+    <!-- Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Reply"
-        android:layout_gravity="end"
-        android:layout_marginTop="8dp" />
+        android:orientation="horizontal"
+        android:paddingTop="8dp">
+
+        <!-- Accept Button -->
+        <Button
+            android:id="@+id/acceptButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Accept" />
+
+        <!-- Complete Button -->
+        <Button
+            android:id="@+id/completeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Complete"
+            android:layout_marginStart="16dp" />
+
+        <!-- Reply Button -->
+        <Button
+            android:id="@+id/replyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reply"
+            android:layout_marginStart="16dp" />
+    </LinearLayout>
 </LinearLayout>
