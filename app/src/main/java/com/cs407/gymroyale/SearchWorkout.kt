@@ -23,13 +23,10 @@ class SearchWorkout : AppCompatActivity() {
     private lateinit var buttonCancel: Button
     private lateinit var adapter: ArrayAdapter<String>
     private lateinit var workoutList: List<String>
-    private lateinit var csvManager: WorkoutLogCSVManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_workout)
-
-        csvManager = WorkoutLogCSVManager(this)
 
         searchView = findViewById(R.id.searchView)
         buttonSearch = findViewById(R.id.buttonSearch)

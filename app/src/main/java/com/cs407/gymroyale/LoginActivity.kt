@@ -8,6 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 class LoginActivity : AppCompatActivity() {
 
@@ -63,6 +67,21 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+    private suspend fun readWorkoutsFromCsv(): List<String> {
+        return withContext(Dispatchers.IO) {
+            val workouts = mutableListOf<String>()
+            val inputStream = resources.openRawResource(R.raw.workouts)
+            val reader = BufferedReader(InputStreamReader(inputStream))
+
+            reader.useLines { lines ->
+                lines.forEach { line ->
+                    workouts.add(line.trim())
+                }
+            }
+
+            workouts
+        }
+    }
 
     private fun registerUser(email: String, password: String, errorTextView: TextView) {
         auth.createUserWithEmailAndPassword(email, password)
@@ -75,6 +94,7 @@ class LoginActivity : AppCompatActivity() {
                         "xp" to 0,
                         "challengesCompleted" to 0,
                         "trophies" to 0,
+                        "workoutlog" to emptyList<Map<String, Any>>()
                     )
                     firestore.collection("users").document(userId).set(userProfile)
                         .addOnSuccessListener {
