@@ -103,6 +103,33 @@ class WorkoutLogFragment : Fragment() {
             val weight = weightStr.toDouble()
             val reps = repsStr.toInt()
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            val expMultiplier = 1   // CHANGE THIS TO BALANCE XP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            val maxLogs = csvManager.readWorkoutLogs()
+                .sortedWith(compareBy { it.workoutName })
+            val newLift =  weight / ((100 - (reps * 2.5)) / 100)
+            var maxLiftSpecific = 0.0
+            for ((index, log) in maxLogs.withIndex()) {
+                if (log.workoutName == workoutName) {
+                    if (log.weight / ((100 - (log.reps * 2.5)) / 100) > maxLiftSpecific) {
+                        maxLiftSpecific = log.weight / ((100 - (log.reps * 2.5)) / 100)
+                    }
+                }
+                if (index == maxLogs.size - 1) {
+                    if (newLift > maxLiftSpecific) {
+                        val expPr = (newLift - maxLiftSpecific + 100) * expMultiplier
+                        Toast.makeText(requireContext(), "XP +$expPr (PR)", Toast.LENGTH_SHORT).show()
+                    } else {
+                        var expPr = (newLift - maxLiftSpecific + 100) * expMultiplier
+                        if (expPr < 0) {
+                            expPr = 0.0
+                        }
+                        Toast.makeText(requireContext(), "XP +$expPr (NO PR)", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
             // Generate a unique ID (could be more sophisticated in a real app)
             val logs = csvManager.readWorkoutLogs().filter { it.workoutName == workoutName }
 
