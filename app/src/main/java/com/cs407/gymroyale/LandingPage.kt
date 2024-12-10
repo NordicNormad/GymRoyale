@@ -56,13 +56,13 @@ class LandingPageFragment : Fragment() {
                     // Handle missing user info
                     levelText.text = "Level: Unknown"
                     trophiesText.text = "Trophies: 0"
-                    gymIconImageView.setImageResource(R.drawable.arena1icon)
+                    gymIconImageView.setImageResource(R.drawable.bronze)
                 }
             } catch (e: Exception) {
                 Log.e("LandingPageFragment", "Error loading user info: ${e.message}", e)
                 levelText.text = "Level: Unknown"
                 trophiesText.text = "Trophies: 0"
-                gymIconImageView.setImageResource(R.drawable.arena1icon)
+                gymIconImageView.setImageResource(R.drawable.bronze)
             }
         }
 
