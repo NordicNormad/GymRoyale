@@ -7,7 +7,18 @@
     android:orientation="vertical"
     android:gravity="center"
     android:padding="16dp"
-    android:background="#2A2A2A">
+    android:background="#000000">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pixel_font"
+        android:layout_centerHorizontal="true"
+        android:text="  GYM ROYALE"
+        android:textSize="60sp"
+        android:textStyle="bold"
+        android:textColor="#ffffff"/>
 
     <!-- Switch Between Login and Registration -->
     <Switch
@@ -18,6 +29,7 @@
         android:minHeight="48dp"
         android:text="Register"
         android:textColor="#FFFFFF"
+        android:fontFamily="@font/pixel_font"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
     <!-- Email Input -->
     <EditText
@@ -25,6 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email"
+        android:fontFamily="@font/pixel_font"
         android:textColor="#FFFFFF"
         android:textColorHint="#CCCCCC"
         android:background="#444444"
@@ -36,6 +49,7 @@
         android:id="@+id/editTextPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/pixel_font"
         android:hint="Password"
         android:textColor="#FFFFFF"
         android:textColorHint="#CCCCCC"
@@ -65,7 +79,7 @@
         android:layout_height="wrap_content"
         android:text="Login"
         android:textColor="#FFFFFF"
-        android:background="#007BFF"
+        android:backgroundTint="#1a53ff"
         android:layout_marginBottom="16dp" />
 
     <!-- Error/Status Message -->
