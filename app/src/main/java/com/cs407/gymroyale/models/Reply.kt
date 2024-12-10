@@ -3,8 +3,11 @@ package com.cs407.gymroyale.models
 import java.util.Date
 
 data class Reply(
-    var userId: String = "",
-    var username: String = "",
-    var message: String = "",
-    var timestamp: Date = Date()
-)
+    val userId: String = "",
+    val name: String = "",
+    val profileLink: String = "",
+    val message: String = "",
+    val timestamp: Date = Date()
+){
+    constructor() : this("", "", "", "", Date())
+}

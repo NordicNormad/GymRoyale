@@ -5,13 +5,16 @@ import android.text.TextUtils
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cs407.gymroyale.models.Reply
+import com.cs407.gymroyale.utils.FirebaseUtils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import java.util.Date
 
 class ReplyActivity : AppCompatActivity() {
 
@@ -23,7 +26,6 @@ class ReplyActivity : AppCompatActivity() {
     private val auth = FirebaseAuth.getInstance()
     private lateinit var challengeId: String
     private val repliesList = mutableListOf<Reply>()
-    private lateinit var repliesAdapter: ReplyAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,9 +44,8 @@ class ReplyActivity : AppCompatActivity() {
         postReplyButton = findViewById(R.id.postReplyButton)
 
         // Set up RecyclerView
-        repliesAdapter = ReplyAdapter(repliesList)
         repliesRecyclerView.layoutManager = LinearLayoutManager(this)
-        repliesRecyclerView.adapter = repliesAdapter
+        repliesRecyclerView.adapter = ReplyAdapter(repliesList, supportFragmentManager)
 
         // Fetch replies
         fetchReplies()
@@ -70,39 +71,44 @@ class ReplyActivity : AppCompatActivity() {
                     repliesList.add(reply)
                 }
 
-                // Notify adapter of dataset changes
-                repliesAdapter.notifyDataSetChanged()
+                repliesRecyclerView.adapter?.notifyDataSetChanged()
             }
     }
 
     private fun postReply() {
         val message = replyInput.text.toString().trim()
         if (TextUtils.isEmpty(message)) {
-            replyInput.error = "Message cannot be empty"
+            Toast.makeText(this, "Message cannot be empty", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val userId = auth.currentUser?.uid ?: run {
-            Log.e("ReplyActivity", "User is not authenticated, cannot post reply.")
-            return
+        val userId = auth.currentUser?.uid ?: return
+
+        // Fetch user details to post reply
+        FirebaseUtils.fetchUserProfile(userId) { userInfo ->
+            if (userInfo != null) {
+                val reply = Reply(
+                    userId = userId,
+                    name = userInfo.name,
+                    profileLink = userInfo.bio, // Optional if needed
+                    message = message,
+                    timestamp = Date()
+                )
+
+                // Add the reply to Firestore
+                db.collection("challenges").document(challengeId).collection("replies")
+                    .add(reply)
+                    .addOnSuccessListener {
+                        replyInput.text.clear()
+                        fetchReplies()
+                        Toast.makeText(this, "Reply posted!", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w("ReplyActivity", "Error posting reply", e)
+                    }
+            } else {
+                Toast.makeText(this, "Failed to fetch user profile.", Toast.LENGTH_SHORT).show()
+            }
         }
-        val username = auth.currentUser?.displayName ?: "Anonymous"
-
-        val reply = Reply(
-            userId = userId,
-            username = username,
-            message = message,
-            timestamp = java.util.Date()
-        )
-
-        db.collection("challenges").document(challengeId).collection("replies")
-            .add(reply)
-            .addOnSuccessListener {
-                replyInput.text.clear()
-                Log.d("ReplyActivity", "Reply successfully posted")
-            }
-            .addOnFailureListener { e ->
-                Log.w("ReplyActivity", "Error posting reply", e)
-            }
     }
 }

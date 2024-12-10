@@ -9,6 +9,7 @@ import android.view.*
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import com.cs407.gymroyale.utils.FirebaseUtils
 import com.cs407.gymroyalepackage.LandingPageFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -20,6 +21,7 @@ class ProfileFragment : Fragment() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var storage: FirebaseStorage
     private var profilePhotoUri: Uri? = null
+    private var viewedUserId: String? = null // To handle dynamic user IDs
 
     private val uploadImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -53,15 +55,24 @@ class ProfileFragment : Fragment() {
         val logOutButton = view.findViewById<Button>(R.id.buttonLogOut)
         val editProfileButton = view.findViewById<Button>(R.id.buttonEditProfile)
 
-        if (auth.currentUser == null) {
+        // Check if a userId is passed; fallback to current user
+        viewedUserId = arguments?.getString("userId") ?: auth.currentUser?.uid
+
+        if (viewedUserId == null) {
+            Toast.makeText(context, "No user information available", Toast.LENGTH_SHORT).show()
             startActivity(Intent(requireContext(), LoginActivity::class.java))
             requireActivity().finish()
             return view
         }
 
-        val userId = auth.currentUser?.uid ?: ""
+        // Hide edit and upload buttons for other users
+        if (viewedUserId != auth.currentUser?.uid) {
+            uploadPhotoButton.visibility = View.GONE
+            editProfileButton.visibility = View.GONE
+        }
 
-        firestore.collection("users").document(userId).get()
+        // Fetch profile data
+        firestore.collection("users").document(viewedUserId!!).get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
                     profileName.text = document.getString("name") ?: "Name not set"
@@ -89,41 +100,7 @@ class ProfileFragment : Fragment() {
         }
 
         editProfileButton.setOnClickListener {
-            val layout = LinearLayout(requireContext())
-            layout.orientation = LinearLayout.VERTICAL
-            val nameField = EditText(requireContext())
-            nameField.hint = "Name"
-            val bioField = EditText(requireContext())
-            bioField.hint = "Bio"
-            layout.addView(nameField)
-            layout.addView(bioField)
-            nameField.setText(profileName.text)
-            bioField.setText(profileBio.text)
-
-            val dialog = androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                .setTitle("Edit Profile")
-                .setView(layout)
-                .setPositiveButton("Save") { _, _ ->
-                    val newName = nameField.text.toString()
-                    val newBio = bioField.text.toString()
-                    val updates = hashMapOf<String, Any>(
-                        "name" to newName,
-                        "bio" to newBio
-                    )
-                    firestore.collection("users").document(userId)
-                        .update(updates)
-                        .addOnSuccessListener {
-                            profileName.text = newName
-                            profileBio.text = newBio
-                            Toast.makeText(context, "Profile updated!", Toast.LENGTH_SHORT).show()
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(context, "Failed to update profile.", Toast.LENGTH_SHORT).show()
-                        }
-                }
-                .setNegativeButton("Cancel", null)
-                .create()
-            dialog.show()
+            showEditProfileDialog(profileName, profileBio, viewedUserId!!)
         }
 
         bottomNavBountyButton.setOnClickListener {
@@ -160,5 +137,43 @@ class ProfileFragment : Fragment() {
             .addOnFailureListener {
                 Toast.makeText(context, "Failed to upload photo.", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun showEditProfileDialog(profileName: TextView, profileBio: TextView, userId: String) {
+        val layout = LinearLayout(requireContext())
+        layout.orientation = LinearLayout.VERTICAL
+        val nameField = EditText(requireContext())
+        nameField.hint = "Name"
+        val bioField = EditText(requireContext())
+        bioField.hint = "Bio"
+        layout.addView(nameField)
+        layout.addView(bioField)
+        nameField.setText(profileName.text)
+        bioField.setText(profileBio.text)
+
+        val dialog = androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Edit Profile")
+            .setView(layout)
+            .setPositiveButton("Save") { _, _ ->
+                val newName = nameField.text.toString()
+                val newBio = bioField.text.toString()
+                val updates = hashMapOf<String, Any>(
+                    "name" to newName,
+                    "bio" to newBio
+                )
+                firestore.collection("users").document(userId)
+                    .update(updates)
+                    .addOnSuccessListener {
+                        profileName.text = newName
+                        profileBio.text = newBio
+                        Toast.makeText(context, "Profile updated!", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(context, "Failed to update profile.", Toast.LENGTH_SHORT).show()
+                    }
+            }
+            .setNegativeButton("Cancel", null)
+            .create()
+        dialog.show()
     }
 }
