@@ -44,6 +44,7 @@ class ProfileFragment : Fragment() {
         val profileBio = view.findViewById<TextView>(R.id.textViewProfileBio)
         val uploadPhotoButton = view.findViewById<Button>(R.id.buttonUploadPhoto)
         val xpTextView = view.findViewById<TextView>(R.id.textViewXP)
+        val trophyTextView = view.findViewById<TextView>(R.id.textTrophyXP)
         val challengesCompletedTextView = view.findViewById<TextView>(R.id.textViewChallengesCompleted)
         val logOutButton = view.findViewById<Button>(R.id.buttonLogOut)
         val editProfileButton = view.findViewById<Button>(R.id.buttonEditProfile)
@@ -62,6 +63,7 @@ class ProfileFragment : Fragment() {
                     profileName.text = document.getString("name") ?: "Name not set"
                     profileBio.text = document.getString("bio") ?: "Bio not set"
                     xpTextView.text = "XP: ${document.getLong("xp") ?: 0}"
+                    trophyTextView.text = "Trophies: ${document.getLong("trophies") ?: 0}"
                     challengesCompletedTextView.text =
                         "Challenges Completed: ${document.getLong("challengesCompleted") ?: 0}"
                 } else {

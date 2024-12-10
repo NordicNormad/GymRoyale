@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.DocumentChange
 import com.cs407.gymroyale.models.Challenge
+import com.cs407.gymroyalepackage.LandingPageFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,14 +38,6 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
-        // Set up the Profile button
-        val profileButton = findViewById<Button>(R.id.buttonProfile)
-        profileButton.setOnClickListener {
-            handleProfileButtonClick()
-        }
-
-        // Listen for challenge matches in real-time
-        listenForMatches()
     }
 
     private fun checkAuthentication() {
@@ -60,51 +53,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleProfileButtonClick() {
-        val currentUser = auth.currentUser
-        if (currentUser == null) {
-            // Redirect to LoginActivity if user is not logged in
-            Log.d("MainActivity", "No user logged in. Redirecting to LoginActivity.")
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-        } else {
-            // Load the ProfileFragment if the user is logged in
-            Log.d("MainActivity", "User logged in: ${currentUser.email}. Loading ProfileFragment.")
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ProfileFragment())
-                .addToBackStack(null)
-                .commit()
-        }
-    }
-
-    private fun listenForMatches() {
-        val currentUser = auth.currentUser
-        val userId = currentUser?.uid
-
-        if (userId == null) {
-            Log.w("MainActivity", "User ID is null. Cannot listen for matches.")
-            return
-        }
-
-        db.collection("challenges")
-            .whereArrayContains("participants", userId)
-            .addSnapshotListener { snapshots, e ->
-                if (e != null) {
-                    Log.w("Firestore", "Listen failed.", e)
-                    return@addSnapshotListener
-                }
-
-                for (docChange in snapshots!!.documentChanges) {
-                    if (docChange.type == DocumentChange.Type.ADDED) {
-                        val challenge = docChange.document.toObject(Challenge::class.java)
-                        // Notify user about the challenge
-                        Toast.makeText(
-                            this,
-                            "Matched to challenge: ${challenge.title}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }
-    }
 }

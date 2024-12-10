@@ -73,7 +73,8 @@ class LoginActivity : AppCompatActivity() {
                         "name" to "New User",
                         "bio" to "Welcome to Gym Royale!",
                         "xp" to 0,
-                        "challengesCompleted" to 0
+                        "challengesCompleted" to 0,
+                        "trophies" to 0,
                     )
                     firestore.collection("users").document(userId).set(userProfile)
                         .addOnSuccessListener {
