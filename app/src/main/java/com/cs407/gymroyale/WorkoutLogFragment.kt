@@ -109,6 +109,7 @@ class WorkoutLogFragment : Fragment() {
                 .sortedWith(compareBy { it.workoutName })
             val newLift =  weight / ((100 - (reps * 2.5)) / 100)
             var maxLiftSpecific = 0.0
+            var expPr = 0.0
             for ((index, log) in maxLogs.withIndex()) {
                 if (log.workoutName == workoutName) {
                     if (log.weight / ((100 - (log.reps * 2.5)) / 100) > maxLiftSpecific) {
@@ -117,14 +118,14 @@ class WorkoutLogFragment : Fragment() {
                 }
                 if (index == maxLogs.size - 1) {
                     if (newLift > maxLiftSpecific) {
-                        val expPr = (newLift - maxLiftSpecific + 100) * expMultiplier
-                        Toast.makeText(requireContext(), "XP +$expPr (PR)", Toast.LENGTH_SHORT).show()
+                        expPr = (newLift - maxLiftSpecific + 100) * expMultiplier
+//                        Toast.makeText(requireContext(), "XP +$expPr (PR)", Toast.LENGTH_SHORT).show()
                     } else {
-                        var expPr = (newLift - maxLiftSpecific + 100) * expMultiplier
+                        expPr = (newLift - maxLiftSpecific + 100) * expMultiplier
                         if (expPr < 0) {
                             expPr = 0.0
                         }
-                        Toast.makeText(requireContext(), "XP +$expPr (NO PR)", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(requireContext(), "XP +$expPr (NO PR)", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -143,7 +144,7 @@ class WorkoutLogFragment : Fragment() {
             csvManager.addWorkoutLog(workoutLog)
 
             // Increment XP in Firebase
-            incrementUserXP(isBonus)
+            incrementUserXP(isBonus, expPr.toInt())
 
             // Reload logs
             loadExistingLogs()
@@ -153,26 +154,25 @@ class WorkoutLogFragment : Fragment() {
         }
     }
 
-    private fun incrementUserXP(isBonus: Boolean) {
+    private fun incrementUserXP(isBonus: Boolean, addXP: Int) {
         val userId = auth.currentUser?.uid ?: return
 
         firestore.collection("users").document(userId).get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
-                    val currentXP = document.getLong("xp") ?: 0
-                    var newXP = currentXP
+                    var currentXP = document.getLong("xp")?.toInt() ?: 0
                     var toastString = ""
                     if (isBonus) {
-                        newXP += 30
-                        toastString = "30 XP added (Bonus!)"
+                        currentXP += addXP + 50
+                        toastString = "${addXP+50} XP added (Bonus!)"
                     } else {
-                        newXP += 15
-                        toastString = "15 XP added"
+                        currentXP += addXP
+                        toastString = "$addXP XP added"
                     }
 
                     // Update XP in Firestore
                     firestore.collection("users").document(userId)
-                        .update("xp", newXP)
+                        .update("xp", currentXP)
                         .addOnSuccessListener {
                             Toast.makeText(requireContext(), toastString, Toast.LENGTH_SHORT).show()
                             Log.d("WorkoutLogFragment", "XP successfully updated")
