@@ -10,4 +10,5 @@ data class WorkoutLog(
     val weight: Double,
     val reps: Int,
     val date: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()),
+    val xp: Int
 )

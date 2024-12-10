@@ -35,7 +35,7 @@ class WorkoutLogCSVManager(private val context: Context) {
                     Log.e(TAG, "Error copying from raw resource", e)
                     // If raw resource doesn't exist, create a new file with headers
                     internalFile.createNewFile()
-                    internalFile.writeText("ID,Workout Name,Weight,Reps,Date\n")
+                    internalFile.writeText("TimeStamp,Workout Name,Weight,Reps,Date,Xp\n")
                     Log.d(TAG, "Created new file with default headers")
                 }
             }
@@ -52,7 +52,7 @@ class WorkoutLogCSVManager(private val context: Context) {
             Log.d(TAG, "Adding log: ${workoutLog}")
 
             FileWriter(file, true).use { writer ->
-                val logEntry = "${workoutLog.timestamp},${workoutLog.workoutName},${workoutLog.weight},${workoutLog.reps},${workoutLog.date}\n"
+                val logEntry = "${workoutLog.timestamp},${workoutLog.workoutName},${workoutLog.weight},${workoutLog.reps},${workoutLog.date},${workoutLog.xp}\n"
                 writer.append(logEntry)
                 Log.d(TAG, "Log entry written: $logEntry")
             }
@@ -77,7 +77,8 @@ class WorkoutLogCSVManager(private val context: Context) {
                                 workoutName = parts[1],
                                 weight = parts[2].toDouble(),
                                 reps = parts[3].toInt(),
-                                date = parts[4]
+                                date = parts[4],
+                                xp = parts[5].toInt()
                             )
                         } catch (e: Exception) {
                             Log.e(TAG, "Error parsing log line: $line", e)
@@ -111,9 +112,9 @@ class WorkoutLogCSVManager(private val context: Context) {
 
             // Rewrite file with remaining logs
             FileWriter(file).use { writer ->
-                writer.write("ID,Workout Name,Weight,Reps,Date\n")
+                writer.write("TimeStamp,Workout Name,Weight,Reps,Date,Xp\n")
                 logs.forEach { log ->
-                    writer.append("${log.timestamp},${log.workoutName},${log.weight},${log.reps},${log.date}\n")
+                    writer.append("${log.timestamp},${log.workoutName},${log.weight},${log.reps},${log.date},${log.xp}\n")
                 }
             }
         } catch (e: Exception) {

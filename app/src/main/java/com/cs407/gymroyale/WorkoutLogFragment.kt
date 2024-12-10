@@ -138,6 +138,7 @@ class WorkoutLogFragment : Fragment() {
                 workoutName = workoutName,
                 weight = weight,
                 reps = reps,
+                xp = expPr.toInt()
             )
 
             // Save the workout log to CSV
@@ -205,10 +206,44 @@ class WorkoutLogFragment : Fragment() {
     }
 
     private fun deleteWorkoutLog(log: WorkoutLog) {
-        // Use the workout name and date to delete the correct log
+        val userId = auth.currentUser?.uid ?: return
+
+        firestore.collection("users").document(userId).get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    var currentXP = document.getLong("xp")?.toInt() ?: 0
+
+                    // Subtract the log's XP from the current XP
+                    currentXP -= log.xp
+
+                    // Ensure XP doesn't go below zero
+                    if (currentXP < 0) {
+                        currentXP = 0
+                    }
+
+                    // Update XP in Firebase
+                    firestore.collection("users").document(userId)
+                        .update("xp", currentXP)
+                        .addOnSuccessListener {
+                            Toast.makeText(requireContext(), "Deletion: -${log.xp} XP", Toast.LENGTH_SHORT).show()
+                            Log.d("WorkoutLogFragment", "XP successfully updated after log deletion")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w("WorkoutLogFragment", "Error updating XP after log deletion", e)
+                        }
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.w("WorkoutLogFragment", "Error retrieving user data", e)
+            }
+
+        // Delete the log from the CSV
         csvManager.deleteWorkoutLog(log.workoutName, log.date, log.timestamp)
-        loadExistingLogs()  // Refresh the list
+
+        // Reload the logs to refresh the list
+        loadExistingLogs()
     }
+
 
     companion object {
         fun newInstance(workoutName: String): WorkoutLogFragment {
