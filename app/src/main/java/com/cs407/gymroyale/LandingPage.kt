@@ -1,8 +1,9 @@
-package com.cs407.gymroyale
+package com.cs407.gymroyalepackage
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,11 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.cs407.gymroyale.BountyFragment
+import com.cs407.gymroyale.ChallengerFragment
+import com.cs407.gymroyale.ProfileFragment
+import com.cs407.gymroyale.R
+import com.cs407.gymroyale.SearchWorkout
 import com.cs407.gymroyale.utils.FirebaseUtils
 
 class LandingPageFragment : Fragment() {
@@ -28,28 +34,36 @@ class LandingPageFragment : Fragment() {
 
         // Load UserInfo from Firestore
         FirebaseUtils.loadUserInfoFromFirestore { userInfo ->
-            if (userInfo != null) {
-                // Set level text with fraction
-                val currentLevel = userInfo.Level.toInt()
-                val progressDecimal = userInfo.Level - currentLevel
-                val progressFraction = (progressDecimal * 10000).toInt()
-                levelText.text = "Level: $currentLevel, $progressFraction/10000"
+            try {
+                if (userInfo != null) {
+                    // Set level text with fraction
+                    val currentLevel = userInfo.level.toInt()
+                    val progressDecimal = userInfo.level - currentLevel
+                    val progressFraction = (progressDecimal * 10000).toInt()
+                    levelText.text = "Level: $currentLevel, $progressFraction/10000"
 
-                // Set trophies text
-                trophiesText.text = "Trophies: ${userInfo.Trophies}"
+                    // Handle trophies with a fallback to default value of 0
+                    val trophies = userInfo.trophies ?: 0
+                    trophiesText.text = "Trophies: $trophies"
 
-                // Set gym icon based on trophies range
-                val gymIconRes = when (userInfo.Trophies) {
-                    in 0..200 -> R.drawable.arena1icon
-                    in 201..400 -> R.drawable.arena2icon
-                    in 401..600 -> R.drawable.arena3icon
-                    else -> R.drawable.arena4icon
+                    // Set gym icon based on trophies range
+                    val gymIconRes = when (trophies) {
+                        in 0..200 -> R.drawable.arena1icon
+                        in 201..400 -> R.drawable.arena2icon
+                        in 401..600 -> R.drawable.arena3icon
+                        else -> R.drawable.arena4icon
+                    }
+                    gymIconImageView.setImageResource(gymIconRes)
+                } else {
+                    // Handle missing user info
+                    levelText.text = "Level: Unknown"
+                    trophiesText.text = "Trophies: 0"
+                    gymIconImageView.setImageResource(R.drawable.arena1icon)
                 }
-                gymIconImageView.setImageResource(gymIconRes)
-            } else {
-                // Handle missing user info (e.g., show default UI or an error message)
+            } catch (e: Exception) {
+                Log.e("LandingPageFragment", "Error loading user info: ${e.message}", e)
                 levelText.text = "Level: Unknown"
-                trophiesText.text = "Trophies: Unknown"
+                trophiesText.text = "Trophies: 0"
                 gymIconImageView.setImageResource(R.drawable.arena1icon)
             }
         }

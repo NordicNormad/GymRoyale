@@ -79,6 +79,13 @@
             android:text="XP: 0"
             android:textSize="16sp"
             android:textColor="#FFFFFF" />
+        <TextView
+            android:id="@+id/textTrophyXP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Throphies : 0"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF" />
 
         <TextView
             android:id="@+id/textViewChallengesCompleted"
