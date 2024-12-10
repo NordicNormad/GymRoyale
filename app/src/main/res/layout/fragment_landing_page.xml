@@ -15,7 +15,8 @@
         android:textStyle="bold"
         android:textColor="#ffffff"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/pixel_font"/>
 
     <!-- This is blank intentionally/i did not implement this -will -->
     <TextView
