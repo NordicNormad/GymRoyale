@@ -2,9 +2,11 @@ package com.cs407.gymroyale
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +22,9 @@ class SearchWorkout : AppCompatActivity() {
     private lateinit var searchView: AutoCompleteTextView
     private lateinit var buttonSearch: Button
     private lateinit var buttonViewToday: Button
-    private lateinit var buttonCancel: Button
+    private lateinit var buttonHome: Button
+    private lateinit var buttonProfile: Button
+    private lateinit var buttonBounties: Button
     private lateinit var adapter: ArrayAdapter<String>
     private lateinit var workoutList: List<String>
 
@@ -31,7 +35,11 @@ class SearchWorkout : AppCompatActivity() {
         searchView = findViewById(R.id.searchView)
         buttonSearch = findViewById(R.id.buttonSearch)
         buttonViewToday = findViewById(R.id.buttonViewToday)
-        buttonCancel = findViewById(R.id.buttonCancel)
+        buttonHome = findViewById(R.id.buttonBottomNavHome)
+        buttonProfile = findViewById(R.id.buttonBottomNavProfile)
+        buttonBounties = findViewById(R.id.buttonBottomNavBounties)
+
+
 
         // Load workout data from the CSV file
 //        lifecycleScope.launch {
@@ -64,13 +72,30 @@ class SearchWorkout : AppCompatActivity() {
         }
 
         // Handle Cancel button click to finish the activity
-        buttonCancel.setOnClickListener {
+        buttonHome.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)  // Assuming MainActivity hosts the fragments
             intent.putExtra("NAVIGATE_TO_HOME", true)  // Use an extra flag to signal home navigation
             startActivity(intent)
             finish()  // Close the current activity
         }
 
+        buttonProfile.setOnClickListener {
+            hideBottomBar() // Hide bottom bar for ProfileFragment
+            val profileFragment = ProfileFragment()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, profileFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
+        buttonBounties.setOnClickListener {
+            hideBottomBar() // Hide bottom bar for BountyFragment
+            val bountyFragment = BountyFragment()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, bountyFragment)
+                .addToBackStack(null)
+                .commit()
+        }
 
 
         // Inside onCreate method
@@ -131,4 +156,24 @@ class SearchWorkout : AppCompatActivity() {
             Toast.makeText(applicationContext, "No workouts found", Toast.LENGTH_SHORT).show()
         }
     }
+
+    private fun hideBottomBar() {
+        val bottomBar = findViewById<LinearLayout>(R.id.bottomNavLayout)
+        bottomBar.visibility = View.GONE
+    }
+
+    private fun showBottomBar() {
+        val bottomBar = findViewById<LinearLayout>(R.id.bottomNavLayout)
+        bottomBar.visibility = View.VISIBLE
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+            showBottomBar()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
 }
