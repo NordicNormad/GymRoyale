@@ -46,9 +46,9 @@ class LandingPageFragment : Fragment() {
 
                     // Set gym icon based on trophies range
                     val gymIconRes = when (trophies) {
-                        in 0..200 -> R.drawable.arena1icon
-                        in 201..400 -> R.drawable.arena2icon
-                        in 401..600 -> R.drawable.arena3icon
+                        in 0..20 -> R.drawable.arena1icon
+                        in 21..40 -> R.drawable.arena2icon
+                        in 41..60 -> R.drawable.arena3icon
                         else -> R.drawable.arena4icon
                     }
                     gymIconImageView.setImageResource(gymIconRes)
