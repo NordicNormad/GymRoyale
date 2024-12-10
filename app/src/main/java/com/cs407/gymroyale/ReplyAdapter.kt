@@ -11,7 +11,7 @@ import com.cs407.gymroyale.models.Reply
 
 class ReplyAdapter(
     private val replies: List<Reply>,
-    private val fragmentManager: FragmentManager
+    private val fragmentManager: FragmentManager // Use FragmentManager for navigation
 ) : RecyclerView.Adapter<ReplyAdapter.ReplyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReplyViewHolder {
@@ -35,24 +35,17 @@ class ReplyAdapter(
             messageTextView.text = reply.message
             timestampTextView.text = reply.timestamp.toString()
 
-            // Open profile fragment when username is clicked
             usernameTextView.setOnClickListener {
-                openProfileFragment(reply.userId)
-            }
-        }
-
-        private fun openProfileFragment(userId: String) {
-            val profileFragment = ProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString("userId", userId) // Pass the clicked user's ID
+                val profileFragment = ProfileFragment().apply {
+                    arguments = Bundle().apply {
+                        putString("userId", reply.userId)
+                    }
                 }
+                fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, profileFragment)
+                    .addToBackStack(null)
+                    .commit()
             }
-            fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, profileFragment) // Ensure fragment_container exists
-                .addToBackStack(null)
-                .commit()
         }
-
     }
 }
-
