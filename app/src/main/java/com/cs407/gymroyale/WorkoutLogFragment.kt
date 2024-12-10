@@ -105,13 +105,11 @@ class WorkoutLogFragment : Fragment() {
 
             // Generate a unique ID (could be more sophisticated in a real app)
             val logs = csvManager.readWorkoutLogs().filter { it.workoutName == workoutName }
-            val newId = if (logs.isEmpty()) 1 else logs.maxOf { it.id } + 1
 
             val workoutLog = WorkoutLog(
-                id = newId,
                 workoutName = workoutName,
                 weight = weight,
-                reps = reps
+                reps = reps,
             )
 
             // Save the workout log to CSV
@@ -167,6 +165,7 @@ class WorkoutLogFragment : Fragment() {
         val logs = csvManager.readWorkoutLogs()
             .filter { it.workoutName == workoutName }
             .sortedByDescending { SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(it.date) }
+            .sortedByDescending { it.timestamp }
 
         workoutLogs.clear()
         workoutLogs.addAll(logs)
@@ -180,7 +179,7 @@ class WorkoutLogFragment : Fragment() {
 
     private fun deleteWorkoutLog(log: WorkoutLog) {
         // Use the workout name and date to delete the correct log
-        csvManager.deleteWorkoutLog(log.workoutName, log.date, log.id)
+        csvManager.deleteWorkoutLog(log.workoutName, log.date, log.timestamp)
         loadExistingLogs()  // Refresh the list
     }
 

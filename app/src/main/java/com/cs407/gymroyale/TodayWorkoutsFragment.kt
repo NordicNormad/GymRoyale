@@ -48,7 +48,8 @@ class TodayWorkoutsFragment : Fragment() {
         val today = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
         val logs = csvManager.readWorkoutLogs()
             .filter { it.date == today }
-            .sortedWith(compareBy({ it.workoutName }, { it.id }))
+            .sortedWith(compareBy({ it.workoutName }))
+            .sortedByDescending { it.timestamp }
 
         todayWorkouts.clear()
 

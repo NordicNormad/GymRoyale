@@ -53,7 +53,11 @@ class WorkoutHistoryActivity : AppCompatActivity() {
                 workoutHistory.add("--- $workoutName ---")
 
                 // Sort logs within each workout group by most recent date
-                val sortedLogs = workoutLogs.sortedByDescending { SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(it.date) }
+                val sortedLogs = workoutLogs.sortedWith(compareByDescending<WorkoutLog> {
+                    SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(it.date)
+                }.thenByDescending {
+                    it.timestamp
+                })
 
                 // Add individual logs for this workout
                 sortedLogs.forEach { log ->

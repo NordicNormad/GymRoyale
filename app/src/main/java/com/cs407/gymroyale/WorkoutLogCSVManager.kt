@@ -52,7 +52,7 @@ class WorkoutLogCSVManager(private val context: Context) {
             Log.d(TAG, "Adding log: ${workoutLog}")
 
             FileWriter(file, true).use { writer ->
-                val logEntry = "${workoutLog.id},${workoutLog.workoutName},${workoutLog.weight},${workoutLog.reps},${workoutLog.date}\n"
+                val logEntry = "${workoutLog.timestamp},${workoutLog.workoutName},${workoutLog.weight},${workoutLog.reps},${workoutLog.date}\n"
                 writer.append(logEntry)
                 Log.d(TAG, "Log entry written: $logEntry")
             }
@@ -73,7 +73,7 @@ class WorkoutLogCSVManager(private val context: Context) {
                         try {
                             val parts = line.split(",")
                             WorkoutLog(
-                                id = parts[0].toInt(),
+                                timestamp = parts[0].toLong(),
                                 workoutName = parts[1],
                                 weight = parts[2].toDouble(),
                                 reps = parts[3].toInt(),
@@ -102,18 +102,18 @@ class WorkoutLogCSVManager(private val context: Context) {
         }
     }
 
-    fun deleteWorkoutLog(workoutName: String, date: String, id: Int) {
+    fun deleteWorkoutLog(workoutName: String, date: String, timestamp: Long) {
         try {
             val file = getWorkoutLogsFile()
 
             val logs = readWorkoutLogs()
-                .filter { !(it.workoutName == workoutName && it.date == date && it.id == id) }
+                .filter { !(it.workoutName == workoutName && it.date == date && it.timestamp == timestamp) }
 
             // Rewrite file with remaining logs
             FileWriter(file).use { writer ->
                 writer.write("ID,Workout Name,Weight,Reps,Date\n")
                 logs.forEach { log ->
-                    writer.append("${log.id},${log.workoutName},${log.weight},${log.reps},${log.date}\n")
+                    writer.append("${log.timestamp},${log.workoutName},${log.weight},${log.reps},${log.date}\n")
                 }
             }
         } catch (e: Exception) {
