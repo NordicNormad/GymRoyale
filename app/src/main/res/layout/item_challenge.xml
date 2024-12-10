@@ -31,6 +31,12 @@
         android:textSize="14sp"
         android:paddingTop="4dp"
         android:text="Trophies: 0" />
+    <TextView
+        android:id="@+id/participantsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:text="Completed by: 0 participants" />
 
     <!-- Buttons -->
     <LinearLayout

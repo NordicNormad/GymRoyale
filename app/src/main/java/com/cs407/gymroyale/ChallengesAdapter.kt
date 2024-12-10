@@ -23,6 +23,12 @@ class ChallengesAdapter(
     override fun onBindViewHolder(holder: ChallengeViewHolder, position: Int) {
         val challenge = challenges[position]
         holder.bind(challenge)
+
+        // Set button visibility logic
+        holder.acceptButton.visibility = if (challenge.status == "open") View.VISIBLE else View.GONE
+        holder.completeButton.visibility = if (challenge.status == "accepted") View.VISIBLE else View.GONE
+
+        // Set listeners for buttons
         holder.acceptButton.setOnClickListener { onAcceptClick(challenge) }
         holder.completeButton.setOnClickListener { onCompleteClick(challenge) }
         holder.replyButton.setOnClickListener { onReplyClick(challenge) }
@@ -34,14 +40,17 @@ class ChallengesAdapter(
         private val titleText: TextView = itemView.findViewById(R.id.challengeTitle)
         private val descriptionText: TextView = itemView.findViewById(R.id.challengeDescription)
         private val trophiesText: TextView = itemView.findViewById(R.id.challengeTrophiesReward)
+        private val participantsText: TextView = itemView.findViewById(R.id.participantsText)
         val acceptButton: Button = itemView.findViewById(R.id.acceptButton)
         val completeButton: Button = itemView.findViewById(R.id.completeButton)
         val replyButton: Button = itemView.findViewById(R.id.replyButton)
 
         fun bind(challenge: Challenge) {
+            // Bind data from the Challenge object to the UI
             titleText.text = challenge.title
             descriptionText.text = challenge.description
             trophiesText.text = "Trophies: ${challenge.trophiesReward}"
+            participantsText.text = "Completed by: ${challenge.completedBy.size} participants"
         }
     }
 }
