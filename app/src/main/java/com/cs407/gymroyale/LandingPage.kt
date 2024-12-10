@@ -110,6 +110,8 @@ class LandingPageFragment : Fragment() {
                 .commit()
         }
 
+
+
         return view
     }
 }
