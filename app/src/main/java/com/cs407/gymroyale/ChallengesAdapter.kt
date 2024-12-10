@@ -10,6 +10,7 @@ import com.cs407.gymroyale.models.Challenge
 
 class ChallengesAdapter(
     private val challenges: List<Challenge>,
+    private val onAcceptClick: (Challenge) -> Unit,
     private val onCompleteClick: (Challenge) -> Unit,
     private val onReplyClick: (Challenge) -> Unit
 ) : RecyclerView.Adapter<ChallengesAdapter.ChallengeViewHolder>() {
@@ -22,7 +23,8 @@ class ChallengesAdapter(
     override fun onBindViewHolder(holder: ChallengeViewHolder, position: Int) {
         val challenge = challenges[position]
         holder.bind(challenge)
-        holder.itemView.setOnClickListener { onCompleteClick(challenge) }
+        holder.acceptButton.setOnClickListener { onAcceptClick(challenge) }
+        holder.completeButton.setOnClickListener { onCompleteClick(challenge) }
         holder.replyButton.setOnClickListener { onReplyClick(challenge) }
     }
 
@@ -31,23 +33,15 @@ class ChallengesAdapter(
     class ChallengeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val titleText: TextView = itemView.findViewById(R.id.challengeTitle)
         private val descriptionText: TextView = itemView.findViewById(R.id.challengeDescription)
-        private val uploadedByText: TextView = itemView.findViewById(R.id.uploadedBy)
-        private val completedByText: TextView = itemView.findViewById(R.id.completedBy)
+        private val trophiesText: TextView = itemView.findViewById(R.id.challengeTrophiesReward)
+        val acceptButton: Button = itemView.findViewById(R.id.acceptButton)
+        val completeButton: Button = itemView.findViewById(R.id.completeButton)
         val replyButton: Button = itemView.findViewById(R.id.replyButton)
 
         fun bind(challenge: Challenge) {
             titleText.text = challenge.title
             descriptionText.text = challenge.description
-
-            // Show username of the uploader
-            uploadedByText.text = "Uploaded by: ${challenge.uploadedByUsername ?: "Unknown"}"
-
-            // Show username of the person who completed the challenge
-            completedByText.text = if (challenge.completedByUsername != null) {
-                "Completed by: ${challenge.completedByUsername}"
-            } else {
-                "Completed by: Not completed yet"
-            }
+            trophiesText.text = "Trophies: ${challenge.trophiesReward}"
         }
     }
 }

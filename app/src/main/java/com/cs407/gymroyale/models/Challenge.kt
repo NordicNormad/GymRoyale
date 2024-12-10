@@ -8,5 +8,6 @@ data class Challenge(
     var uploadedByUsername: String? = null,
     var completedBy: String? = null,
     var completedByUsername: String? = null,
-    var status: String = "open" // Status options: open, completed
+    var status: String = "open" ,// Status options: open, completed
+    var trophiesReward: Int = 20// Number of trophies awarded for completing the challenge
 )
