@@ -28,7 +28,8 @@
         android:textColor="#ffffff"
         android:layout_below="@id/textGymRoyale"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/pixel_font"/>
 
     <!-- Level bar -->
     <LinearLayout
@@ -39,7 +40,8 @@
         android:layout_marginTop="16dp"
         android:padding="7dp"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        >
 
         <!-- Level Text -->
         <TextView
@@ -50,7 +52,8 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="#ffffff"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:fontFamily="@font/pixel_font"/>
 
         <!-- Trophies Text -->
         <TextView
@@ -61,7 +64,8 @@
             android:textSize="16sp"
             android:textColor="#ffffff"
             android:layout_gravity="center"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/pixel_font"/>
     </LinearLayout>
 
     <!-- Central image -->
@@ -85,7 +89,8 @@
         android:textStyle="bold"
         android:layout_above="@id/buttonChallenges"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/pixel_font"/>
 
     <!-- Find Challenger button -->
     <Button
@@ -99,7 +104,8 @@
         android:textStyle="bold"
         android:layout_above="@id/bottomNavigation"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/pixel_font"/>
 
     <LinearLayout
         android:id="@+id/bottomNavigation"
@@ -109,7 +115,8 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_alignParentBottom="true"
-        android:background="#000000">
+        android:background="#000000"
+        >
 
         <!-- Bottom nav - Profile -->
         <Button
@@ -122,7 +129,8 @@
             android:backgroundTint="#1a53ff"
             android:text="Profile"
             android:contentDescription="Profile"
-            android:layout_marginEnd="8dp" />  <!-- Added marginEnd to create space between Profile and Home -->
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/pixel_font"/>  <!-- Added marginEnd to create space between Profile and Home -->
 
         <!-- Bottom nav - Homepage -->
         <Button
@@ -135,7 +143,8 @@
             android:backgroundTint="#1a53ff"
             android:text="Home"
             android:contentDescription="Workout"
-            android:layout_marginEnd="8dp" />  <!-- Added marginEnd to create space between Home and Bounties -->
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/pixel_font"/>  <!-- Added marginEnd to create space between Home and Bounties -->
 
         <!-- Bottom nav - Bounties -->
         <Button
@@ -147,6 +156,7 @@
             android:layout_weight="1"
             android:backgroundTint="#1a53ff"
             android:text="Bounties"
-            android:contentDescription="Bounties" />
+            android:contentDescription="Bounties"
+            android:fontFamily="@font/pixel_font"/>
     </LinearLayout>
 </RelativeLayout>

@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:text="Challenge Title" />
+        android:text="Challenge Title"
+        android:fontFamily="@font/pixel_font"/>
 
     <!-- Challenge Description -->
     <TextView
@@ -21,7 +22,8 @@
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:paddingTop="4dp"
-        android:text="Challenge Description" />
+        android:text="Challenge Description"
+        android:fontFamily="@font/pixel_font"/>
 
     <!-- Buttons -->
     <LinearLayout
@@ -35,7 +37,8 @@
             android:id="@+id/acceptButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Accept" />
+            android:text="Accept"
+            android:fontFamily="@font/pixel_font"/>
 
         <!-- Complete Button -->
         <Button
@@ -43,7 +46,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Complete"
-            android:layout_marginStart="16dp" />
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/pixel_font"/>
 
         <!-- Reply Button -->
         <Button
@@ -51,6 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Reply"
-            android:layout_marginStart="16dp" />
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/pixel_font"/>
     </LinearLayout>
 </LinearLayout>

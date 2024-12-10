@@ -13,7 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:text="Username" />
+        android:text="Username"
+        android:fontFamily="@font/pixel_font"/>
 
     <!-- Reply Message -->
     <TextView
@@ -21,7 +22,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="4dp"
-        android:text="Reply message goes here." />
+        android:text="Reply message goes here."
+        android:fontFamily="@font/pixel_font"/>
 
     <!-- Timestamp -->
     <TextView
@@ -31,5 +33,6 @@
         android:textSize="12sp"
         android:textColor="@android:color/darker_gray"
         android:paddingTop="4dp"
-        android:text="Timestamp" />
+        android:text="Timestamp"
+        android:fontFamily="@font/pixel_font"/>
 </LinearLayout>

@@ -17,7 +17,8 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:fontFamily="@font/pixel_font"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvBounties"
@@ -40,7 +41,8 @@
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rvBounties" />
+        app:layout_constraintTop_toBottomOf="@id/rvBounties"
+        android:fontFamily="@font/pixel_font"/>
 
     <!--    <Button-->
     <!--        android:id="@+id/openSearchButton"-->
@@ -77,7 +79,8 @@
             android:backgroundTint="#1a53ff"
             android:text="Profile"
             android:contentDescription="Profile"
-            android:layout_marginEnd="8dp" />  <!-- Added marginEnd to create space between Profile and Home -->
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/pixel_font"/>  <!-- Added marginEnd to create space between Profile and Home -->
 
         <!-- Bottom nav - Homepage -->
         <Button
@@ -90,7 +93,8 @@
             android:backgroundTint="#1a53ff"
             android:text="Home"
             android:contentDescription="Workout"
-            android:layout_marginEnd="8dp" />  <!-- Added marginEnd to create space between Home and Bounties -->
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/pixel_font"/>  <!-- Added marginEnd to create space between Home and Bounties -->
 
         <!-- Bottom nav - Bounties -->
         <Button
@@ -102,7 +106,8 @@
             android:layout_weight="1"
             android:backgroundTint="#1a53ff"
             android:text="Bounties"
-            android:contentDescription="Bounties" />
+            android:contentDescription="Bounties"
+            android:fontFamily="@font/pixel_font"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
