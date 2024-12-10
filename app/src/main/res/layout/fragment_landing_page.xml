@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ccf5ff">
+    android:background="#000000">
 
     <!-- Title text -->
     <TextView
@@ -13,18 +13,18 @@
         android:text="GYM ROYALE"
         android:textSize="60sp"
         android:textStyle="bold"
-        android:textColor="#000000"
+        android:textColor="#ffffff"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp" />
 
-    <!-- Rank -->
+    <!-- This is blank intentionally/i did not implement this -will -->
     <TextView
         android:id="@+id/textRank"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Rank: 256301"
+        android:text=""
         android:textSize="16sp"
-        android:textColor="#000000"
+        android:textColor="#ffffff"
         android:layout_below="@id/textGymRoyale"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp" />
@@ -48,7 +48,7 @@
             android:text="Experience Lvl: 0"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="#000000"
+            android:textColor="#ffffff"
             android:layout_gravity="center" />
 
         <!-- Trophies Text -->
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:text="Trophies: 0"
             android:textSize="16sp"
-            android:textColor="#000000"
+            android:textColor="#ffffff"
             android:layout_gravity="center"
             android:layout_marginTop="8dp" />
     </LinearLayout>
@@ -76,10 +76,10 @@
     <Button
         android:id="@+id/buttonLogWorkout"
         android:layout_width="400dp"
-        android:layout_height="90dp"
+        android:layout_height="60dp"
         android:text="LOG WORKOUT"
-        android:textColor="#000000"
-        android:backgroundTint="#ffff99"
+        android:textColor="#ffffff"
+        android:backgroundTint="#1a53ff"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_above="@id/buttonChallenges"
@@ -90,60 +90,61 @@
     <Button
         android:id="@+id/buttonChallenges"
         android:layout_width="400dp"
-        android:layout_height="90dp"
+        android:layout_height="60dp"
         android:text="CHALLENGES"
-        android:textColor="#000000"
-        android:backgroundTint="#ffff99"
+        android:textColor="#ffffff"
+        android:backgroundTint="#1a53ff"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_above="@id/bottomNavigation"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="16dp" />
 
-    <!-- Bottom navigation bar -->
     <LinearLayout
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:textColor="#000000"
+        android:textColor="#ffffff"
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_alignParentBottom="true"
-        android:background="#ccf5ff">
+        android:background="#000000">
 
         <!-- Bottom nav - Profile -->
         <Button
             android:id="@+id/buttonBottomNavProfile"
             android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:textSize="15sp"
-            android:textColor="#000000"
+            android:layout_height="45dp"
+            android:textSize="10sp"
+            android:textColor="#ffffff"
             android:layout_weight="1"
-            android:backgroundTint="#ffff99"
+            android:backgroundTint="#1a53ff"
             android:text="Profile"
-            android:contentDescription="Profile" />
+            android:contentDescription="Profile"
+            android:layout_marginEnd="8dp" />  <!-- Added marginEnd to create space between Profile and Home -->
 
         <!-- Bottom nav - Homepage -->
         <Button
             android:id="@+id/buttonBottomNavHome"
-            android:layout_width="0dp"
+            android:layout_width="100dp"
             android:layout_height="60dp"
             android:textSize="15sp"
-            android:textColor="#000000"
+            android:textColor="#ffffff"
             android:layout_weight="1"
-            android:backgroundTint="#ffff99"
+            android:backgroundTint="#1a53ff"
             android:text="Home"
-            android:contentDescription="Workout" />
+            android:contentDescription="Workout"
+            android:layout_marginEnd="8dp" />  <!-- Added marginEnd to create space between Home and Bounties -->
 
         <!-- Bottom nav - Bounties -->
         <Button
             android:id="@+id/buttonBottomNavBounties"
             android:layout_width="0dp"
-            android:textSize="15sp"
-            android:layout_height="60dp"
-            android:textColor="#000000"
+            android:textSize="10sp"
+            android:layout_height="45dp"
+            android:textColor="#ffffff"
             android:layout_weight="1"
-            android:backgroundTint="#ffff99"
+            android:backgroundTint="#1a53ff"
             android:text="Bounties"
             android:contentDescription="Bounties" />
     </LinearLayout>
