@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:background="#000000"
     android:layout_height="match_parent">
 
     <ListView
@@ -11,6 +12,7 @@
         android:layout_height="0dp"
         android:layout_margin="16dp"
         app:layout_constraintTop_toTopOf="parent"
+        android:fontFamily="@font/pixel_font"
         app:layout_constraintBottom_toTopOf="@id/buttonCancel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -19,7 +21,9 @@
         android:id="@+id/buttonCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cancel"
+        android:text="Back"
+        android:fontFamily="@font/pixel_font"
+        android:backgroundTint="#1a53ff"
         android:layout_margin="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
