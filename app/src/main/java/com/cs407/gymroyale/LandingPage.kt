@@ -55,17 +55,8 @@ class LandingPageFragment : Fragment() {
         }
 
         // Button Definitions
-        val profileButton = view.findViewById<Button>(R.id.buttonProfile)
         val logWorkoutButton = view.findViewById<Button>(R.id.buttonLogWorkout)
         val challengesButton = view.findViewById<Button>(R.id.buttonChallenges)
-
-        // Profile button action
-        profileButton.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ProfileFragment())
-                .addToBackStack(null)
-                .commit()
-        }
 
         // Load WorkoutStorageFragment when the Log Workout button is clicked
         logWorkoutButton.setOnClickListener {
@@ -82,7 +73,7 @@ class LandingPageFragment : Fragment() {
         }
 
         // Bottom navigation bar buttons
-        val bottomNavSettingsButton = view.findViewById<Button>(R.id.buttonBottomNavSettings)
+        val bottomNavProfileButton = view.findViewById<Button>(R.id.buttonBottomNavProfile)
         val bottomNavBountyButton = view.findViewById<Button>(R.id.buttonBottomNavBounties)
         val bottomNavHomeButton = view.findViewById<Button>(R.id.buttonBottomNavHome)
 
@@ -93,9 +84,9 @@ class LandingPageFragment : Fragment() {
                 .commit()
         }
 
-        bottomNavSettingsButton.setOnClickListener {
+        bottomNavProfileButton.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, SettingsMain())
+                .replace(R.id.fragment_container, ProfileFragment())
                 .addToBackStack(null)
                 .commit()
         }

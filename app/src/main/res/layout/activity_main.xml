@@ -9,13 +9,4 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <!-- Profile Button -->
-    <Button
-        android:id="@+id/buttonProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Profile"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="16dp" />
 </RelativeLayout>
