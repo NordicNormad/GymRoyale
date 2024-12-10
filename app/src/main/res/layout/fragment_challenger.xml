@@ -13,6 +13,18 @@
         android:padding="8dp" />
 
     <!-- Bottom Navigation Bar -->
+
+    <Button
+        android:id="@+id/addChallengeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#1a53ff"
+        android:text="Add Challenge"
+        android:textColor="#ffffff"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="600dp"
+        android:layout_marginBottom="16dp"/>
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
