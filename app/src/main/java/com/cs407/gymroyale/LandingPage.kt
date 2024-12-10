@@ -37,10 +37,8 @@ class LandingPageFragment : Fragment() {
             try {
                 if (userInfo != null) {
                     // Set level text with fraction
-                    val currentLevel = userInfo.level.toInt()
-                    val progressDecimal = userInfo.level - currentLevel
-                    val progressFraction = (progressDecimal * 10000).toInt()
-                    levelText.text = "Level: $currentLevel, $progressFraction/10000"
+                    val currentLevel = userInfo.xp
+                    levelText.text = "Experience Lvl: $currentLevel"
 
                     // Handle trophies with a fallback to default value of 0
                     val trophies = userInfo.trophies ?: 0
