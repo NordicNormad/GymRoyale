@@ -25,13 +25,16 @@
         android:textColor="#ffffff" />
     <!-- Bottom Navigation Bar -->
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#000000"
         android:gravity="center"
         android:orientation="horizontal"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <!-- Bottom nav - Profile -->
         <Button
@@ -45,7 +48,7 @@
             android:contentDescription="Profile"
             android:text="Profile"
             android:textColor="#ffffff"
-            android:textSize="10sp" />
+            android:textSize="14sp" />
 
         <!-- Bottom nav - Homepage -->
         <Button
@@ -59,7 +62,7 @@
             android:contentDescription="Workout"
             android:text="Home"
             android:textColor="#ffffff"
-            android:textSize="15sp" />
+            android:textSize="18sp" />
 
         <!-- Bottom nav - Bounties -->
         <Button
@@ -72,6 +75,6 @@
             android:contentDescription="Bounties"
             android:text="Bounties"
             android:textColor="#ffffff"
-            android:textSize="10sp" />
+            android:textSize="14sp" />
     </LinearLayout>
 </FrameLayout>

@@ -84,9 +84,13 @@ class TodayWorkoutsFragment : Fragment() {
                     // Add workout name as a header
                     todayWorkouts.add("--- $workoutName ---")
 
-                    val sortedLogs = workoutLogs.sortedByDescending {
-                        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(it.date)
-                    }
+                    val sortedLogs = workoutLogs.sortedWith(
+                        compareByDescending<WorkoutLog> {
+                            SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(it.date)
+                        }.thenByDescending {
+                            it.timestamp
+                        }
+                    )
 
                     // Add individual logs for this workout
                     sortedLogs.forEach { log ->

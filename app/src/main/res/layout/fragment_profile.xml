@@ -14,7 +14,7 @@
         android:orientation="vertical"
         android:padding="16dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -142,20 +142,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#1a53ff"
-            android:text="Upload Photo"
+            android:text="Chose profile Photo"
             android:layout_gravity="center"
-            android:fontFamily="@font/pixel_font"/>
+            android:fontFamily="@font/pixel_font" />
+
     </LinearLayout>
 
     <!-- Bottom Navigation Bar -->
     <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#000000"
         android:gravity="center"
         android:orientation="horizontal"
-        android:layout_marginBottom="4dp"
+        android:layout_gravity="bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -165,42 +166,41 @@
             android:id="@+id/buttonBottomNavProfile"
             android:layout_width="0dp"
             android:layout_height="45dp"
-            android:textSize="10sp"
-            android:textColor="#ffffff"
+            android:fontFamily="@font/pixel_font"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:backgroundTint="#1a53ff"
-            android:text="Profile"
             android:contentDescription="Profile"
-            android:layout_marginEnd="8dp"
-            android:fontFamily="@font/pixel_font"/>
+            android:text="Profile"
+            android:textColor="#ffffff"
+            android:textSize="14sp" />
 
         <!-- Bottom nav - Homepage -->
         <Button
             android:id="@+id/buttonBottomNavHome"
-            android:layout_width="100dp"
+            android:layout_width="0dp"
             android:layout_height="60dp"
-            android:textSize="15sp"
-            android:textColor="#ffffff"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:backgroundTint="#1a53ff"
-            android:text="Home"
+            android:fontFamily="@font/pixel_font"
             android:contentDescription="Workout"
-            android:layout_marginEnd="8dp"
-            android:fontFamily="@font/pixel_font"/>
+            android:text="Home"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
 
         <!-- Bottom nav - Bounties -->
         <Button
             android:id="@+id/buttonBottomNavBounties"
             android:layout_width="0dp"
-            android:textSize="10sp"
             android:layout_height="45dp"
-            android:textColor="#ffffff"
             android:layout_weight="1"
+            android:fontFamily="@font/pixel_font"
             android:backgroundTint="#1a53ff"
-            android:text="Bounties"
             android:contentDescription="Bounties"
-            android:fontFamily="@font/pixel_font"/>
-
+            android:text="Bounties"
+            android:textColor="#ffffff"
+            android:textSize="14sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
