@@ -14,6 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:hint="Search workouts"
+        android:textColorHint="#FFFFFF"
+        android:fontFamily="@font/pixel_font"
         android:completionThreshold="1"
         android:textColor="#FFFFFF"
         android:inputType="text"

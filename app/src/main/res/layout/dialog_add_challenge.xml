@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="#FFFFFF">
 
     <Spinner
         android:id="@+id/workoutSpinner"
@@ -14,7 +15,9 @@
     <EditText
         android:id="@+id/challengeWeightInput"
         android:layout_width="match_parent"
+        android:fontFamily="@font/pixel_font"
         android:layout_height="wrap_content"
+        android:textColorHint="#000000"
         android:hint="Weight (lbs)"
         android:inputType="number" />
 
@@ -22,6 +25,8 @@
         android:id="@+id/challengeRepsInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/pixel_font"
+        android:textColorHint="#000000"
         android:hint="Reps"
         android:inputType="number" />
 
@@ -29,13 +34,17 @@
         android:id="@+id/challengeTrophiesInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/pixel_font"
+        android:textColorHint="#000000"
         android:hint="Trophies Reward"
         android:inputType="number" />
     <EditText
         android:id="@+id/challengeCommentsInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/pixel_font"
         android:hint="Comments"
+        android:textColorHint="#000000"
         android:inputType="textMultiLine"
         android:minLines="2"
         android:maxLines="5" />
