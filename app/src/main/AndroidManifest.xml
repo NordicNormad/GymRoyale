@@ -15,7 +15,7 @@
         android:theme="@style/Theme.GymRoyale"
         tools:targetApi="31">
         <activity
-            android:name=".SplashActivity"
+            android:name=".SplachActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

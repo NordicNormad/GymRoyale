@@ -335,11 +335,6 @@ class ChallengerFragment : Fragment() {
                         .update("completedBy", FieldValue.arrayUnion(userId))
                         .addOnSuccessListener {
                             incrementUserTrophies(userId, challenge.trophies)
-                            Toast.makeText(
-                                requireContext(),
-                                "Challenge completed!",
-                                Toast.LENGTH_SHORT
-                            ).show()
                         }
                         .addOnFailureListener {
                             Toast.makeText(
