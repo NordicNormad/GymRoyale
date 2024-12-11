@@ -159,11 +159,17 @@ class SearchWorkout : AppCompatActivity() {
 
     private fun hideBottomBar() {
         val bottomBar = findViewById<LinearLayout>(R.id.bottomNavLayout)
+        buttonSearch.visibility = View.GONE
+        searchView.visibility = View.GONE
+        buttonViewToday.visibility = View.GONE
         bottomBar.visibility = View.GONE
     }
 
     private fun showBottomBar() {
         val bottomBar = findViewById<LinearLayout>(R.id.bottomNavLayout)
+        buttonSearch.visibility = View.VISIBLE
+        searchView.visibility = View.VISIBLE
+        buttonViewToday.visibility = View.VISIBLE
         bottomBar.visibility = View.VISIBLE
     }
 
