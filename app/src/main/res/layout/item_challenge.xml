@@ -1,75 +1,83 @@
-<LinearLayout
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:backgroundTint="#000000"
     android:padding="16dp">
 
-    <!-- Challenge Title -->
+    <!-- Workout name -->
     <TextView
-        android:id="@+id/challengeTitle"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvWorkout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:text="Workout Name"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:text="Challenge Title" />
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Challenge Description -->
+    <!-- Reps and Weight -->
     <TextView
-        android:id="@+id/challengeDescription"
+        android:id="@+id/tvRepsAndWeight"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Reps: 10, Weight: 100kg"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvWorkout"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Trophies -->
+    <TextView
+        android:id="@+id/tvTrophies"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:paddingTop="4dp"
-        android:text="Challenge Description" />
+        android:text="Trophies: 3"
+        android:textSize="16sp"
+        android:textColor="#FFD700"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvRepsAndWeight"
+        android:layout_marginTop="8dp"/>
 
-    <!-- Trophies Reward -->
+    <!-- Comment -->
     <TextView
-        android:id="@+id/challengeTrophiesReward"
+        android:id="@+id/tvComment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Great effort on this challenge!"
+        android:textSize="14sp"
+        android:textColor="#AAAAAA"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTrophies"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Accept Button -->
+    <Button
+        android:id="@+id/btnAccept"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:paddingTop="4dp"
-        android:text="Trophies: 0" />
-    <TextView
-        android:id="@+id/participantsText"
+        android:text="Accept"
+        android:backgroundTint="#4CAF50"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvComment"
+        android:layout_marginTop="12dp"/>
+
+    <!-- Reply Button -->
+    <Button
+        android:id="@+id/btnReply"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:text="Completed by: 0 participants" />
+        android:text="Reply"
+        android:backgroundTint="#2196F3"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvComment"
+        android:layout_marginTop="12dp"/>
 
-    <!-- Buttons -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="8dp">
-
-        <!-- Accept Button -->
-        <Button
-            android:id="@+id/acceptButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#1a53ff"
-            android:text="Accept" />
-
-        <!-- Complete Button -->
-        <Button
-            android:id="@+id/completeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#1a53ff"
-            android:text="Complete"
-            android:layout_marginStart="16dp" />
-
-        <!-- Reply Button -->
-        <Button
-            android:id="@+id/replyButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#1a53ff"
-            android:text="Reply"
-            android:layout_marginStart="16dp" />
-    </LinearLayout>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

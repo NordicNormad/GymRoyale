@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -6,17 +5,25 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/challengeTitleInput"
+    <Spinner
+        android:id="@+id/workoutSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Challenge Title" />
+        android:hint="Select Workout" />
 
     <EditText
-        android:id="@+id/challengeDescriptionInput"
+        android:id="@+id/challengeWeightInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Challenge Description" />
+        android:hint="Weight (lbs)"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/challengeRepsInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Reps"
+        android:inputType="number" />
 
     <EditText
         android:id="@+id/challengeTrophiesInput"
@@ -24,4 +31,13 @@
         android:layout_height="wrap_content"
         android:hint="Trophies Reward"
         android:inputType="number" />
+    <EditText
+        android:id="@+id/challengeCommentsInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Comments"
+        android:inputType="textMultiLine"
+        android:minLines="2"
+        android:maxLines="5" />
+
 </LinearLayout>

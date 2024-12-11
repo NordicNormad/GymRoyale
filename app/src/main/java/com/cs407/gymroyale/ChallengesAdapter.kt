@@ -11,7 +11,6 @@ import com.cs407.gymroyale.models.Challenge
 class ChallengesAdapter(
     private val challenges: List<Challenge>,
     private val onAcceptClick: (Challenge) -> Unit,
-    private val onCompleteClick: (Challenge) -> Unit,
     private val onReplyClick: (Challenge) -> Unit
 ) : RecyclerView.Adapter<ChallengesAdapter.ChallengeViewHolder>() {
 
@@ -24,33 +23,28 @@ class ChallengesAdapter(
         val challenge = challenges[position]
         holder.bind(challenge)
 
-        // Set button visibility logic
-        holder.acceptButton.visibility = if (challenge.status == "open") View.VISIBLE else View.GONE
-        holder.completeButton.visibility = if (challenge.status == "accepted") View.VISIBLE else View.GONE
-
         // Set listeners for buttons
         holder.acceptButton.setOnClickListener { onAcceptClick(challenge) }
-        holder.completeButton.setOnClickListener { onCompleteClick(challenge) }
         holder.replyButton.setOnClickListener { onReplyClick(challenge) }
     }
 
     override fun getItemCount(): Int = challenges.size
 
     class ChallengeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val titleText: TextView = itemView.findViewById(R.id.challengeTitle)
-        private val descriptionText: TextView = itemView.findViewById(R.id.challengeDescription)
-        private val trophiesText: TextView = itemView.findViewById(R.id.challengeTrophiesReward)
-        private val participantsText: TextView = itemView.findViewById(R.id.participantsText)
-        val acceptButton: Button = itemView.findViewById(R.id.acceptButton)
-        val completeButton: Button = itemView.findViewById(R.id.completeButton)
-        val replyButton: Button = itemView.findViewById(R.id.replyButton)
+        // UI elements for the workout, reps, weights, trophies, and comment
+        private val workoutText: TextView = itemView.findViewById(R.id.tvWorkout)
+        private val repsAndWeightText: TextView = itemView.findViewById(R.id.tvRepsAndWeight)
+        private val trophiesText: TextView = itemView.findViewById(R.id.tvTrophies)
+        private val commentsText: TextView = itemView.findViewById(R.id.tvComment)
+        val acceptButton: Button = itemView.findViewById(R.id.btnAccept)
+        val replyButton: Button = itemView.findViewById(R.id.btnReply)
 
         fun bind(challenge: Challenge) {
             // Bind data from the Challenge object to the UI
-            titleText.text = challenge.title
-            descriptionText.text = challenge.description
-            trophiesText.text = "Trophies: ${challenge.trophiesReward}"
-            participantsText.text = "Completed by: ${challenge.completedBy.size} participants"
+            workoutText.text = challenge.workout // Bind workout name
+            repsAndWeightText.text = "Reps: ${challenge.reps}, Weight: ${challenge.weight}kg" // Bind reps and weight
+            trophiesText.text = "Trophies: ${challenge.trophies}" // Bind trophies
+            commentsText.text = challenge.comments // Bind comments
         }
     }
 }

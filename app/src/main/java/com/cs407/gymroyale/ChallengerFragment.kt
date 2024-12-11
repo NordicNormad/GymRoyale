@@ -8,8 +8,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +22,13 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.cs407.gymroyale.models.Challenge
 import com.cs407.gymroyalepackage.LandingPageFragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class ChallengerFragment : Fragment() {
 
@@ -86,7 +96,6 @@ class ChallengerFragment : Fragment() {
                 challengesRecyclerView.adapter = ChallengesAdapter(
                     challengesList,
                     { challenge -> acceptChallenge(challenge) },
-                    { challenge -> completeChallenge(challenge) },
                     { challenge -> openReplyPage(challenge) }
                 )
             }
@@ -94,23 +103,35 @@ class ChallengerFragment : Fragment() {
                 Log.w("Firestore", "Error fetching challenges", e)
             }
     }
+
     @SuppressLint("MissingInflatedId")
     private fun showAddChallengeDialog() {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_challenge, null)
-        val titleInput = dialogView.findViewById<EditText>(R.id.challengeTitleInput)
-        val descriptionInput = dialogView.findViewById<EditText>(R.id.challengeDescriptionInput)
+
+        val workoutSpinner = dialogView.findViewById<Spinner>(R.id.workoutSpinner)
+        val repsInput = dialogView.findViewById<EditText>(R.id.challengeRepsInput)
+        val weightInput = dialogView.findViewById<EditText>(R.id.challengeWeightInput)
         val trophiesInput = dialogView.findViewById<EditText>(R.id.challengeTrophiesInput)
+        val commentsInput = dialogView.findViewById<EditText>(R.id.challengeCommentsInput) // New Comments input
+
+        // Load workouts from CSV and populate the spinner
+        val workouts = loadWorkoutsFromCSV()
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, workouts)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        workoutSpinner.adapter = adapter
 
         AlertDialog.Builder(requireContext())
             .setTitle("Add Challenge")
             .setView(dialogView)
             .setPositiveButton("Save") { dialog, _ ->
-                val title = titleInput.text.toString().trim()
-                val description = descriptionInput.text.toString().trim()
+                val selectedWorkout = workoutSpinner.selectedItem.toString()
+                val reps = repsInput.text.toString().toIntOrNull() ?: 0
+                val weight = weightInput.text.toString().toIntOrNull() ?: 0
                 val trophies = trophiesInput.text.toString().toIntOrNull() ?: 0
+                val comments = commentsInput.text.toString()  // Capture comments
 
-                if (title.isNotEmpty() && description.isNotEmpty()) {
-                    addChallengeToFirestore(title, description, trophies)
+                if (reps > 0 && weight > 0) {
+                    addChallengeToFirestore(selectedWorkout, reps, weight, trophies, comments)
                 } else {
                     Toast.makeText(context, "Please fill out all fields", Toast.LENGTH_SHORT).show()
                 }
@@ -124,18 +145,36 @@ class ChallengerFragment : Fragment() {
             .show()
     }
 
-    private fun addChallengeToFirestore(title: String, description: String, trophies: Int) {
-        val challenge = hashMapOf(
-            "title" to title,
-            "description" to description,
-            "trophiesReward" to trophies,
-            "status" to "open",
-            "completedBy" to emptyList<String>()
-        )
 
+    private fun loadWorkoutsFromCSV(): List<String> {
+        val workouts = mutableListOf<String>()
+        val inputStream = resources.openRawResource(R.raw.workouts)
+        val reader = BufferedReader(InputStreamReader(inputStream))
+
+        reader.useLines { lines ->
+            lines.forEach { line ->
+                workouts.add(line.trim())
+            }
+        }
+        return workouts
+    }
+
+
+    private fun addChallengeToFirestore(workout: String, weight: Int, reps: Int, trophies: Int, comments: String) {
+        val challenge = hashMapOf(
+            "createdBy" to FirebaseAuth.getInstance().currentUser?.uid,
+            "completedBy" to emptyList<String>(),
+            "workout" to workout,
+            "weight" to weight,
+            "reps" to reps,
+            "date" to FieldValue.serverTimestamp(),
+            "trophies" to trophies,
+            "comments" to comments // Add comments
+        )
         db.collection("challenges")
             .add(challenge)
             .addOnSuccessListener {
+                Log.d("Firestore", "Challenge added successfully: ${it.id}")
                 Toast.makeText(context, "Challenge added successfully", Toast.LENGTH_SHORT).show()
                 fetchAvailableChallenges() // Refresh the list
             }
@@ -144,17 +183,88 @@ class ChallengerFragment : Fragment() {
             }
     }
 
+
     private fun acceptChallenge(challenge: Challenge) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
+        // Check if user has already completed this challenge
         db.collection("challenges").document(challenge.id)
-            .update("status", "accepted", "acceptedBy", userId)
-            .addOnSuccessListener {
-                Toast.makeText(context, "Challenge accepted!", Toast.LENGTH_SHORT).show()
-                fetchAvailableChallenges() // Refresh the list
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val completedBy = document.get("completedBy") as? List<*>
+                    if (completedBy != null && completedBy.contains(userId)) {
+                        Toast.makeText(requireContext(), "Already completed this challenge.", Toast.LENGTH_SHORT).show()
+                        return@addOnSuccessListener
+                    }
+
+                    // Show confirmation dialog
+                    showChallengeConfirmationDialog(challenge, userId)
+                }
             }
-            .addOnFailureListener { e ->
-                Log.w("Firestore", "Error accepting challenge", e)
+            .addOnFailureListener {
+                Toast.makeText(requireContext(), "Error checking challenge status", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun showChallengeConfirmationDialog(challenge: Challenge, userId: String) {
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_confirm_challenge, null)
+        val challengeDetails = dialogView.findViewById<TextView>(R.id.challengeDetails)
+        val confirmButton = dialogView.findViewById<Button>(R.id.btnConfirmLog)
+        val cancelButton = dialogView.findViewById<Button>(R.id.btnCancelLog)
+
+        challengeDetails.text = "Workout: ${challenge.workout}\nReps: ${challenge.reps}\nWeight: ${challenge.weight} kg"
+
+        val builder = AlertDialog.Builder(requireContext())
+            .setTitle("Confirm Challenge")
+            .setView(dialogView)
+
+        val dialog = builder.create()
+
+        confirmButton.setOnClickListener {
+            // Log the workout to Firebase
+            logWorkoutToFirebase(challenge, userId)
+            dialog.dismiss()
+        }
+
+        cancelButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun logWorkoutToFirebase(challenge: Challenge, userId: String) {
+        // Get the current server timestamp
+
+        // Construct the workout log
+        val workoutLog = mapOf(
+            "workoutName" to challenge.workout,
+            "weight" to challenge.weight,
+            "reps" to challenge.reps,
+            "date" to SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()),
+            "timestamp" to System.currentTimeMillis(),
+            "xp" to 0 // Default xp to 0
+        )
+
+        // Add workout log to the user's workoutlog field
+        db.collection("users").document(userId)
+            .update("workoutlog", FieldValue.arrayUnion(workoutLog))
+            .addOnSuccessListener {
+                Toast.makeText(requireContext(), "Workout logged successfully!", Toast.LENGTH_SHORT).show()
+
+                // Add user to the challenge's completedBy array
+                db.collection("challenges").document(challenge.id)
+                    .update("completedBy", FieldValue.arrayUnion(userId))
+                    .addOnSuccessListener {
+                        Toast.makeText(requireContext(), "Challenge completed!", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(requireContext(), "Error updating challenge status.", Toast.LENGTH_SHORT).show()
+                    }
+            }
+            .addOnFailureListener {
+                Toast.makeText(requireContext(), "Error logging workout.", Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -183,7 +293,7 @@ class ChallengerFragment : Fragment() {
 
                     challengeRef.update("completedBy", FieldValue.arrayUnion(userId))
                         .addOnSuccessListener {
-                            claimTrophies(challenge.trophiesReward)
+//                            claimTrophies(challenge.trophiesReward)
                             Toast.makeText(context, "Challenge completed and trophies claimed!", Toast.LENGTH_SHORT).show()
                             fetchAvailableChallenges() // Refresh the list
                         }
