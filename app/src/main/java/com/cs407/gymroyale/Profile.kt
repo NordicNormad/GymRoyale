@@ -11,19 +11,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.cs407.gymroyalepackage.LandingPageFragment
 
 class ProfileFragment : Fragment() {
 
+    private lateinit var auth: FirebaseAuth
+    private lateinit var firestore: FirebaseFirestore
     private lateinit var profilePhoto: ImageView
     private lateinit var profileName: TextView
     private lateinit var profileBio: TextView
+    private lateinit var xpTextView: TextView
+    private lateinit var trophyTextView: TextView
+    private lateinit var challengesCompletedTextView: TextView
     private lateinit var uploadPhotoButton: Button
     private lateinit var logOutButton: Button
     private lateinit var editProfileButton: Button
     private lateinit var bottomNavProfileButton: Button
     private lateinit var bottomNavHomeButton: Button
     private lateinit var bottomNavBountyButton: Button
+    private var viewedUserId: String? = null
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
@@ -32,10 +40,17 @@ class ProfileFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
+        // Initialize Firebase
+        auth = FirebaseAuth.getInstance()
+        firestore = FirebaseFirestore.getInstance()
+
         // Initialize UI elements
         profilePhoto = view.findViewById(R.id.imageViewProfilePhoto)
         profileName = view.findViewById(R.id.textViewProfileName)
         profileBio = view.findViewById(R.id.textViewProfileBio)
+        xpTextView = view.findViewById(R.id.textViewXP)
+        trophyTextView = view.findViewById(R.id.textTrophyXP)
+        challengesCompletedTextView = view.findViewById(R.id.textViewChallengesCompleted)
         uploadPhotoButton = view.findViewById(R.id.buttonUploadPhoto)
         logOutButton = view.findViewById(R.id.buttonLogOut)
         editProfileButton = view.findViewById(R.id.buttonEditProfile)
@@ -43,8 +58,20 @@ class ProfileFragment : Fragment() {
         bottomNavHomeButton = view.findViewById(R.id.buttonBottomNavHome)
         bottomNavBountyButton = view.findViewById(R.id.buttonBottomNavBounties)
 
-        // Load the profile photo locally
+        // Get userId from arguments or fallback to the logged-in user
+        viewedUserId = arguments?.getString("userId") ?: auth.currentUser?.uid
+
+        if (viewedUserId == null) {
+            Toast.makeText(context, "No user information available", Toast.LENGTH_SHORT).show()
+            navigateToLogin()
+            return view
+        }
+
+        // Load profile photo locally
         loadProfilePhotoLocally()
+
+        // Fetch and display profile data from Firebase
+        fetchProfileData(viewedUserId!!)
 
         // Set up button listeners
         uploadPhotoButton.setOnClickListener {
@@ -66,6 +93,26 @@ class ProfileFragment : Fragment() {
         setBottomNavigationListeners()
 
         return view
+    }
+
+    private fun fetchProfileData(userId: String) {
+        firestore.collection("users").document(userId).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    profileName.text = document.getString("name") ?: "Name not set"
+                    profileBio.text = document.getString("bio") ?: "Bio not set"
+                    xpTextView.text = "XP: ${document.getLong("xp") ?: 0}"
+                    trophyTextView.text = "Trophies: ${document.getLong("trophies") ?: 0}"
+                    challengesCompletedTextView.text =
+                        "Challenges Completed: ${document.getLong("challengesCompleted") ?: 0}"
+                } else {
+                    Toast.makeText(context, "User data not found", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(context, "Error fetching profile: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                Log.e("ProfileFragment", "Error fetching profile data", e)
+            }
     }
 
     private fun saveSelectedResourceLocally(imageResId: Int) {
@@ -116,9 +163,20 @@ class ProfileFragment : Fragment() {
             .setPositiveButton("Save") { _, _ ->
                 val newName = nameField.text.toString()
                 val newBio = bioField.text.toString()
-                profileName.text = newName
-                profileBio.text = newBio
-                Toast.makeText(context, "Profile updated!", Toast.LENGTH_SHORT).show()
+                val updates = hashMapOf<String, Any>(
+                    "name" to newName,
+                    "bio" to newBio
+                )
+                firestore.collection("users").document(viewedUserId!!)
+                    .update(updates)
+                    .addOnSuccessListener {
+                        profileName.text = newName
+                        profileBio.text = newBio
+                        Toast.makeText(context, "Profile updated!", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(context, "Failed to update profile.", Toast.LENGTH_SHORT).show()
+                    }
             }
             .setNegativeButton("Cancel", null)
             .create()
@@ -126,8 +184,17 @@ class ProfileFragment : Fragment() {
     }
 
     private fun logOutUser() {
+        auth.signOut()
         Toast.makeText(context, "Logged out successfully.", Toast.LENGTH_SHORT).show()
-        // Implement actual logout functionality here if needed
+        val intent = Intent(requireContext(), LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+    }
+
+    private fun navigateToLogin() {
+        val intent = Intent(requireContext(), LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
     }
 
     private fun setBottomNavigationListeners() {

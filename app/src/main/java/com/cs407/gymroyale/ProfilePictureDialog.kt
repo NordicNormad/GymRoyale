@@ -16,7 +16,8 @@ class ProfilePictureDialog(
         R.drawable.profile_2,
         R.drawable.profile_3,
         R.drawable.profile_4,
-        R.drawable.profile_5
+        R.drawable.profile_5,
+        R.drawable.profile_6
     )
 
     override fun onCreateView(
