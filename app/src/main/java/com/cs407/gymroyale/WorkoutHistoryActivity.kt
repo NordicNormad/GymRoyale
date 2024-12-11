@@ -1,10 +1,14 @@
 package com.cs407.gymroyale
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.cs407.gymroyale.R
@@ -85,11 +89,18 @@ class WorkoutHistoryActivity : AppCompatActivity() {
             }
 
             // Update ListView with workout history
-            workoutHistoryAdapter = ArrayAdapter(
+            workoutHistoryAdapter = object : ArrayAdapter<String>(
                 this@WorkoutHistoryActivity,
                 android.R.layout.simple_list_item_1,
                 workoutHistory
-            )
+            ) {
+                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                    val view = super.getView(position, convertView, parent)
+                    val textView = view.findViewById<TextView>(android.R.id.text1)
+                    textView.setTextColor(Color.WHITE)
+                    return view
+                }
+            }
             listViewWorkoutHistory.adapter = workoutHistoryAdapter
         }
     }
