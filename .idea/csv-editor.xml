@@ -10,6 +10,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\app\src\main\res\raw\workout_logs.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\app\src\main\res\raw\workouts.csv">
           <value>
             <Attribute>
