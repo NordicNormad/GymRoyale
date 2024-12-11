@@ -1,5 +1,6 @@
 package com.cs407.gymroyale
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -204,7 +206,19 @@ class WorkoutLogFragment : Fragment() {
                 })
 
                 val logDisplayList = workoutLogs.map { "${it.date} --- ${it.weight} lbs --- ${it.reps} reps" }
-                logAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, logDisplayList)
+                logAdapter = object : ArrayAdapter<String>(
+                    requireContext(),
+                    android.R.layout.simple_list_item_1,
+                    logDisplayList
+                ) {
+                    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                        val view = super.getView(position, convertView, parent)
+                        val textView = view.findViewById<TextView>(android.R.id.text1)
+                        textView.setTextColor(Color.WHITE)
+                        textView.typeface = ResourcesCompat.getFont(context, R.font.pixel_font)
+                        return view
+                    }
+                }
                 listViewLogs.adapter = logAdapter
                 logAdapter.notifyDataSetChanged()
             }
