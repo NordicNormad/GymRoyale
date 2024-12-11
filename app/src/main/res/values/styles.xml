@@ -9,4 +9,10 @@
         <item name="android:fontFamily">@font/pixel_font</item>
         <item name="android:textSize">28sp</item>
     </style>
+
+    <style name="SwitchCompat">
+        <item name="colorControlActivated">#1a53ff</item>
+        <item name="colorSwitchThumbNormal">@color/white</item>
+        <item name="android:colorForeground">@android:color/darker_gray</item>
+    </style>
 </resources>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center"
     android:padding="16dp"
@@ -21,16 +21,17 @@
         android:textColor="#ffffff"/>
 
     <!-- Switch Between Login and Registration -->
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switchAuthMode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/pixel_font"
         android:minWidth="48dp"
         android:minHeight="48dp"
         android:text="Register"
         android:textColor="#FFFFFF"
-        android:fontFamily="@font/pixel_font"
-        tools:ignore="UseSwitchCompatOrMaterialXml" />
+        app:thumbTint="#1a53ff"
+        app:trackTint="#CACACA"/>
     <!-- Email Input -->
     <EditText
         android:id="@+id/editTextEmail"

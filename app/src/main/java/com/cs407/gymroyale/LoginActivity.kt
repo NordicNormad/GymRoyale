@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
         val passwordEditText = findViewById<EditText>(R.id.editTextPassword)
         val confirmPasswordEditText = findViewById<EditText>(R.id.editTextConfirmPassword)
         val authButton = findViewById<Button>(R.id.buttonAuth)
-        val toggleSwitch = findViewById<Switch>(R.id.switchAuthMode)
+        val toggleSwitch = findViewById<SwitchCompat>(R.id.switchAuthMode)
         val errorTextView = findViewById<TextView>(R.id.textViewError)
 
         toggleSwitch.setOnCheckedChangeListener { _, isChecked ->
