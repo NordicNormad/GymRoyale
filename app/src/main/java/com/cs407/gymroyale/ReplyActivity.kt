@@ -21,6 +21,7 @@ class ReplyActivity : AppCompatActivity() {
     private lateinit var repliesRecyclerView: RecyclerView
     private lateinit var replyInput: EditText
     private lateinit var postReplyButton: Button
+    private lateinit var buttonCancel: Button
 
     private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
@@ -42,6 +43,7 @@ class ReplyActivity : AppCompatActivity() {
         repliesRecyclerView = findViewById(R.id.repliesRecyclerView)
         replyInput = findViewById(R.id.replyInput)
         postReplyButton = findViewById(R.id.postReplyButton)
+        buttonCancel = findViewById(R.id.buttonCancel)
 
         // Set up RecyclerView
         repliesRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -53,6 +55,9 @@ class ReplyActivity : AppCompatActivity() {
         // Post reply button action
         postReplyButton.setOnClickListener {
             postReply()
+        }
+        buttonCancel.setOnClickListener {
+            finish()
         }
     }
 
@@ -130,5 +135,4 @@ class ReplyActivity : AppCompatActivity() {
                 Log.e("ReplyActivity", "Error fetching profile", e)
             }
     }
-
 }
