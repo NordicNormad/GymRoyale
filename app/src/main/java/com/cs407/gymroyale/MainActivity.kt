@@ -29,25 +29,38 @@ class MainActivity : AppCompatActivity() {
 
         // Ensure user is authenticated
         checkAuthentication()
-
-        // Check for userId in intent for ProfileFragment navigation
-        val userId = intent.getStringExtra("userId")
-        if (userId != null) {
-            Log.d("MainActivity", "Navigating to ProfileFragment for user: $userId")
-            val profileFragment = ProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString("userId", userId)
+        // Handle all navigation cases
+        when {
+            intent.getStringExtra("userId") != null -> {
+                // Existing userId navigation
+                val userId = intent.getStringExtra("userId")
+                Log.d("MainActivity", "Navigating to ProfileFragment for user: $userId")
+                val profileFragment = ProfileFragment().apply {
+                    arguments = Bundle().apply {
+                        putString("userId", userId)
+                    }
                 }
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, profileFragment)
+                    .addToBackStack(null)
+                    .commit()
             }
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, profileFragment)
-                .addToBackStack(null)
-                .commit()
-        } else if (savedInstanceState == null) {
-            // Load the main content (LandingPageFragment)
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, LandingPageFragment())
-                .commit()
+            intent.getBooleanExtra("NAVIGATE_TO_PROFILE", false) -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, ProfileFragment())
+                    .commit()
+            }
+            intent.getBooleanExtra("NAVIGATE_TO_BOUNTIES", false) -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, BountyFragment())
+                    .commit()
+            }
+            savedInstanceState == null -> {
+                // Load the main content (LandingPageFragment)
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, LandingPageFragment())
+                    .commit()
+            }
         }
     }
 

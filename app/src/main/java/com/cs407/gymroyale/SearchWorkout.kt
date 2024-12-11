@@ -103,21 +103,17 @@ class SearchWorkout : AppCompatActivity() {
         }
 
         buttonProfile.setOnClickListener {
-            hideBottomBar() // Hide bottom bar for ProfileFragment
-            val profileFragment = ProfileFragment()
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, profileFragment)
-                .addToBackStack(null)
-                .commit()
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("NAVIGATE_TO_PROFILE", true)
+            startActivity(intent)
+            finish()
         }
 
         buttonBounties.setOnClickListener {
-            hideBottomBar() // Hide bottom bar for BountyFragment
-            val bountyFragment = BountyFragment()
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, bountyFragment)
-                .addToBackStack(null)
-                .commit()
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("NAVIGATE_TO_BOUNTIES", true)
+            startActivity(intent)
+            finish()
         }
 
 
