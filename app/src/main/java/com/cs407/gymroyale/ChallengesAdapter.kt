@@ -42,7 +42,7 @@ class ChallengesAdapter(
         fun bind(challenge: Challenge) {
             // Bind data from the Challenge object to the UI
             workoutText.text = challenge.workout // Bind workout name
-            repsAndWeightText.text = "Reps: ${challenge.reps}, Weight: ${challenge.weight}kg" // Bind reps and weight
+            repsAndWeightText.text = "Reps: ${challenge.reps}, Weight: ${challenge.weight} lbs" // Bind reps and weight
             trophiesText.text = "Trophies: ${challenge.trophies}" // Bind trophies
             commentsText.text = challenge.comments // Bind comments
         }
