@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     tools:context=".SearchWorkout">
 
     <AutoCompleteTextView
@@ -14,6 +15,7 @@
         android:layout_margin="16dp"
         android:hint="Search workouts"
         android:completionThreshold="1"
+        android:textColor="#FFFFFF"
         android:inputType="text"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,6 +26,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Search"
+        android:fontFamily="@font/pixel_font"
+        android:backgroundTint="#1a53ff"
         app:layout_constraintTop_toBottomOf="@id/searchView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -32,6 +36,8 @@
         android:id="@+id/buttonViewToday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#1a53ff"
+        android:fontFamily="@font/pixel_font"
         android:text="View Today's Workouts"
         app:layout_constraintTop_toBottomOf="@id/buttonSearch"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,31 +47,72 @@
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:backgroundTint="#1a53ff"
         app:layout_constraintTop_toBottomOf="@id/buttonViewToday"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toTopOf="@id/bottomNavLayout"/>
 
-    <Button
-        android:id="@+id/buttonCancel"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/bottomNavLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Cancel"
-        android:layout_margin="16dp"
+        android:orientation="horizontal"
+        android:background="#000000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <Button
+            android:id="@+id/buttonBottomNavProfile"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:textSize="10sp"
+            android:textColor="#ffffff"
+            android:layout_weight="1"
+            android:backgroundTint="#1a53ff"
+            android:text="Profile"
+            android:contentDescription="Profile"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/pixel_font"/>
+
+        <Button
+            android:id="@+id/buttonBottomNavHome"
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:textSize="15sp"
+            android:textColor="#ffffff"
+            android:layout_weight="1"
+            android:backgroundTint="#1a53ff"
+            android:text="Home"
+            android:contentDescription="Workout"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/pixel_font"/>
+
+        <Button
+            android:id="@+id/buttonBottomNavBounties"
+            android:layout_width="0dp"
+            android:textSize="10sp"
+            android:layout_height="45dp"
+            android:textColor="#ffffff"
+            android:layout_weight="1"
+            android:backgroundTint="#1a53ff"
+            android:text="Bounties"
+            android:contentDescription="Bounties"
+            android:fontFamily="@font/pixel_font"/>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/historyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="View History"
+        android:backgroundTint="#1a53ff"
+        android:fontFamily="@font/pixel_font"
         android:layout_margin="70dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

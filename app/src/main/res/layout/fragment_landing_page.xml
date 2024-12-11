@@ -80,7 +80,7 @@
     <!-- Log Workout button -->
     <Button
         android:id="@+id/buttonLogWorkout"
-        android:layout_width="400dp"
+        android:layout_width="300dp"
         android:layout_height="60dp"
         android:text="LOG WORKOUT"
         android:textColor="#ffffff"
@@ -95,7 +95,7 @@
     <!-- Find Challenger button -->
     <Button
         android:id="@+id/buttonChallenges"
-        android:layout_width="400dp"
+        android:layout_width="300dp"
         android:layout_height="60dp"
         android:text="CHALLENGES"
         android:textColor="#ffffff"
