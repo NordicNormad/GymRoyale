@@ -3,13 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="#000000">
 
     <TextView
         android:id="@+id/challengeDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Challenge details"
+        android:fontFamily="@font/pixel_font"
+        android:textColor="#FFFFFF"
         android:textSize="16sp"
         android:paddingBottom="16dp" />
 
@@ -18,17 +21,23 @@
         android:layout_height="wrap_content"
         android:text="I solemnly swear that I completed this challenge."
         android:textSize="14sp"
+        android:fontFamily="@font/pixel_font"
+        android:textColor="#FFFFFF"
         android:paddingBottom="16dp" />
 
     <Button
         android:id="@+id/btnConfirmLog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:backgroundTint="#1a53ff"
         android:text="Log" />
 
     <Button
         android:id="@+id/btnCancelLog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:backgroundTint="#1a53ff"
         android:text="Cancel" />
 </LinearLayout>

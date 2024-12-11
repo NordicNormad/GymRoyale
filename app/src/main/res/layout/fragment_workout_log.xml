@@ -41,15 +41,19 @@
         android:id="@+id/editTextWeight"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColorHint="#FFFFFF"
         android:hint="Weight (lbs)"
+        android:textColor="#FFFFFF"
         android:inputType="numberDecimal"
         android:fontFamily="@font/pixel_font"/>
 
     <EditText
         android:id="@+id/editTextReps"
         android:layout_width="match_parent"
+        android:textColorHint="#FFFFFF"
         android:layout_height="wrap_content"
         android:hint="Reps"
+        android:textColor="#FFFFFF"
         android:inputType="number"
         android:fontFamily="@font/pixel_font"/>
 

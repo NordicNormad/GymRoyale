@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="#000000"
     android:padding="8dp">
 
     <TextView
@@ -11,23 +12,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Username"
+        android:fontFamily="@font/pixel_font"
+        android:textColor="#FFD700"
         android:textStyle="bold"
         android:clickable="true"
+        android:textSize="24dp"
         android:focusable="true"
         android:paddingBottom="4dp" />
 
     <TextView
         android:id="@+id/messageTextView"
         android:layout_width="wrap_content"
+        android:fontFamily="@font/pixel_font"
+        android:textColor="#FFFFFF"
         android:layout_height="wrap_content"
+        android:textSize="24dp"
         android:text="Message"
         android:paddingBottom="4dp" />
 
     <TextView
         android:id="@+id/timestampTextView"
         android:layout_width="wrap_content"
+        android:fontFamily="@font/pixel_font"
+        android:textColor="#FFFFFF"
         android:layout_height="wrap_content"
         android:text="Timestamp"
-        android:textSize="12sp" />
+        android:textSize="18sp" />
 </LinearLayout>
 
