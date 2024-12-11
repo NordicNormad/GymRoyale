@@ -19,6 +19,8 @@
     <EditText
         android:id="@+id/replyInput"
         android:layout_width="match_parent"
+        android:textColorHint="#FFFFFF"
+        android:textColor="#FFFFFF"
         android:layout_height="wrap_content"
         android:fontFamily="@font/pixel_font"
         android:hint="Write your reply..." />
@@ -28,6 +30,8 @@
         android:id="@+id/postReplyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/pixel_font"
+        android:backgroundTint="#1a53ff"
         android:layout_gravity="end"
         android:text="Post" />
 </LinearLayout>
