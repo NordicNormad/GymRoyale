@@ -25,8 +25,6 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.cs407.gymroyale.models.Challenge
 import com.cs407.gymroyalepackage.LandingPageFragment
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.text.SimpleDateFormat
@@ -335,7 +333,7 @@ class ChallengerFragment : Fragment() {
 
         dialog.show()
     }
-    private fun incrementUserTrophies(userId: String, trophies: Int) {
+    private fun incrementUserTrophiesandCount(userId: String, trophies: Int) {
         db.collection("users").document(userId)
             .update("trophies", FieldValue.increment(trophies.toLong()))
             .addOnSuccessListener {
@@ -343,6 +341,15 @@ class ChallengerFragment : Fragment() {
             }
             .addOnFailureListener { e ->
                 Log.e("Firestore", "Error updating trophies: ${e.message}", e)
+            }
+
+        db.collection("users").document(userId)
+            .update("challengesCompleted", FieldValue.increment(1))
+            .addOnSuccessListener {
+                Log.d("Firestore", "Challenges completed count incremented for user: $userId")
+            }
+            .addOnFailureListener { e ->
+                Log.e("Firestore", "Error incrementing challenges completed: ${e.message}", e)
             }
     }
 
@@ -375,7 +382,7 @@ class ChallengerFragment : Fragment() {
                     db.collection("challenges").document(challenge.id)
                         .update("completedBy", FieldValue.arrayUnion(userId))
                         .addOnSuccessListener {
-                            incrementUserTrophies(userId, challenge.trophies)
+                            incrementUserTrophiesandCount(userId, challenge.trophies)
                         }
                         .addOnFailureListener {
                             Toast.makeText(
