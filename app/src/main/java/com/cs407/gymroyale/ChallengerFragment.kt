@@ -235,36 +235,109 @@ class ChallengerFragment : Fragment() {
     }
 
     private fun logWorkoutToFirebase(challenge: Challenge, userId: String) {
-        // Get the current server timestamp
+        // Fetch the max log for this specific workout
+        fetchMaxLogForChallenge(challenge.workout, userId) { maxLiftSpecific ->
+            val newLift = challenge.weight / ((100 - (challenge.reps * 2.5)) / 100)
+            val expMultiplier = 1
+            val expPr = maxOf((newLift - maxLiftSpecific + 100) * expMultiplier, 0.0).toInt()
 
-        // Construct the workout log
-        val workoutLog = mapOf(
-            "workoutName" to challenge.workout,
-            "weight" to challenge.weight,
-            "reps" to challenge.reps,
-            "date" to SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()),
-            "timestamp" to System.currentTimeMillis(),
-            "xp" to 0 // Default xp to 0
-        )
+            // Construct the workout log
+            val workoutLog = mapOf(
+                "workoutName" to challenge.workout,
+                "weight" to challenge.weight,
+                "reps" to challenge.reps,
+                "date" to SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()),
+                "timestamp" to System.currentTimeMillis(),
+                "xp" to expPr
+            )
 
-        // Add workout log to the user's workoutlog field
-        db.collection("users").document(userId)
-            .update("workoutlog", FieldValue.arrayUnion(workoutLog))
-            .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Workout logged successfully!", Toast.LENGTH_SHORT).show()
+            // Add workout log to the user's workoutlog field
+            db.collection("users").document(userId)
+                .update("workoutlog", FieldValue.arrayUnion(workoutLog))
+                .addOnSuccessListener {
+                    // Increment user XP
+                    incrementUserXPForChallenge(userId, expPr)
 
-                // Add user to the challenge's completedBy array
-                db.collection("challenges").document(challenge.id)
-                    .update("completedBy", FieldValue.arrayUnion(userId))
-                    .addOnSuccessListener {
-                        Toast.makeText(requireContext(), "Challenge completed!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Workout logged successfully!", Toast.LENGTH_SHORT).show()
+
+                    // Add user to the challenge's completedBy array
+                    db.collection("challenges").document(challenge.id)
+                        .update("completedBy", FieldValue.arrayUnion(userId))
+                        .addOnSuccessListener {
+                            Toast.makeText(requireContext(), "Challenge completed!", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(requireContext(), "Error updating challenge status.", Toast.LENGTH_SHORT).show()
+                        }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(requireContext(), "Error logging workout.", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+
+    private fun fetchMaxLogForChallenge(workoutName: String, userId: String, callback: (Double) -> Unit) {
+        db.collection("users").document(userId).get()
+            .addOnSuccessListener { document ->
+                val workoutLogs = document.get("workoutlog") as? List<Map<String, Any>> ?: emptyList()
+                val maxLog = workoutLogs
+                    .filter { it["workoutName"] == workoutName }
+                    .maxByOrNull { log ->
+                        val weight = when (val w = log["weight"]) {
+                            is Double -> w
+                            is Long -> w.toDouble()
+                            else -> 0.0
+                        }
+                        val reps = when (val r = log["reps"]) {
+                            is Long -> r.toInt()
+                            is Int -> r
+                            else -> 0
+                        }
+                        weight / ((100 - (reps * 2.5)) / 100)
                     }
-                    .addOnFailureListener {
-                        Toast.makeText(requireContext(), "Error updating challenge status.", Toast.LENGTH_SHORT).show()
+
+                val maxLiftSpecific = maxLog?.let { log ->
+                    val weight = when (val w = log["weight"]) {
+                        is Double -> w
+                        is Long -> w.toDouble()
+                        else -> 0.0
                     }
+                    val reps = when (val r = log["reps"]) {
+                        is Long -> r.toInt()
+                        is Int -> r
+                        else -> 0
+                    }
+                    weight / ((100 - (reps * 2.5)) / 100)
+                } ?: 0.0
+
+                callback(maxLiftSpecific)
             }
             .addOnFailureListener {
-                Toast.makeText(requireContext(), "Error logging workout.", Toast.LENGTH_SHORT).show()
+                callback(0.0) // Handle error, default to 0 max lift
+            }
+    }
+
+    private fun incrementUserXPForChallenge(userId: String, addXP: Int) {
+        db.collection("users").document(userId).get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    var currentXP = document.getLong("xp")?.toInt() ?: 0
+                    currentXP += addXP
+
+                    // Update XP in Firestore
+                    db.collection("users").document(userId)
+                        .update("xp", currentXP)
+                        .addOnSuccessListener {
+                            Toast.makeText(requireContext(), "$addXP XP added", Toast.LENGTH_SHORT).show()
+                            Log.d("ChallengerFragment", "XP successfully updated")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w("ChallengerFragment", "Error updating XP", e)
+                        }
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.w("ChallengerFragment", "Error retrieving user data", e)
             }
     }
 
