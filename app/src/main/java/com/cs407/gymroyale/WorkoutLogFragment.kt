@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import java.text.SimpleDateFormat
 import java.util.Locale
+import android.view.inputmethod.InputMethodManager
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -34,6 +35,11 @@ class WorkoutLogFragment : Fragment() {
     private lateinit var logAdapter: ArrayAdapter<String>
     private val workoutLogs = mutableListOf<WorkoutLog>()  // Store actual log objects
 
+    // Add this function
+    private fun hideKeyboard() {
+        val imm = requireActivity().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        requireActivity().currentFocus?.let { imm.hideSoftInputFromWindow(it.windowToken, 0) }
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -63,12 +69,14 @@ class WorkoutLogFragment : Fragment() {
 
         buttonSave.setOnClickListener {
             textViewBounty.visibility = View.INVISIBLE
+            hideKeyboard()
             if (isBounty && Bonus) {
                 saveWorkoutLog(true)
             } else {
                 saveWorkoutLog(false)
             }
             Bonus = false
+
         }
 
         // Handle long-press to delete a log

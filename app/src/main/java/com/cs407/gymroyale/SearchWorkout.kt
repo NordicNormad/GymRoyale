@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import android.view.inputmethod.InputMethodManager
 
 class SearchWorkout : AppCompatActivity() {
 
@@ -27,6 +28,28 @@ class SearchWorkout : AppCompatActivity() {
     private lateinit var buttonBounties: Button
     private lateinit var adapter: ArrayAdapter<String>
     private lateinit var workoutList: List<String>
+
+    private fun hideKeyboard() {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        currentFocus?.let { imm.hideSoftInputFromWindow(it.windowToken, 0) }
+    }
+    override fun onResume() {
+        super.onResume()
+        setupKeyboardVisibilityListener()
+    }
+
+    private fun setupKeyboardVisibilityListener() {
+        val rootLayout = findViewById<View>(android.R.id.content)
+        rootLayout.viewTreeObserver.addOnGlobalLayoutListener {
+            val bottomBar = findViewById<LinearLayout>(R.id.bottomNavigation)
+            val heightDiff = rootLayout.rootView.height - rootLayout.height
+            if (heightDiff > 200) { // Keyboard is visible
+                bottomBar.visibility = View.GONE
+            } else {
+                bottomBar.visibility = View.VISIBLE
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -138,6 +161,12 @@ class SearchWorkout : AppCompatActivity() {
             workoutList
         )
         searchView.setAdapter(adapter)
+        searchView.setOnItemClickListener { _, _, _, _ ->
+            val selectedWorkout = searchView.text.toString()
+            hideKeyboard()
+            selectWorkout(selectedWorkout)
+
+        }
     }
 
     private fun selectWorkout(query: String) {
@@ -155,6 +184,7 @@ class SearchWorkout : AppCompatActivity() {
         } else {
             Toast.makeText(applicationContext, "No workouts found", Toast.LENGTH_SHORT).show()
         }
+        hideKeyboard()
     }
 
     private fun hideBottomBar() {
