@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
@@ -43,6 +44,7 @@ class ChallengerFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_challenger, container, false)
 
+        val gymIconImageView = view.findViewById<ImageView>(R.id.imageGymIcon)
         val bottomNavProfileButton = view.findViewById<Button>(R.id.buttonBottomNavProfile)
         val bottomNavBountyButton = view.findViewById<Button>(R.id.buttonBottomNavBounties)
         val bottomNavHomeButton = view.findViewById<Button>(R.id.buttonBottomNavHome)
@@ -52,6 +54,9 @@ class ChallengerFragment : Fragment() {
 
         // Fetch challenges from Firestore
         fetchAvailableChallenges()
+
+        // Set the correct gym icon based on trophies
+        updateGymIcon(gymIconImageView)
 
         // Handle Add Challenge Button
         val addChallengeButton = view.findViewById<Button>(R.id.addChallengeButton)
@@ -81,6 +86,27 @@ class ChallengerFragment : Fragment() {
         }
         return view
     }
+
+    private fun updateGymIcon(gymIconImageView: ImageView) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+
+        // Fetch user's trophy count
+        db.collection("users").document(userId).get()
+            .addOnSuccessListener { document ->
+                val trophies = document.getLong("trophies")?.toInt() ?: 0
+                val gymIconRes = when (trophies) {
+                    in 0..20 -> R.drawable.bronze
+                    in 21..40 -> R.drawable.silver
+                    in 41..60 -> R.drawable.gold
+                    else -> R.drawable.legendary
+                }
+                gymIconImageView.setImageResource(gymIconRes)
+            }
+            .addOnFailureListener { e ->
+                Log.w("Firestore", "Error fetching user's trophy count: ${e.message}", e)
+            }
+    }
+
     private fun getTrophyLevel(trophies: Int): String {
         return when {
             trophies <= 20 -> "Bronze"
