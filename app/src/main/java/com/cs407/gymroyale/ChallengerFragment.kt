@@ -81,26 +81,48 @@ class ChallengerFragment : Fragment() {
         }
         return view
     }
+    private fun getTrophyLevel(trophies: Int): String {
+        return when {
+            trophies <= 20 -> "Bronze"
+            trophies in 21..40 -> "Silver"
+            trophies in 41..60 -> "Gold"
+            else -> "Legendary"
+        }
+    }
 
     private fun fetchAvailableChallenges() {
-        db.collection("challenges")
-            .get()
-            .addOnSuccessListener { documents ->
-                challengesList.clear()
-                for (document in documents) {
-                    val challenge = document.toObject(Challenge::class.java)
-                    challenge.id = document.id
-                    challengesList.add(challenge)
-                }
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
-                challengesRecyclerView.adapter = ChallengesAdapter(
-                    challengesList,
-                    { challenge -> acceptChallenge(challenge) },
-                    { challenge -> openReplyPage(challenge) }
-                )
+        // Fetch user's trophy count
+        db.collection("users").document(userId).get()
+            .addOnSuccessListener { document ->
+                val trophies = document.getLong("trophies")?.toInt() ?: 0
+                val trophyLevel = getTrophyLevel(trophies)
+
+                // Fetch challenges for the user's level
+                db.collection("challenges")
+                    .whereEqualTo("level", trophyLevel)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        challengesList.clear()
+                        for (document in documents) {
+                            val challenge = document.toObject(Challenge::class.java)
+                            challenge.id = document.id
+                            challengesList.add(challenge)
+                        }
+
+                        challengesRecyclerView.adapter = ChallengesAdapter(
+                            challengesList,
+                            { challenge -> acceptChallenge(challenge) },
+                            { challenge -> openReplyPage(challenge) }
+                        )
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w("Firestore", "Error fetching challenges: ${e.message}", e)
+                    }
             }
             .addOnFailureListener { e ->
-                Log.w("Firestore", "Error fetching challenges", e)
+                Log.w("Firestore", "Error fetching user's trophy count: ${e.message}", e)
             }
     }
 
@@ -161,27 +183,42 @@ class ChallengerFragment : Fragment() {
 
 
     private fun addChallengeToFirestore(workout: String, weight: Int, reps: Int, trophies: Int, comments: String) {
-        val challenge = hashMapOf(
-            "createdBy" to FirebaseAuth.getInstance().currentUser?.uid,
-            "completedBy" to emptyList<String>(),
-            "workout" to workout,
-            "weight" to weight,
-            "reps" to reps,
-            "date" to FieldValue.serverTimestamp(),
-            "trophies" to trophies,
-            "comments" to comments // Add comments
-        )
-        db.collection("challenges")
-            .add(challenge)
-            .addOnSuccessListener {
-                Log.d("Firestore", "Challenge added successfully: ${it.id}")
-                Toast.makeText(context, "Challenge added successfully", Toast.LENGTH_SHORT).show()
-                fetchAvailableChallenges() // Refresh the list
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+
+        // Fetch user's trophy count
+        db.collection("users").document(userId).get()
+            .addOnSuccessListener { document ->
+                val userTrophies = document.getLong("trophies")?.toInt() ?: 0
+                val level = getTrophyLevel(userTrophies)
+
+                val challenge = hashMapOf(
+                    "createdBy" to userId,
+                    "completedBy" to emptyList<String>(),
+                    "workout" to workout,
+                    "weight" to weight,
+                    "reps" to reps,
+                    "date" to FieldValue.serverTimestamp(),
+                    "trophies" to trophies,
+                    "comments" to comments,
+                    "level" to level // Add level to challenge
+                )
+
+                db.collection("challenges")
+                    .add(challenge)
+                    .addOnSuccessListener {
+                        Log.d("Firestore", "Challenge added successfully: ${it.id}")
+                        Toast.makeText(context, "Challenge added successfully", Toast.LENGTH_SHORT).show()
+                        fetchAvailableChallenges() // Refresh the list
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("Firestore", "Error adding challenge", e)
+                    }
             }
             .addOnFailureListener { e ->
-                Log.e("Firestore", "Error adding challenge", e)
+                Log.w("Firestore", "Error fetching user's trophies for challenge creation: ${e.message}", e)
             }
     }
+
 
 
     private fun acceptChallenge(challenge: Challenge) {
@@ -328,4 +365,6 @@ class ChallengerFragment : Fragment() {
         intent.putExtra("challengeId", challenge.id)
         startActivity(intent)
     }
+
 }
+

@@ -9,5 +9,6 @@ data class Challenge(
     var createdBy: String = "",             // User ID of the challenge creator
     var completedBy: List<String> = emptyList(), // List of user IDs who completed the challenge
     var date: Any? = null,                   // Date when the challenge was created
-    var comments: String = ""
+    var comments: String = "",
+    val level: String = ""
 )
