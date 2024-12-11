@@ -38,6 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Back"
+            android:textColor="@color/white"
             android:fontFamily="@font/pixel_font"
             android:backgroundTint="#1a53ff"
             android:layout_marginEnd="16dp" />
@@ -47,6 +48,7 @@
             android:id="@+id/postReplyButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:fontFamily="@font/pixel_font"
             android:backgroundTint="#1a53ff"
             android:text="Post" />

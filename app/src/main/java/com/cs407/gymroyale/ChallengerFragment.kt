@@ -15,6 +15,8 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -166,11 +168,13 @@ class ChallengerFragment : Fragment() {
 
         // Load workouts from CSV and populate the spinner
         val workouts = loadWorkoutsFromCSV()
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, workouts)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        // Use custom spinner item layout
+        val adapter = ArrayAdapter(requireContext(), R.layout.spinner_item, workouts)
+        adapter.setDropDownViewResource(R.layout.spinner_item)  // Apply the same style to the dropdown view
         workoutSpinner.adapter = adapter
 
-        AlertDialog.Builder(requireContext())
+        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialogStyle) // Use custom theme
             .setTitle("Add Challenge")
             .setView(dialogView)
             .setPositiveButton("Save") { dialog, _ ->
@@ -191,9 +195,41 @@ class ChallengerFragment : Fragment() {
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
             }
-            .create()
-            .show()
+
+        val dialog = builder.create()
+
+        // Set the background to white, title font color to black, and custom button styles
+        dialog.setOnShowListener {
+            // Set background to white
+            dialog.window?.setBackgroundDrawableResource(android.R.color.white)
+
+            // Customize the title with black font and pixel font
+            val titleTextView = dialog.findViewById<TextView>(android.R.id.title)
+            titleTextView?.let {
+                it.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black)) // Set text color to black
+                it.typeface = ResourcesCompat.getFont(requireContext(), R.font.pixel_font) // Set custom font
+            }
+
+            // Customize the positive button
+            val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            positiveButton?.let {
+                it.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black)) // Black text color
+                it.typeface = ResourcesCompat.getFont(requireContext(), R.font.pixel_font) // Set custom font
+            }
+
+            // Customize the negative button
+            val negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+            negativeButton?.let {
+                it.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black)) // Black text color
+                it.typeface = ResourcesCompat.getFont(requireContext(), R.font.pixel_font) // Set custom font
+            }
+        }
+
+        // Show the dialog
+        dialog.show()
     }
+
+
 
 
     private fun loadWorkoutsFromCSV(): List<String> {
@@ -278,11 +314,14 @@ class ChallengerFragment : Fragment() {
 
         challengeDetails.text = "Workout: ${challenge.workout}\nReps: ${challenge.reps}\nWeight: ${challenge.weight} lbs"
 
-        val builder = AlertDialog.Builder(requireContext())
+        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialogStyle)
             .setTitle("Confirm Challenge")
             .setView(dialogView)
 
         val dialog = builder.create()
+        dialog.setOnShowListener {
+            dialog.window?.setBackgroundDrawableResource(android.R.color.white)
+        }
 
         confirmButton.setOnClickListener {
             // Log the workout to Firebase

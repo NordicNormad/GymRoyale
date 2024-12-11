@@ -123,7 +123,7 @@
             android:text="Log Out"
             android:textSize="16sp"
             android:textColor="#FFFFFF"
-            android:backgroundTint="#1a53ff"
+            android:backgroundTint="#F44336"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/pixel_font"/>
 
@@ -133,6 +133,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="#1a53ff"
             android:text="Edit Profile"
+            android:textColor="@color/white"
             android:layout_marginTop="8dp"
             android:layout_gravity="center_horizontal"
             android:fontFamily="@font/pixel_font"/>
@@ -142,6 +143,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#1a53ff"
+            android:textColor="@color/white"
             android:text="Chose profile Photo"
             android:layout_gravity="center"
             android:fontFamily="@font/pixel_font" />

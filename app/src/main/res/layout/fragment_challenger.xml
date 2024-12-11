@@ -6,54 +6,60 @@
     android:layout_height="match_parent"
     android:background="#000000">
 
+    <!-- Title Text -->
     <TextView
         android:id="@+id/titleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="88dp"
-        android:layout_marginTop="16dp"
         android:fontFamily="@font/pixel_font"
         android:text="Challenges"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
         android:textColor="#ffffff"
-        android:textSize="30sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="28sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/addChallengeButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread" />
 
+    <!-- Central Image -->
+    <ImageView
+        android:id="@+id/imageGymIcon"
+        android:layout_width="74dp"
+        android:layout_height="74dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/addChallengeButton"
+        app:layout_constraintStart_toEndOf="@id/titleText"
+        app:layout_constraintEnd_toStartOf="@id/addChallengeButton"
+    tools:layout_editor_absoluteY="0dp" />
+
+    <!-- Add Challenge Button -->
     <Button
         android:id="@+id/addChallengeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
         android:backgroundTint="#1a53ff"
         android:fontFamily="@font/pixel_font"
         android:text="Add Challenge +"
         android:textColor="#ffffff"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@id/imageGymIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageGymIcon" />
 
+    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/challengesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:backgroundTint="#000000"
         android:padding="8dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/addChallengeButton"
+        app:layout_constraintTop_toBottomOf="@id/imageGymIcon"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigation" />
 
-    <!-- Central image -->
-
     <!-- Bottom Navigation Bar -->
-
-    <ImageView
-        android:id="@+id/imageGymIcon"
-        android:layout_width="74dp"
-        android:layout_height="74dp"
-        android:layout_centerHorizontal="true"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-1dp" />
-
     <LinearLayout
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
@@ -72,7 +78,6 @@
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:backgroundTint="#1a53ff"
-            android:contentDescription="Profile"
             android:text="Profile"
             android:textColor="#ffffff"
             android:textSize="14sp" />
@@ -86,7 +91,6 @@
             android:layout_weight="1"
             android:backgroundTint="#1a53ff"
             android:fontFamily="@font/pixel_font"
-            android:contentDescription="Workout"
             android:text="Home"
             android:textColor="#ffffff"
             android:textSize="18sp" />
@@ -99,7 +103,6 @@
             android:layout_weight="1"
             android:fontFamily="@font/pixel_font"
             android:backgroundTint="#1a53ff"
-            android:contentDescription="Bounties"
             android:text="Bounties"
             android:textColor="#ffffff"
             android:textSize="14sp" />

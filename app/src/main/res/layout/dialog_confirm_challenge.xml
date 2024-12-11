@@ -25,19 +25,31 @@
         android:textColor="#000000"
         android:paddingBottom="16dp" />
 
-    <Button
-        android:id="@+id/btnConfirmLog"
+    <!-- Horizontal LinearLayout for the two buttons -->
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#ffffff"
-        android:backgroundTint="#1a53ff"
-        android:text="Log" />
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal">
+        <Button
+            android:id="@+id/btnCancelLog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:textColor="#ffffff"
+            android:backgroundTint="#1a53ff"
+            android:fontFamily="@font/pixel_font"
+            android:text="Cancel" />
+        <Button
+            android:id="@+id/btnConfirmLog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:backgroundTint="#4CAF50"
+            android:fontFamily="@font/pixel_font"
+            android:text="Log" />
 
-    <Button
-        android:id="@+id/btnCancelLog"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#ffffff"
-        android:backgroundTint="#1a53ff"
-        android:text="Cancel" />
+
+    </LinearLayout>
+
 </LinearLayout>

@@ -29,6 +29,7 @@
         android:layout_height="wrap_content"
         android:text="Search"
         android:fontFamily="@font/pixel_font"
+        android:textColor="@color/white"
         android:backgroundTint="#1a53ff"
         app:layout_constraintTop_toBottomOf="@id/searchView"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,6 +42,7 @@
         android:backgroundTint="#1a53ff"
         android:fontFamily="@font/pixel_font"
         android:text="View Today's Workouts"
+        android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/buttonSearch"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -118,6 +120,7 @@
         android:text="View History"
         android:backgroundTint="#1a53ff"
         android:fontFamily="@font/pixel_font"
+        android:textColor="@color/white"
         android:layout_margin="70dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
