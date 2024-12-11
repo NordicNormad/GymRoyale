@@ -9,6 +9,7 @@
     <!-- Workout name -->
     <TextView
         android:id="@+id/tvWorkout"
+        android:fontFamily="@font/pixel_font"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Workout Name"
@@ -21,6 +22,7 @@
     <!-- Reps and Weight -->
     <TextView
         android:id="@+id/tvRepsAndWeight"
+        android:fontFamily="@font/pixel_font"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Reps: 10, Weight: 100kg"
@@ -35,6 +37,7 @@
     <TextView
         android:id="@+id/tvTrophies"
         android:layout_width="wrap_content"
+        android:fontFamily="@font/pixel_font"
         android:layout_height="wrap_content"
         android:text="Trophies: 3"
         android:textSize="16sp"
@@ -47,6 +50,7 @@
     <TextView
         android:id="@+id/tvComment"
         android:layout_width="0dp"
+        android:fontFamily="@font/pixel_font"
         android:layout_height="wrap_content"
         android:text="Great effort on this challenge!"
         android:textSize="14sp"
@@ -62,6 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Accept"
+        android:fontFamily="@font/pixel_font"
         android:backgroundTint="#4CAF50"
         android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,8 +79,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Reply"
-        android:backgroundTint="#2196F3"
+        android:backgroundTint="#1a53ff"
         android:textColor="#FFFFFF"
+        android:fontFamily="@font/pixel_font"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvComment"
         android:layout_marginTop="12dp"/>
