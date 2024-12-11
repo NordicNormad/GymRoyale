@@ -244,7 +244,7 @@ class ChallengerFragment : Fragment() {
     }
 
 
-    private fun addChallengeToFirestore(workout: String, weight: Int, reps: Int, trophies: Int, comments: String) {
+    private fun addChallengeToFirestore(workout: String, reps: Int, weight: Int, trophies: Int, comments: String) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
         // Fetch user's trophy count
