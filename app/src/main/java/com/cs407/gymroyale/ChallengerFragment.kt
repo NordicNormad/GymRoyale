@@ -213,7 +213,7 @@ class ChallengerFragment : Fragment() {
         val confirmButton = dialogView.findViewById<Button>(R.id.btnConfirmLog)
         val cancelButton = dialogView.findViewById<Button>(R.id.btnCancelLog)
 
-        challengeDetails.text = "Workout: ${challenge.workout}\nReps: ${challenge.reps}\nWeight: ${challenge.weight} kg"
+        challengeDetails.text = "Workout: ${challenge.workout}\nReps: ${challenge.reps}\nWeight: ${challenge.weight} lbs"
 
         val builder = AlertDialog.Builder(requireContext())
             .setTitle("Confirm Challenge")
