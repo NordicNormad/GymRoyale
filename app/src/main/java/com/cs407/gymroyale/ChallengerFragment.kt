@@ -64,18 +64,20 @@ class ChallengerFragment : Fragment() {
             showAddChallengeDialog()
         }
 
-        bottomNavBountyButton.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, BountyFragment())
-                .addToBackStack(null)
-                .commit()
+        bottomNavProfileButton.setOnClickListener {
+            val intent = Intent(requireActivity(), MainActivity::class.java)
+            intent.putExtra("NAVIGATE_TO_PROFILE", true)
+            startActivity(intent)
+            requireActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
+            requireActivity().finish()
         }
 
-        bottomNavProfileButton.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ProfileFragment())
-                .addToBackStack(null)
-                .commit()
+        bottomNavBountyButton.setOnClickListener {
+            val intent = Intent(requireActivity(), MainActivity::class.java)
+            intent.putExtra("NAVIGATE_TO_BOUNTIES", true)
+            startActivity(intent)
+            requireActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+            requireActivity().finish()
         }
 
         bottomNavHomeButton.setOnClickListener {

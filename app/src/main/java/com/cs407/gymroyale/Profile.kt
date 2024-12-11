@@ -16,6 +16,29 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.cs407.gymroyalepackage.LandingPageFragment
 
 class ProfileFragment : Fragment() {
+    private fun navigateFragment(fragment: Fragment, slideInFromRight: Boolean) {
+        val (enter, exit, popEnter, popExit) = if (slideInFromRight) {
+            arrayOf(
+                R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_left,
+                R.anim.slide_out_right
+            )
+        } else {
+            arrayOf(
+                R.anim.slide_in_left,
+                R.anim.slide_out_right,
+                R.anim.slide_in_right,
+                R.anim.slide_out_left
+            )
+        }
+
+        parentFragmentManager.beginTransaction()
+            .setCustomAnimations(enter, exit, popEnter, popExit)
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
 
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
@@ -57,7 +80,6 @@ class ProfileFragment : Fragment() {
         bottomNavProfileButton = view.findViewById(R.id.buttonBottomNavProfile)
         bottomNavHomeButton = view.findViewById(R.id.buttonBottomNavHome)
         bottomNavBountyButton = view.findViewById(R.id.buttonBottomNavBounties)
-
         // Get userId from arguments or fallback to the logged-in user
         viewedUserId = arguments?.getString("userId") ?: auth.currentUser?.uid
 
@@ -90,7 +112,13 @@ class ProfileFragment : Fragment() {
         }
 
         // Set up bottom navigation
-        setBottomNavigationListeners()
+        bottomNavBountyButton.setOnClickListener {
+            navigateFragment(BountyFragment(), slideInFromRight = true)   // left to right
+        }
+
+        bottomNavHomeButton.setOnClickListener {
+            navigateFragment(LandingPageFragment(), slideInFromRight = true)  // right to left
+        }
 
         return view
     }
@@ -195,28 +223,5 @@ class ProfileFragment : Fragment() {
         val intent = Intent(requireContext(), LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
-    }
-
-    private fun setBottomNavigationListeners() {
-        bottomNavProfileButton.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ProfileFragment())
-                .addToBackStack(null)
-                .commit()
-        }
-
-        bottomNavHomeButton.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, LandingPageFragment())
-                .addToBackStack(null)
-                .commit()
-        }
-
-        bottomNavBountyButton.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, BountyFragment())
-                .addToBackStack(null)
-                .commit()
-        }
     }
 }

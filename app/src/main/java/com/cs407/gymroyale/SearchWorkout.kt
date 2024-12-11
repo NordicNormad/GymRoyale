@@ -17,6 +17,7 @@ import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import android.view.inputmethod.InputMethodManager
+import androidx.fragment.app.Fragment
 
 class SearchWorkout : AppCompatActivity() {
 
@@ -106,6 +107,7 @@ class SearchWorkout : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             intent.putExtra("NAVIGATE_TO_PROFILE", true)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
             finish()
         }
 
@@ -113,6 +115,7 @@ class SearchWorkout : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             intent.putExtra("NAVIGATE_TO_BOUNTIES", true)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             finish()
         }
 
@@ -129,7 +132,7 @@ class SearchWorkout : AppCompatActivity() {
     private fun showTodayWorkouts() {
         val todayFragment = TodayWorkoutsFragment()
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, todayFragment)
+            .replace(R.id.fragment_container, todayFragment)
             .addToBackStack(null)
             .commit()
     }
@@ -174,7 +177,7 @@ class SearchWorkout : AppCompatActivity() {
             // Navigate to WorkoutLogFragment
             val fragment = WorkoutLogFragment.newInstance(workoutName)
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, fragment)
+                .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit()
         } else {

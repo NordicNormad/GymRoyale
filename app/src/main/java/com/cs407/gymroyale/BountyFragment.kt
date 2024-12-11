@@ -33,6 +33,30 @@ class BountyFragment : Fragment() {
     private lateinit var bountyAdapter: BountyAdapter
     private var bountyList = mutableListOf<Bounty>()
 
+    private fun navigateFragment(fragment: Fragment, slideInFromRight: Boolean) {
+        val (enter, exit, popEnter, popExit) = if (slideInFromRight) {
+            arrayOf(
+                R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_left,
+                R.anim.slide_out_right
+            )
+        } else {
+            arrayOf(
+                R.anim.slide_in_left,
+                R.anim.slide_out_right,
+                R.anim.slide_in_right,
+                R.anim.slide_out_left
+            )
+        }
+
+        parentFragmentManager.beginTransaction()
+            .setCustomAnimations(enter, exit, popEnter, popExit)
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -82,25 +106,13 @@ class BountyFragment : Fragment() {
             }
         }
 
-        bottomNavBountyButton.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, BountyFragment())
-                .addToBackStack(null)
-                .commit()
+        // Set up bottom navigation
+        bottomNavHomeButton.setOnClickListener {
+            navigateFragment(LandingPageFragment(), slideInFromRight = false)   // right to left
         }
 
         bottomNavProfileButton.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ProfileFragment())
-                .addToBackStack(null)
-                .commit()
-        }
-
-        bottomNavHomeButton.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, LandingPageFragment())
-                .addToBackStack(null)
-                .commit()
+            navigateFragment(ProfileFragment(), slideInFromRight = false)  // right to left
         }
 
         return view

@@ -21,6 +21,30 @@ import com.cs407.gymroyale.utils.FirebaseUtils
 class LandingPageFragment : Fragment() {
 
     @SuppressLint("MissingInflatedId")
+    private fun navigateFragment(fragment: Fragment, slideInFromRight: Boolean) {
+        val (enter, exit, popEnter, popExit) = if (slideInFromRight) {
+            arrayOf(
+                R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_left,
+                R.anim.slide_out_right
+            )
+        } else {
+            arrayOf(
+                R.anim.slide_in_left,
+                R.anim.slide_out_right,
+                R.anim.slide_in_right,
+                R.anim.slide_out_left
+            )
+        }
+
+        parentFragmentManager.beginTransaction()
+            .setCustomAnimations(enter, exit, popEnter, popExit)
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -90,28 +114,12 @@ class LandingPageFragment : Fragment() {
         val bottomNavHomeButton = view.findViewById<Button>(R.id.buttonBottomNavHome)
 
         bottomNavBountyButton.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, BountyFragment())
-                .addToBackStack(null)
-                .commit()
+            navigateFragment(BountyFragment(), slideInFromRight = true)   // left to right
         }
 
         bottomNavProfileButton.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ProfileFragment())
-                .addToBackStack(null)
-                .commit()
+            navigateFragment(ProfileFragment(), slideInFromRight = false)  // right to left
         }
-
-        bottomNavHomeButton.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, LandingPageFragment())
-                .addToBackStack(null)
-                .commit()
-        }
-
-
-
         return view
     }
 }
