@@ -258,8 +258,6 @@ class ChallengerFragment : Fragment() {
                     // Increment user XP
                     incrementUserXPForChallenge(userId, expPr)
 
-                    Toast.makeText(requireContext(), "Workout logged successfully!", Toast.LENGTH_SHORT).show()
-
                     // Add user to the challenge's completedBy array
                     db.collection("challenges").document(challenge.id)
                         .update("completedBy", FieldValue.arrayUnion(userId))
@@ -328,7 +326,7 @@ class ChallengerFragment : Fragment() {
                     db.collection("users").document(userId)
                         .update("xp", currentXP)
                         .addOnSuccessListener {
-                            Toast.makeText(requireContext(), "$addXP XP added", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "Challenge completed! $addXP XP added", Toast.LENGTH_SHORT).show()
                             Log.d("ChallengerFragment", "XP successfully updated")
                         }
                         .addOnFailureListener { e ->

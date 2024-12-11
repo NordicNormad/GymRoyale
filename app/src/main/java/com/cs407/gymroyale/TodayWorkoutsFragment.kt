@@ -1,6 +1,8 @@
 package com.cs407.gymroyale
 
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,11 +45,18 @@ class TodayWorkoutsFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
-        todayWorkoutAdapter = ArrayAdapter(
+        todayWorkoutAdapter = object : ArrayAdapter<String>(
             requireContext(),
             android.R.layout.simple_list_item_1,
             todayWorkouts
-        )
+        ) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getView(position, convertView, parent)
+                val textView = view.findViewById<TextView>(android.R.id.text1)
+                textView.setTextColor(Color.WHITE)
+                return view
+            }
+        }
         listViewTodayWorkouts.adapter = todayWorkoutAdapter
 
         // Load today's workouts from Firebase
@@ -107,9 +116,16 @@ class TodayWorkoutsFragment : Fragment() {
             workoutLogsList.mapNotNull { log ->
                 val logDate = log["date"] as String
                 if (logDate == today) {
+                    // Safely cast weight to Double
+                    val weight = when (val weightValue = log["weight"]) {
+                        is Long -> weightValue.toDouble()  // Convert Long to Double if necessary
+                        is Double -> weightValue
+                        else -> 0.0  // Default to 0.0 if the value is neither Long nor Double
+                    }
+
                     WorkoutLog(
                         workoutName = log["workoutName"] as String,
-                        weight = log["weight"] as Double,
+                        weight = weight,
                         reps = (log["reps"] as Long).toInt(),
                         xp = (log["xp"] as Long).toInt(),
                         timestamp = log["timestamp"] as Long,
@@ -120,8 +136,9 @@ class TodayWorkoutsFragment : Fragment() {
                 }
             }
         } catch (e: Exception) {
-            // Log error and return empty list if there's an issue fetching data
+            Log.e("WorkoutHistoryActivity", "Error fetching today's workout logs", e)
             emptyList()
         }
     }
+
 }

@@ -112,9 +112,16 @@ class WorkoutHistoryActivity : AppCompatActivity() {
             val workoutLogsList = document.get("workoutlog") as? List<Map<String, Any>> ?: emptyList()
 
             workoutLogsList.map {
+                // Safely cast weight to Double
+                val weight = when (val weightValue = it["weight"]) {
+                    is Long -> weightValue.toDouble()  // Convert Long to Double if necessary
+                    is Double -> weightValue
+                    else -> 0.0  // Default to 0.0 if the value is neither Long nor Double
+                }
+
                 WorkoutLog(
                     workoutName = it["workoutName"] as String,
-                    weight = it["weight"] as Double,
+                    weight = weight,
                     reps = (it["reps"] as Long).toInt(),
                     xp = (it["xp"] as Long).toInt(),
                     timestamp = it["timestamp"] as Long,
@@ -126,4 +133,5 @@ class WorkoutHistoryActivity : AppCompatActivity() {
             emptyList()
         }
     }
+
 }
