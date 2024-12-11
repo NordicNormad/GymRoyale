@@ -167,7 +167,6 @@ class BountyFragment : Fragment() {
         inner class BountyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val tvTask: TextView = view.findViewById(R.id.tvTask)
             val cbCompleted: CheckBox = view.findViewById(R.id.cbCompleted)
-            val tvXP: TextView = view.findViewById(R.id.tvXP)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BountyViewHolder {
@@ -179,7 +178,6 @@ class BountyFragment : Fragment() {
         override fun onBindViewHolder(holder: BountyViewHolder, position: Int) {
             val bounty = bounties[position]
             holder.tvTask.text = bounty.task
-            holder.tvXP.text = "XP 50K"
 
             // Check or uncheck the checkbox based on the current selection
             holder.cbCompleted.isChecked = (position == selectedPosition)

@@ -7,14 +7,6 @@
     android:padding="16dp"
     android:background="#000000">
 
-    <!-- User profile picture -->
-    <ImageView
-        android:id="@+id/profileImageView"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_profile_placeholder" />
-
     <!-- User name -->
     <TextView
         android:id="@+id/profileNameTextView"
@@ -39,6 +31,13 @@
         android:layout_gravity="center"
         android:text="User Stats"
         android:textSize="16sp" />
+    <TextView
+        android:id="@+id/profileBioTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="User Bio"
+        android:textSize="14sp"
+        android:layout_marginBottom="16dp" />
 
     <!-- Close button -->
     <Button

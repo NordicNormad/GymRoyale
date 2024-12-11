@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
@@ -54,6 +55,7 @@ class TodayWorkoutsFragment : Fragment() {
                 val view = super.getView(position, convertView, parent)
                 val textView = view.findViewById<TextView>(android.R.id.text1)
                 textView.setTextColor(Color.WHITE)
+                textView.typeface = ResourcesCompat.getFont(context, R.font.pixel_font)
                 return view
             }
         }

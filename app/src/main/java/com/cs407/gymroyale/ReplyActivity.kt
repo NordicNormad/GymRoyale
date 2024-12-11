@@ -122,9 +122,9 @@ class ReplyActivity : AppCompatActivity() {
                 if (document.exists()) {
                     val userName = document.getString("name") ?: "Name not set"
                     val userStats = "XP: ${document.getLong("xp") ?: 0}, Trophies: ${document.getLong("trophies") ?: 0}"
-
+                    val userBio = document.getString("bio") ?: "Bio not set"
                     // Open the dialog with fetched data
-                    val dialog = UserProfileDialog.newInstance(userName, userStats)
+                    val dialog = UserProfileDialog.newInstance(userName, userStats, userBio)
                     dialog.show(supportFragmentManager, "UserProfileDialog")
                 } else {
                     Toast.makeText(this, "User data not found", Toast.LENGTH_SHORT).show()

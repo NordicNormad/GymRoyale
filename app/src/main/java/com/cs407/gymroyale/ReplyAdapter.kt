@@ -51,9 +51,9 @@ class ReplyAdapter(
                     if (document.exists()) {
                         val userName = document.getString("name") ?: "Name not set"
                         val userStats = "XP: ${document.getLong("xp") ?: 0}, Trophies: ${document.getLong("trophies") ?: 0}"
-
+                        val userBio = document.getString("bio") ?: "Bio not set"
                         // Open the UserProfileDialog with fetched data
-                        val dialog = UserProfileDialog.newInstance(userName, userStats)
+                        val dialog = UserProfileDialog.newInstance(userName, userStats, userBio)
                         dialog.show(fragmentManager, "UserProfileDialog")
                     } else {
                         Toast.makeText(
