@@ -145,14 +145,25 @@ class WorkoutLogFragment : Fragment() {
         firestore.collection("users").document(userId).get()
             .addOnSuccessListener { document ->
                 val workoutLogs = document.get("workoutlog") as? List<Map<String, Any>> ?: emptyList()
+
                 val maxLog = workoutLogs
                     .filter { it["workoutName"] == workoutName }
-                    .maxByOrNull { it["weight"] as Double / ((100 - ((it["reps"] as Long) * 2.5)) / 100) }
-                val maxLiftSpecific = maxLog?.let { it["weight"] as Double / ((100 - ((it["reps"] as Long) * 2.5)) / 100) } ?: 0.0
+                    .maxByOrNull {
+                        val weight = (it["weight"] as? Number)?.toDouble() ?: 0.0
+                        val reps = (it["reps"] as? Number)?.toDouble() ?: 0.0
+                        weight / ((100 - (reps * 2.5)) / 100)
+                    }
+
+                val maxLiftSpecific = maxLog?.let {
+                    val weight = (it["weight"] as? Number)?.toDouble() ?: 0.0
+                    val reps = (it["reps"] as? Number)?.toDouble() ?: 0.0
+                    weight / ((100 - (reps * 2.5)) / 100)
+                } ?: 0.0
+
                 callback(maxLiftSpecific)
             }
             .addOnFailureListener {
-                callback(0.0) // Handle error, default to 0 max lift
+                callback(0.0) // Handle error by defaulting to 0 max lift
             }
     }
 
@@ -205,10 +216,10 @@ class WorkoutLogFragment : Fragment() {
                 workoutLogs.addAll(filteredLogs.map {
                     WorkoutLog(
                         workoutName = it["workoutName"] as String,
-                        weight = it["weight"] as Double,
-                        reps = (it["reps"] as Long).toInt(),
-                        xp = (it["xp"] as Long).toInt(),
-                        timestamp = it["timestamp"] as Long,
+                        weight = (it["weight"] as? Number)?.toDouble() ?: 0.0,
+                        reps = (it["reps"] as? Number)?.toInt() ?: 0,
+                        xp = (it["xp"] as? Number)?.toInt() ?: 0,
+                        timestamp = (it["timestamp"] as? Number)?.toLong() ?: 0L,
                         date = it["date"] as String
                     )
                 })

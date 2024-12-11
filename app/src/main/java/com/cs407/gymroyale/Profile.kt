@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import com.cs407.gymroyale.utils.FirebaseUtils.db
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.cs407.gymroyalepackage.LandingPageFragment
@@ -120,6 +121,7 @@ class ProfileFragment : Fragment() {
             navigateFragment(LandingPageFragment(), slideInFromRight = true)  // right to left
         }
 
+
         return view
     }
 
@@ -224,4 +226,5 @@ class ProfileFragment : Fragment() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
     }
+
 }
